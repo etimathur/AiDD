@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/back"
+    tools:context=".Flipcardsp">
+
+    <TextView
+        android:id="@+id/flip"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:background="#A7F2FF"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="FLIP CARDS STATISTICS"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/mem"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="MEMORY GRAPH"
+        android:layout_below="@+id/flip"
+        android:layout_marginTop="70dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphmp"
+        android:layout_width="390dp"
+        android:layout_height="183dp"
+        android:layout_below="@+id/flip"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="120dp"/>
+
+
+
+
+
+
+</RelativeLayout>
