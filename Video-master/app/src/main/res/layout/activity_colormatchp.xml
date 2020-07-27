@@ -10,11 +10,11 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_height="47dp"
+        android:background="#A7F2FF"
         android:fontFamily="serif"
         android:gravity="center"
         android:text="COLOR MATCH STATISTICS"
-        android:background="#A7F2FF"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
 
@@ -26,6 +26,7 @@
         android:gravity="center"
         android:layout_marginTop="10dp"
         android:text="SCORE GRAPH"
+        android:textStyle="bold"
         android:layout_below="@+id/textView"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -46,6 +47,7 @@
         android:gravity="center"
         android:layout_marginTop="30dp"
         android:text="SPEED GRAPH"
+        android:textStyle="bold"
         android:layout_below="@+id/graph2"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 

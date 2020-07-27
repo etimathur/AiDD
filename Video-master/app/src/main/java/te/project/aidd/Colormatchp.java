@@ -17,7 +17,7 @@ public class Colormatchp extends AppCompatActivity {
         setContentView(R.layout.activity_colormatchp);
         GraphView graph = (GraphView) findViewById(R.id.graph2);
         // graph.getGridLabelRenderer().setVerticalAxisTitle("Match Value");
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("Games");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("GAMES");
         // graph.getViewport().setMinX(0);
         //graph.getViewport().setMaxX(5);
         graph.getViewport().setMinY(10);
@@ -35,6 +35,7 @@ public class Colormatchp extends AppCompatActivity {
                 new DataPoint(5, 20)
         });
         graph.addSeries(series);
+        graph.setBackgroundColor(Color.WHITE);
         series.setThickness(5);
         series.setColor(Color.BLUE);
         series.setAnimated(true);
@@ -65,6 +66,7 @@ public class Colormatchp extends AppCompatActivity {
         });
 
         graph1.addSeries(series1);
+        graph1.setBackgroundColor(Color.WHITE);
         graph1.getViewport().setScalableY(true);
         series1.setThickness(5);
         series1.setColor(Color.RED);

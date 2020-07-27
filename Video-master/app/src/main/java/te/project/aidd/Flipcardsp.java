@@ -50,6 +50,7 @@ public class Flipcardsp extends AppCompatActivity {
 
         graphA.addSeries(series4);
         graphA.getViewport().setScalableY(true);
+        graphA.setBackgroundColor(Color.WHITE);
         series4.setThickness(5);
         series4.setColor(Color.RED);
         series4.setAnimated(true);
