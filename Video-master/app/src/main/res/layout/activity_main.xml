@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A7F2FF"
+    android:background="#ffffff"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="436dp"
         android:fontFamily="serif"
         android:text="AiDD"
         android:textAlignment="center"
@@ -26,14 +27,15 @@
         app:layout_constraintVertical_bias="0.372" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="281dp"
-        android:layout_height="209dp"
+        android:id="@+id/logo"
+        android:layout_width="369dp"
+        android:layout_height="256dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:layout_constraintVertical_bias="0.389"
+        app:srcCompat="@drawable/flogo" />
 
     <TextView
         android:id="@+id/textView"
