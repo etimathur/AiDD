@@ -33,6 +33,23 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        //check if user is logged in
+        //if user is logged in -->move to their particular pageee
+        SessionManagement sessionManagement=new SessionManagement(HomeActivity.this);
+        int userID=sessionManagement.getSession();
+        if (userID!=-1){
+            Intent par=new Intent(HomeActivity.this,ChildNavActivity.class);
+            par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(par);
+        }
+        else{
+            //do nothing
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

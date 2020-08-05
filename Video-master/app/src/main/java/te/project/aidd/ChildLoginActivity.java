@@ -34,10 +34,16 @@ public class ChildLoginActivity extends AppCompatActivity {
                 String user=childUserName.getText().toString().trim();
                 String password=childPassword.getText().toString().trim();
                 Boolean res=db.childCheckUser(user,password);
+                int id=1;
                 if (res==true)
                 {
+                    User new_user=new User(id,user);
+                    SessionManagement sessionManagement=new SessionManagement(ChildLoginActivity.this);
+                    sessionManagement.saveSession(new_user);
+                    id=id++;
                     Toast.makeText(ChildLoginActivity.this,"Successfully Logged in",Toast.LENGTH_SHORT).show();
                     Intent par=new Intent(ChildLoginActivity.this,ChildNavActivity.class);
+                    par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(par);
                 }
                 else{
@@ -49,6 +55,9 @@ public class ChildLoginActivity extends AppCompatActivity {
         childUserName.addTextChangedListener(childLoginTextWatcher);
         childPassword.addTextChangedListener(childLoginTextWatcher);
     }
+
+
+
     private TextWatcher childLoginTextWatcher=new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

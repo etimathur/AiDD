@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import te.project.aidd.HomeActivity;
 import te.project.aidd.R;
+import te.project.aidd.SessionManagement;
 import te.project.aidd.ui.exercises.ExercisesFragment;
 
 public class LogoutFragment extends Fragment {
@@ -30,10 +31,12 @@ public class LogoutFragment extends Fragment {
         y.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SessionManagement sessionManagement=new SessionManagement(LogoutFragment.this.getActivity());
+                sessionManagement.removeSession();
                 Toast.makeText(getActivity(),"Successfully logged out!",Toast.LENGTH_SHORT).show();
 //                Intent yIntent=new Intent(LogoutFragment.this.getActivity(), HomeActivity.class);
                 Intent yIntent = new Intent(getActivity().getApplicationContext(), HomeActivity.class);
-                yIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                yIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(yIntent);
             }
         });
