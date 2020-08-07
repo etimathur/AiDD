@@ -40,7 +40,6 @@ public class ChildLoginActivity extends AppCompatActivity {
                     User new_user=new User(id,user);
                     SessionManagement sessionManagement=new SessionManagement(ChildLoginActivity.this);
                     sessionManagement.saveSession(new_user);
-                    id=id++;
                     Toast.makeText(ChildLoginActivity.this,"Successfully Logged in",Toast.LENGTH_SHORT).show();
                     Intent par=new Intent(ChildLoginActivity.this,ChildNavActivity.class);
                     par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);

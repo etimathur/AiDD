@@ -45,9 +45,14 @@ public class ParentLoginActivity extends AppCompatActivity {
                 String user=parUserName.getText().toString().trim();
                 String password=parPassword.getText().toString().trim();
                     Boolean res = db.checkUser(user, password);
+                    int id=0;
                     if (res == true) {
+                        User new_user=new User(id,user);
+                        SessionManagement sessionManagement=new SessionManagement(ParentLoginActivity.this);
+                        sessionManagement.saveSession(new_user);
                         Toast.makeText(ParentLoginActivity.this, "Successfully Logged in", Toast.LENGTH_SHORT).show();
                         Intent par=new Intent(ParentLoginActivity.this,ParentNavActivity.class);
+                        par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(par);
                     } else {
                         Toast.makeText(ParentLoginActivity.this, "Login error", Toast.LENGTH_SHORT).show();

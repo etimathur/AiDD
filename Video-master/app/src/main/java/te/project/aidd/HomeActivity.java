@@ -41,8 +41,13 @@ public class HomeActivity extends AppCompatActivity {
         //if user is logged in -->move to their particular pageee
         SessionManagement sessionManagement=new SessionManagement(HomeActivity.this);
         int userID=sessionManagement.getSession();
-        if (userID!=-1){
+        if (userID==1){
             Intent par=new Intent(HomeActivity.this,ChildNavActivity.class);
+            par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(par);
+        }
+        else if (userID==0){
+            Intent par=new Intent(HomeActivity.this,ParentNavActivity.class);
             par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(par);
         }
