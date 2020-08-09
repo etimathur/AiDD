@@ -31,7 +31,7 @@
             android:name=".FlipCards"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Maze"
+            android:name=".FindTheMatch"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ChildNavActivity"

@@ -12,12 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import te.project.aidd.Color_instruct;
-import te.project.aidd.ColourMatch;
+import te.project.aidd.FindTheMatch;
 import te.project.aidd.Flip_instuct;
 import te.project.aidd.Jigsaw;
-import te.project.aidd.FlipCards;
 import te.project.aidd.R;
-import te.project.aidd.Maze;
 
 public class ExercisesFragment extends Fragment {
 
@@ -41,8 +39,8 @@ public class ExercisesFragment extends Fragment {
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent mazeIntent=new Intent(ExercisesFragment.this.getActivity(), Maze.class);
-                startActivity(mazeIntent);
+                Intent findMatchIntent=new Intent(ExercisesFragment.this.getActivity(), FindTheMatch.class);
+                startActivity(findMatchIntent);
             }
         });
         card2.setOnClickListener(new View.OnClickListener() {

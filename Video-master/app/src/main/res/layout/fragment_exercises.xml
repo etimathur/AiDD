@@ -47,12 +47,12 @@
                 <ImageView
                     android:layout_width="128dp"
                     android:layout_height="168dp"
-                    app:srcCompat="@drawable/maze" />
+                    app:srcCompat="@drawable/findthematch" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LOST IN MAZE"
+                    android:text="FIND THE MATCH"
                     android:textAlignment="center"
                     android:textColor="#000000"
                     android:textSize="18sp"
