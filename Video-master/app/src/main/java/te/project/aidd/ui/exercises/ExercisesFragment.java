@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import te.project.aidd.Color_instruct;
+import te.project.aidd.FindMatchInstruct;
 import te.project.aidd.FindTheMatch;
 import te.project.aidd.Flip_instuct;
 import te.project.aidd.Jigsaw;
@@ -39,7 +40,7 @@ public class ExercisesFragment extends Fragment {
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent findMatchIntent=new Intent(ExercisesFragment.this.getActivity(), FindTheMatch.class);
+                Intent findMatchIntent=new Intent(ExercisesFragment.this.getActivity(), FindMatchInstruct.class);
                 startActivity(findMatchIntent);
             }
         });

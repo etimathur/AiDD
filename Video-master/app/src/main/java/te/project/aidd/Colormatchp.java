@@ -63,8 +63,8 @@ public class Colormatchp extends AppCompatActivity {
         graph1.getViewport().setYAxisBoundsManual(true);
 
         LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, 10),
-                new DataPoint(2, 20),
+                new DataPoint(1, 30),
+                new DataPoint(2, 43),
                 new DataPoint(3, 55),
                 new DataPoint(4, 75),
                 new DataPoint(5, 60),

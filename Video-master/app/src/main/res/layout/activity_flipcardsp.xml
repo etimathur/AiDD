@@ -81,7 +81,7 @@
                 android:layout_height="43dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Parent's Obseervations"
+                android:text="Parent's Observations"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
@@ -116,7 +116,7 @@
                 android:layout_height="43dp"
                 android:layout_marginLeft="200dp"
                 android:fontFamily="serif"
-                android:text="Doctor's Obseervations"
+                android:text="Doctor's Observations"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@android:color/black"

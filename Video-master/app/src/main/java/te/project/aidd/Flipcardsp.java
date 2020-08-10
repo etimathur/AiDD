@@ -34,7 +34,7 @@ public class Flipcardsp extends AppCompatActivity {
                 new DataPoint(2, 25),
                 new DataPoint(3, 25),
                 new DataPoint(4, 35),
-                new DataPoint(5, 20)
+                new DataPoint(5, 60)
         });
         //graph3.addSeries(series3);
 
@@ -53,7 +53,7 @@ public class Flipcardsp extends AppCompatActivity {
                 new DataPoint(2, 20),
                 new DataPoint(3, 55),
                 new DataPoint(4, 75),
-                new DataPoint(5, 20),
+                new DataPoint(5, 60),
 //                new DataPoint(0, 70),
 //                new DataPoint(0, 80),
 //                new DataPoint(0, 60),

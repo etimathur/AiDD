@@ -9,14 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Flipcardsp"
+        <activity
+            android:name=".FindMatchInstruct"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Colormatchp"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Color_instruct"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Flip_instuct"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Flipcardsp"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Colormatchp"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Color_instruct"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Flip_instuct"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ParentNavActivity"
             android:label="@string/title_activity_parent_nav"
