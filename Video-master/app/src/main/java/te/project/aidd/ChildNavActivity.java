@@ -49,6 +49,19 @@ public class ChildNavActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+
+        int count = getSupportFragmentManager().getBackStackEntryCount();
+
+        if (count == 0) {
+            finish();
+            //additional code
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
+
+    }
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.child_nav, menu);

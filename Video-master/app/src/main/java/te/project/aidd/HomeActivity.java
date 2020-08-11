@@ -43,12 +43,12 @@ public class HomeActivity extends AppCompatActivity {
         int userID=sessionManagement.getSession();
         if (userID==1){
             Intent par=new Intent(HomeActivity.this,ChildNavActivity.class);
-            par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(par);
         }
         else if (userID==0){
             Intent par=new Intent(HomeActivity.this,ParentNavActivity.class);
-            par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(par);
         }
         else{
