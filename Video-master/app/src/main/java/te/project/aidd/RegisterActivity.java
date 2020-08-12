@@ -71,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                     } else {
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
+                            sendMail();
                             Toast.makeText(RegisterActivity.this, "You have registered", Toast.LENGTH_SHORT).show();
                             Intent moveToLogin = new Intent(RegisterActivity.this, HomeActivity.class);
                             startActivity(moveToLogin);
@@ -86,6 +87,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }else {
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
+                            sendMail();
                             Toast.makeText(RegisterActivity.this, "You have registered", Toast.LENGTH_SHORT).show();
                             Intent moveToLogin = new Intent(RegisterActivity.this, HomeActivity.class);
                             startActivity(moveToLogin);
@@ -101,6 +103,15 @@ public class RegisterActivity extends AppCompatActivity {
         UserName.addTextChangedListener(registerTextWatcher);
         Password.addTextChangedListener(registerTextWatcher);
 
+    }
+
+    private void sendMail(){
+
+        String mail="2018.jatin.chhabria@ves.ac.in";
+        String message="Hello";
+        String subject="Testing mail";
+        JavaMailAPI javaMailAPI=new JavaMailAPI(this,mail,subject,message);
+        javaMailAPI.execute();
     }
 
     private TextWatcher registerTextWatcher = new TextWatcher() {
