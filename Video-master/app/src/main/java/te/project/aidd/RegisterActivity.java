@@ -24,6 +24,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText ChildName;
     EditText doctorMail;
     TextView login;
+    int id=1;
 
     private static final Pattern PASSWORD_PATTERN=
             Pattern.compile("^" +
@@ -71,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
                     } else {
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
-                            sendMail();
+                            sendMail(name,mail,user,password);
                             Toast.makeText(RegisterActivity.this, "You have registered", Toast.LENGTH_SHORT).show();
                             Intent moveToLogin = new Intent(RegisterActivity.this, HomeActivity.class);
                             startActivity(moveToLogin);
@@ -87,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
                     }else {
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
-                            sendMail();
+                            sendMail(name,mail,user,password);
                             Toast.makeText(RegisterActivity.this, "You have registered", Toast.LENGTH_SHORT).show();
                             Intent moveToLogin = new Intent(RegisterActivity.this, HomeActivity.class);
                             startActivity(moveToLogin);
@@ -105,13 +106,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void sendMail(){
+    private void sendMail(String name, String docMail, String userMail,String password){
 
-        String mail="2018.jatin.chhabria@ves.ac.in";
-        String message="Hello";
-        String subject="Testing mail";
+        String mail=userMail;
+        String message="You have successfully registered on AiDD:Assisting ADHD children and doctors app.Please note the Login credentials.\nParent/Doctor username:"+" "+userMail+"\nParent/Doctor Password:"+password+"\nChild name:"+name+"\nChild Password:"+name+String.valueOf(id);
+        String subject="Registration successful";
         JavaMailAPI javaMailAPI=new JavaMailAPI(this,mail,subject,message);
         javaMailAPI.execute();
+        id++;
     }
 
     private TextWatcher registerTextWatcher = new TextWatcher() {
