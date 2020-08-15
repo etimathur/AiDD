@@ -18,6 +18,8 @@ public class Colormatchp extends AppCompatActivity {
     ProgressBar pbdoc;
     TextView tparent,tdoc;
     int i=0,j=0;
+    DatabaseHelper db;
+    int list[]=new int[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,24 +29,25 @@ public class Colormatchp extends AppCompatActivity {
         tparent=(TextView) findViewById(R.id.parenttext);
         pbdoc=(ProgressBar) findViewById(R.id.docpro);
         tdoc=(TextView) findViewById(R.id.doctext);
-        GraphView graph = (GraphView) findViewById(R.id.graph2);
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("NO OF GAMES");
-        graph.getViewport().setMinY(10);
-        graph.getViewport().setMaxY(50);
-
-        graph.getViewport().setYAxisBoundsManual(true);
+        db=new DatabaseHelper(this);
+        SessionManagement ses=new SessionManagement(Colormatchp.this);
+        String naaam=ses.getnaaam();
+        list=db.color_match_arr(naaam);
+        // graph for calculating the score
+        GraphView scoregraph = (GraphView) findViewById(R.id.graph2);
+        scoregraph.getGridLabelRenderer().setHorizontalAxisTitle("NO OF GAMES");
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, 45),
+                new DataPoint(1,list[0]),
 
-                new DataPoint(2, 25),
-                new DataPoint(3, 25),
-                new DataPoint(4, 35),
-                new DataPoint(5, 20)
+                new DataPoint(2,list[1]),
+                new DataPoint(3, list[2]),
+                new DataPoint(4, list[3]),
+                new DataPoint(5, list[4])
         });
-        graph.addSeries(series);
-        graph.setBackgroundColor(Color.WHITE);
-        graph.getLegendRenderer().setVisible(true);
-        graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        scoregraph.addSeries(series);
+        scoregraph.setBackgroundColor(Color.WHITE);
+        scoregraph.getLegendRenderer().setVisible(true);
+        scoregraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         series.setTitle("SCORE");
         series.setThickness(7);
         series.setColor(Color.BLUE);
@@ -53,14 +56,20 @@ public class Colormatchp extends AppCompatActivity {
         series.setDataPointsRadius(10);
 
 
-        GraphView graph1 = (GraphView) findViewById(R.id.graph);
+
+
+
+
+
+        //graph for calculating the speed
+        GraphView timegraph = (GraphView) findViewById(R.id.graph);
         //graph1.getGridLabelRenderer().setVerticalAxisTitle("Speed progress");
-        graph1.getGridLabelRenderer().setHorizontalAxisTitle(" NO OF GAMES");
+        timegraph.getGridLabelRenderer().setHorizontalAxisTitle(" NO OF GAMES");
 
-        graph1.getViewport().setMinY(0);
-        graph1.getViewport().setMaxY(100);
+        timegraph.getViewport().setMinY(0);
+        timegraph.getViewport().setMaxY(100);
 
-        graph1.getViewport().setYAxisBoundsManual(true);
+        timegraph.getViewport().setYAxisBoundsManual(true);
 
         LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>(new DataPoint[]{
                 new DataPoint(1, 30),
@@ -71,11 +80,11 @@ public class Colormatchp extends AppCompatActivity {
 
         });
 
-        graph1.addSeries(series1);
-        graph1.setBackgroundColor(Color.WHITE);
-        graph1.getViewport().setScalableY(true);
-        graph1.getLegendRenderer().setVisible(true);
-        graph1.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        timegraph.addSeries(series1);
+        timegraph.setBackgroundColor(Color.WHITE);
+        timegraph.getViewport().setScalableY(true);
+        timegraph.getLegendRenderer().setVisible(true);
+        timegraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
         series1.setTitle("TIME");
         series1.setThickness(7);
         series1.setColor(Color.RED);
@@ -90,8 +99,6 @@ public class Colormatchp extends AppCompatActivity {
         pbdoc.setMax(100);
         pbdoc.setProgress(75);
         tdoc.setText(75+"%");
-
-
 
 
     }

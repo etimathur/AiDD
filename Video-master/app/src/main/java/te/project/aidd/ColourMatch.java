@@ -2,6 +2,7 @@ package te.project.aidd;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,12 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
+import java.util.Random;
 
-import te.project.aidd.ui.exercises.ExercisesFragment;
+//import te.project.aidd.ui.exercises.ExercisesFragment;
 
 public class ColourMatch extends AppCompatActivity {
     private TextView score;
-    private TextView res;
     private ImageView image;
     private boolean answer;
     private Button yes,no;
@@ -30,22 +31,32 @@ public class ColourMatch extends AppCompatActivity {
     private static final long COUNTDOWN_IN=30000;
     private CountDownTimer cd;
     private long timeleft;
+    DatabaseHelper db;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colour_match);
+        db=new DatabaseHelper(this);
         score=(TextView) findViewById(R.id.score);
         image=(ImageView) findViewById((R.id.color));
         yes=(Button) findViewById(R.id.btn_yes);
         no=(Button) findViewById(R.id.btn_no);
         timer=(TextView) findViewById(R.id.time);
+
+
+
+
+
+
+        Random ran=new Random();
+        question=ran.nextInt(14);
         updateQuestion();
         timeleft=COUNTDOWN_IN;
         startCountDown();
 
-        //Random r=new Random();
-        //question=r.nextInt(5);
 
 
 
@@ -53,7 +64,7 @@ public class ColourMatch extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(answer == true){
+                if(answer){
                     points++;
 
                     updateScore(points);
@@ -73,7 +84,13 @@ public class ColourMatch extends AppCompatActivity {
                     Toast.makeText(ColourMatch.this, "Wrong", Toast.LENGTH_SHORT).show();
                     points=points-1;
                     updateScore(points);
-                    updateQuestion();
+                    if(question==Questions.answers.length){
+                        question=0;
+                        updateQuestion();
+                    }
+                    else{
+                        updateQuestion();
+                    }
 
                 }
             }
@@ -81,7 +98,7 @@ public class ColourMatch extends AppCompatActivity {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(answer == false){
+                if(!answer){
                     points++;
                     updateScore(points);
                     Toast.makeText(ColourMatch.this, "Correct", Toast.LENGTH_SHORT).show();
@@ -90,7 +107,6 @@ public class ColourMatch extends AppCompatActivity {
                     if(question==Questions.answers.length){
                         question=0;
                         updateQuestion();
-
                     }
                     else{
                         updateQuestion();
@@ -101,7 +117,13 @@ public class ColourMatch extends AppCompatActivity {
                     Toast.makeText(ColourMatch.this, "Wrong", Toast.LENGTH_SHORT).show();
                     points=points-1;
                     updateScore(points);
-                    updateQuestion();
+                    if(question==Questions.answers.length){
+                        question=0;
+                        updateQuestion();
+                    }
+                    else{
+                        updateQuestion();
+                    }
 
                 }
             }
@@ -136,14 +158,20 @@ public class ColourMatch extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timeleft=0;
+
 //                results=(float)no_of_q/30;
 //                rt=(float)points/no_of_q;
 //                swara=((results+rt)/2)*100;
-//                res=(TextView) findViewById(R.id.result);
 //                res.setVisibility(View.VISIBLE);
 //                res.setText("results="+swara+"questions="+no_of_q);
                 //updateCountDownText();
+                SessionManagement ses=new SessionManagement(ColourMatch.this);
+                String naaam=ses.getnaaam();
+                db.addscore(points,naaam);
+
+
                 cd.cancel();
+
 
 
                 Intent homepage=new Intent(ColourMatch.this, Color_instruct.class);
@@ -162,10 +190,10 @@ public class ColourMatch extends AppCompatActivity {
         int seconds=(int)(timeleft/1000)%60;
         String timeformat=String.format(Locale.getDefault(),"00:%02d",seconds);
         timer.setText(timeformat);
-        if(timeleft<1000){
+        if(timeleft<10000){
             timer.setTextColor(Color.RED);
         }else {
             timer.setTextColor(Color.BLACK);
         }
     }
-    }
+}
