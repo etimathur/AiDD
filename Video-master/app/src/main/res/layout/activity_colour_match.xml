@@ -71,12 +71,24 @@
 
     </TableRow>
 
-    <ImageView
-        android:id="@+id/color"
-        android:layout_width="350dp"
-        android:layout_height="150dp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/c1"
+        android:layout_width="370dp"
+        android:layout_height="209dp"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="10dp"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="8dp">
+
+        <ImageView
+            android:id="@+id/color"
+            android:layout_width="370dp"
+            android:layout_height="168dp"
+            android:layout_gravity="center" />
+
+
+    </androidx.cardview.widget.CardView>
     <TableRow
         android:id="@+id/tableRow1"
         android:layout_height="wrap_content"
@@ -90,6 +102,9 @@
             android:layout_height="58dp"
             android:layout_below="@+id/color"
             android:layout_marginTop="30dp"
+            android:fontFamily="serif"
+            android:textStyle="bold"
+            android:textSize="20sp"
             android:background="@drawable/round"
             android:text="Yes" />
 
@@ -100,6 +115,9 @@
             android:layout_below="@+id/color"
             android:layout_marginLeft="50dp"
             android:layout_marginTop="30dp"
+            android:fontFamily="serif"
+            android:textStyle="bold"
+            android:textSize="20sp"
             android:background="@drawable/round"
             android:text="No" />
     </TableRow>

@@ -26,6 +26,7 @@
                 android:background="#A7F2FF"
                 android:fontFamily="serif"
                 android:gravity="center"
+                android:textStyle="bold"
                 android:text="COLOR MATCH STATISTICS"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 

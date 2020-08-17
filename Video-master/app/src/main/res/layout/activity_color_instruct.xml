@@ -85,6 +85,8 @@
         android:background="@drawable/round"
         android:text="LET'S PLAY"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:fontFamily="serif"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

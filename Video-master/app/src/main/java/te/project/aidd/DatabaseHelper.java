@@ -12,6 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME="register.db";
     public static final String TABLE_NAME="registeruser";
     public static final String TABLE_COLOR = "colormatch";
+    public static final String TABLE_COLORMATCH_ANALYSIS="colormatchanalysis";
     public static final String COL_1="ID";
     public static final String COL_2="name";
     public static final String COL_3="email";
@@ -34,13 +35,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE registeruser (ID INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, email TEXT,username TEXT UNIQUE , password TEXT,childPassword TEXT)");
         db.execSQL("CREATE TABLE colormatch ( ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1 INTEGER, game_2 INTEGER, game_3 INTEGER, game_4 INTEGER, game_5 INTEGER)");
-
+        db.execSQL("CREATE TABLE colormatchanalysis ( ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1 INTEGER, game_2 INTEGER, game_3 INTEGER, game_4 INTEGER, game_5 INTEGER)");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLOR);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLORMATCH_ANALYSIS);
         onCreate(db);
 
     }
@@ -62,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cc.put(game_5, 0);
         long res=db.insert("registeruser",null,cV);
         db.insert(TABLE_COLOR, null, cc);
+        db.insert(TABLE_COLORMATCH_ANALYSIS,null,cc);
         countID++;
         db.close();
         return res;
@@ -114,6 +117,46 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int[] array=new int[5];
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM colormatch WHERE parentname=?", new String[]{name});
+        if (cursor.moveToFirst()) {
+            int c1 = cursor.getInt(cursor.getColumnIndex(game_1));
+            int c2 = cursor.getInt(cursor.getColumnIndex(game_2));
+            int c3 = cursor.getInt(cursor.getColumnIndex(game_3));
+            int c4 = cursor.getInt(cursor.getColumnIndex(game_4));
+            int c5 =  cursor.getInt(cursor.getColumnIndex(game_5));
+            array[0]=c1;
+            array[1]=c2;
+            array[2]=c3;
+            array[3]=c4;
+            array[4]=c5;
+
+        }
+        return array;
+
+    }
+    public void time_analysis(int analysis, String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        Cursor cursor = db.rawQuery("SELECT * FROM colormatchanalysis  WHERE name=?", new String[]{name});
+        if (cursor.moveToFirst()) {
+            int c1 = cursor.getInt(cursor.getColumnIndex(game_2));
+            int c2 = cursor.getInt(cursor.getColumnIndex(game_3));
+            int c3 = cursor.getInt(cursor.getColumnIndex(game_4));
+            int c4 = cursor.getInt(cursor.getColumnIndex(game_5));
+            values.put(game_1, c1);
+            values.put(game_2, c2);
+            values.put(game_3, c3);
+            values.put(game_4, c4);
+            values.put(game_5, analysis);
+        }
+        db.update(TABLE_COLORMATCH_ANALYSIS, values, "name=?", new String[]{name});
+        db.close();
+
+    }
+
+    public int[] time_analysis_graph(String name) {
+        int[] array=new int[5];
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM colormatchanalysis WHERE parentname=?", new String[]{name});
         if (cursor.moveToFirst()) {
             int c1 = cursor.getInt(cursor.getColumnIndex(game_1));
             int c2 = cursor.getInt(cursor.getColumnIndex(game_2));

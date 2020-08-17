@@ -20,6 +20,7 @@ public class Colormatchp extends AppCompatActivity {
     int i=0,j=0;
     DatabaseHelper db;
     int list[]=new int[5];
+    int analysis_list[]=new int[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +69,17 @@ public class Colormatchp extends AppCompatActivity {
 
         timegraph.getViewport().setMinY(0);
         timegraph.getViewport().setMaxY(100);
+        analysis_list=db.time_analysis_graph(naaam);
 
         timegraph.getViewport().setYAxisBoundsManual(true);
 
         LineGraphSeries<DataPoint> series1 = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                new DataPoint(1, 30),
-                new DataPoint(2, 43),
-                new DataPoint(3, 55),
-                new DataPoint(4, 75),
-                new DataPoint(5, 60),
+                new DataPoint(1, analysis_list[0]),
+                new DataPoint(2, analysis_list[1]),
+                new DataPoint(3, analysis_list[2]),
+                new DataPoint(4, analysis_list[3]),
+                new DataPoint(5, analysis_list[4]),
+
 
         });
 

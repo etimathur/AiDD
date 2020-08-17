@@ -26,7 +26,7 @@ public class ColourMatch extends AppCompatActivity {
     private int points=0;
     private int question=0;
     private int no_of_q=0;
-    public float results,swara,rt;
+    public float analysis;
     private TextView timer ;
     private static final long COUNTDOWN_IN=30000;
     private CountDownTimer cd;
@@ -45,14 +45,8 @@ public class ColourMatch extends AppCompatActivity {
         yes=(Button) findViewById(R.id.btn_yes);
         no=(Button) findViewById(R.id.btn_no);
         timer=(TextView) findViewById(R.id.time);
-
-
-
-
-
-
         Random ran=new Random();
-        question=ran.nextInt(14);
+        question=ran.nextInt(15);
         updateQuestion();
         timeleft=COUNTDOWN_IN;
         startCountDown();
@@ -158,16 +152,13 @@ public class ColourMatch extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timeleft=0;
-
-//                results=(float)no_of_q/30;
-//                rt=(float)points/no_of_q;
-//                swara=((results+rt)/2)*100;
-//                res.setVisibility(View.VISIBLE);
-//                res.setText("results="+swara+"questions="+no_of_q);
-                //updateCountDownText();
+                // analysis of the game without model by 80% to 20% equation
+                analysis= (float) ((0.8*points/no_of_q)+ (0.2*no_of_q/30));
+                int results =(int) (analysis*100);
                 SessionManagement ses=new SessionManagement(ColourMatch.this);
                 String naaam=ses.getnaaam();
                 db.addscore(points,naaam);
+                db.time_analysis(results,naaam);
 
 
                 cd.cancel();
@@ -176,9 +167,6 @@ public class ColourMatch extends AppCompatActivity {
 
                 Intent homepage=new Intent(ColourMatch.this, Color_instruct.class);
                 startActivity(homepage);
-
-
-
 
 
             }
