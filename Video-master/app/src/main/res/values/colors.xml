@@ -6,4 +6,5 @@
     <color name="textColorPrimary">#000000</color>
     <color name="textTab">#A7F2FF</color>
     <color name="colorBackupPrimary">#6200EE</color>
+    <color name="colorWhite">#ffffff</color>
 </resources>

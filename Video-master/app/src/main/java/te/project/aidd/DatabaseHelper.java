@@ -25,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String game_3 = "game_3";
     private static final String game_4 = "game_4";
     private static final String game_5 = "game_5";
-    int countID=1;
+    private static int countID=1;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);

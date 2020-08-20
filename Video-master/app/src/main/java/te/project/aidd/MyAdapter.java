@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import te.project.aidd.ui.exercises.ExercisesFragment;
 
 public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
 
@@ -24,6 +23,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
         this.c = c;
         this.models = models;
     }
+
 
     @NonNull
     @Override

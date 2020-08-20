@@ -43,5 +43,6 @@ public class FragmentTutorials extends Fragment {
         models.add(new Model("Jigsaw Puzzle", R.drawable.jigsaw));
         models.add(new Model("Flip The cards", R.drawable.flip));
         models.add(new Model("Lost in maze", R.drawable.maze));
+        models.add(new Model("Lost in maze", R.drawable.maze));
     }
 }
