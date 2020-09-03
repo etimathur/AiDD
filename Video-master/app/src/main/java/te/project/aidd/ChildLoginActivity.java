@@ -33,11 +33,11 @@ public class ChildLoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String user=childUserName.getText().toString().trim();
                 String password=childPassword.getText().toString().trim();
-                Boolean res=db.childCheckUser(user,password);
+                int tableID=db.childCheckUser(user,password);
                 int id=1;
-                if (res==true)
+                if (tableID>0)
                 {
-                    User new_user=new User(id,user);
+                    User new_user=new User(id,user,tableID);
                     SessionManagement sessionManagement=new SessionManagement(ChildLoginActivity.this);
                     sessionManagement.saveSession(new_user);
                     Toast.makeText(ChildLoginActivity.this,"Successfully Logged in",Toast.LENGTH_SHORT).show();

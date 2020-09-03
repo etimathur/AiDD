@@ -5,14 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME="register.db";
+    public static final String DATABASE_NAME="aidd.db";
     public static final String TABLE_NAME="registeruser";
     public static final String TABLE_COLOR = "colormatch";
     public static final String TABLE_COLORMATCH_ANALYSIS="colormatchanalysis";
+
     public static final String COL_1="ID";
     public static final String COL_2="name";
     public static final String COL_3="email";
@@ -27,6 +29,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String game_5 = "game_5";
     private static int countID=1;
 
+    //For Find the match
+    public static final String TABLE_FINDTHEMATCH="findthematch";
+    public static final String COLFTM_1="ID";
+    public static final String COLFTM_2="name";
+    public static final String COLFTM_3="email";
+    public static final String COlFTM_4="correctscore";
+    public static final String COlFTM_5="wrongscore";
+    public static final String COlFTM_6="totalscore";
+    public static final String emailString="email";
+    public static final String usernameString="username";
+    public int id;
+
+
     public DatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, 1);
     }
@@ -36,6 +51,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE registeruser (ID INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, email TEXT,username TEXT UNIQUE , password TEXT,childPassword TEXT)");
         db.execSQL("CREATE TABLE colormatch ( ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1 INTEGER, game_2 INTEGER, game_3 INTEGER, game_4 INTEGER, game_5 INTEGER)");
         db.execSQL("CREATE TABLE colormatchanalysis ( ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1 INTEGER, game_2 INTEGER, game_3 INTEGER, game_4 INTEGER, game_5 INTEGER)");
+
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_FINDTHEMATCH + "(" + COLFTM_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLFTM_2 + " TEXT,"+COLFTM_3+" TEXT,"+COlFTM_4+" INTEGER, "+COlFTM_5+" INTEGER, "+COlFTM_6+" INTEGER )";
+
+        db.execSQL(CREATE_TABLE);
+
+
     }
 
     @Override
@@ -43,17 +64,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLOR);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLORMATCH_ANALYSIS);
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_FINDTHEMATCH);
         onCreate(db);
 
     }
     public long addUser(String name, String email,String user, String password){
-        SQLiteDatabase db=this.getWritableDatabase();
+        SQLiteDatabase db=this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM registeruser",null);
+        if(cursor.moveToLast()) {
+            countID = cursor.getInt(cursor.getColumnIndex(COL_1));
+        }
+        else {
+            countID=0;
+        }
+        countID++;
+        db=this.getWritableDatabase();
         ContentValues cV=new ContentValues();
         ContentValues cc = new ContentValues();
         cV.put("name",name);
         cV.put("email",email);
         cV.put("username",user);
         cV.put("password",password);
+
+
         cV.put("childPassword",name+String.valueOf(countID));
         cc.put("name", name);
         cc.put("parentname",user);
@@ -65,7 +99,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long res=db.insert("registeruser",null,cV);
         db.insert(TABLE_COLOR, null, cc);
         db.insert(TABLE_COLORMATCH_ANALYSIS,null,cc);
-        countID++;
+
+
+
+//        ContentValues cV2 = new ContentValues();
+//        cV2.put("name",name);
+//        cV2.put("email",email);
+//        cV2.put(game_1, 0);
+//        cV2.put(game_2, 0);
+//        cV2.put(game_3, 0);
+//        cV2.put(game_4, 0);
+//        cV2.put(game_5, 0);
+//        long flag=db.insert(TABLE_FINDTHEMATCH,null,cV2);
         db.close();
         return res;
     }
@@ -87,11 +132,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor.getCount()>0)return true;
         else return false;
     }
-    public Boolean childCheckUser(String name,String password ){
+    public int childCheckUser(String name,String password ){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from registeruser where name=? and childPassword=?", new String[]{name,password});
-        if (cursor.getCount()>0)return true;
-        else return false;
+        cursor.moveToFirst();
+        int id=cursor.getInt(cursor.getColumnIndex(COL_1));
+        if (cursor.getCount()>0){
+            return id;
+        }
+        else return 0;
     }
     public void addscore(int score, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -174,4 +223,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+    public String getEmailForChild(int id)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM registeruser WHERE ID=?",new String[]{String.valueOf(id)});
+        String email;
+        if(cursor.moveToFirst()) {
+            email = cursor.getString(cursor.getColumnIndex(usernameString));
+        }
+        else {
+            Log.i("Error","Error");
+            email="";
+        }
+        return email;
+    }
+
+    //For Find the Match
+
+    public void insertScore(String email, String name, int correctScore,int wrongScore,int totalScore)
+    {
+        SQLiteDatabase db= this.getWritableDatabase();
+        ContentValues contentValues =new ContentValues();
+        Log.d("Email ",email);
+        contentValues.put(COLFTM_2,name);
+        contentValues.put(COLFTM_3,email);
+        contentValues.put(COlFTM_4,correctScore);
+        contentValues.put(COlFTM_5,wrongScore);
+        contentValues.put(COlFTM_6,totalScore);
+        db.insert(TABLE_FINDTHEMATCH,null,contentValues);
+    }
 }

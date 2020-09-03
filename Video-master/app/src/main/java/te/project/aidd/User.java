@@ -3,6 +3,14 @@ package te.project.aidd;
 public class User {
     int id;
     String name;
+    int tableId;
+
+    public User(int id, String name, int tableId) {
+        this.id = id;
+        this.name = name;
+        this.tableId=tableId;
+
+    }
 
     public User(int id, String name) {
         this.id = id;
@@ -23,5 +31,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getTableId() {
+
+        return tableId;
+    }
+
+    public void setTableId(int tableId) {
+        this.tableId = tableId;
     }
 }

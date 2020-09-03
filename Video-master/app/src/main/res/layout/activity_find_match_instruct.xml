@@ -28,37 +28,40 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        android:id="@+id/textView9"
+        android:layout_width="293dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="3.You can only proceed to next question after giving a correct answer"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+    <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="sans-serif-medium"
+        android:gravity="center"
         android:text="Instructions"
         android:textColor="#000000"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.457"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="20dp"
-        android:text="1.Given are 9 random images"
-        android:textColor="#000000"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-    <TextView
         android:id="@+id/textView8"
-        android:layout_width="285dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="309dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
         android:text="2.Select the correct images based on the given question"
         android:textColor="#000000"
         android:textSize="24sp"
@@ -66,16 +69,17 @@
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TextView
-        android:id="@+id/textView9"
-        android:layout_width="279dp"
-        android:layout_height="88dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="20dp"
-        android:text="3.You can only proceed to next question after giving a correct answer"
+        android:id="@+id/textView11"
+        android:layout_width="262dp"
+        android:layout_height="67dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:text="4. You have 30 secs to complete the challenge."
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
     <Button
         android:id="@+id/ftm"
@@ -83,25 +87,28 @@
         android:layout_height="47dp"
         android:layout_marginTop="4dp"
         android:background="@drawable/round"
+        android:gravity="center"
         android:text="LET'S BEGIN"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11"
-        app:layout_constraintVertical_bias="0.2" />
-
+        app:layout_constraintVertical_bias="0.258" />
 
     <TextView
-        android:id="@+id/textView11"
-        android:layout_width="266dp"
-        android:layout_height="59dp"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="15dp"
-        android:text="4. You have 30 secs to complete the challenge."
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="32dp"
+        android:gravity="center"
+        android:text="1.Given are 9 random images"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
