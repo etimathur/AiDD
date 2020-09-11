@@ -1,6 +1,7 @@
 package te.project.aidd;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +21,8 @@ import java.util.Random;
 //import te.project.aidd.ui.exercises.ExercisesFragment;
 
 public class ColourMatch extends AppCompatActivity {
-    private TextView score;
-    private ImageView image;
+    private TextView score,meaning,level;
+    private ImageView image,image2;
     private boolean answer;
     private Button yes,no;
     private int points=0;
@@ -28,10 +30,11 @@ public class ColourMatch extends AppCompatActivity {
     private int no_of_q=0;
     public float analysis;
     private TextView timer ;
-    private static final long COUNTDOWN_IN=30000;
+    private static final long COUNTDOWN_IN=45000;
     private CountDownTimer cd;
     private long timeleft;
     DatabaseHelper db;
+    CardView c1,c2;
 
 
 
@@ -45,12 +48,16 @@ public class ColourMatch extends AppCompatActivity {
         yes=(Button) findViewById(R.id.btn_yes);
         no=(Button) findViewById(R.id.btn_no);
         timer=(TextView) findViewById(R.id.time);
+        meaning=findViewById(R.id.meaning);
+        level=(TextView) findViewById(R.id.level);
+        c1= findViewById(R.id.c1);
+        c2= findViewById(R.id.c2);
+        image2= (ImageView) findViewById(R.id.bb);
         Random ran=new Random();
-        question=ran.nextInt(15);
+        question=ran.nextInt(14);
         updateQuestion();
         timeleft=COUNTDOWN_IN;
         startCountDown();
-
 
 
 
@@ -63,7 +70,6 @@ public class ColourMatch extends AppCompatActivity {
 
                     updateScore(points);
                     Toast.makeText(ColourMatch.this, "Correct", Toast.LENGTH_SHORT).show();
-                    // updateQuestion();
                     //perform this check before you update the question
                     if(question==Questions.answers.length){
                         question=0;
@@ -72,11 +78,9 @@ public class ColourMatch extends AppCompatActivity {
                     else{
                         updateQuestion();
                     }
-
                 }
                 else {
                     Toast.makeText(ColourMatch.this, "Wrong", Toast.LENGTH_SHORT).show();
-                    points=points-1;
                     updateScore(points);
                     if(question==Questions.answers.length){
                         question=0;
@@ -96,7 +100,6 @@ public class ColourMatch extends AppCompatActivity {
                     points++;
                     updateScore(points);
                     Toast.makeText(ColourMatch.this, "Correct", Toast.LENGTH_SHORT).show();
-                    //updateQuestion();
                     //perform this check before you update the question
                     if(question==Questions.answers.length){
                         question=0;
@@ -105,11 +108,9 @@ public class ColourMatch extends AppCompatActivity {
                     else{
                         updateQuestion();
                     }
-
                 }
                 else {
                     Toast.makeText(ColourMatch.this, "Wrong", Toast.LENGTH_SHORT).show();
-                    points=points-1;
                     updateScore(points);
                     if(question==Questions.answers.length){
                         question=0;
@@ -122,17 +123,23 @@ public class ColourMatch extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
     }
 
 
     private void updateQuestion(){
-
         image.setImageResource(Questions.images[question]);
         answer=Questions.answers[question];
+        if(points>5){
+            LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) c1.getLayoutParams();
+            layoutParams.height=420;
+            c1.setLayoutParams(layoutParams);
+            c2.setVisibility(View.VISIBLE);
+            level.setText("LEVEL 2");
+            meaning.setVisibility(View.VISIBLE);
+            image.setImageResource(Questions.meaning[question]);
+            image2.setImageResource(Questions.textcolor[question]);
+        }
+
         question++;
         no_of_q++;
 
@@ -159,14 +166,11 @@ public class ColourMatch extends AppCompatActivity {
                 String naaam=ses.getnaaam();
                 db.addscore(points,naaam);
                 db.time_analysis(results,naaam);
-
-
                 cd.cancel();
-
-
-
+                finish();
                 Intent homepage=new Intent(ColourMatch.this, Color_instruct.class);
                 startActivity(homepage);
+
 
 
             }
