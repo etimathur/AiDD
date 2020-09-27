@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".YoutubeVideo"></activity>
+        <activity android:name=".MakeColor"></activity>
+        <activity android:name=".YoutubeVideo" />
         <activity
             android:name=".FindMatchInstruct"
             android:theme="@style/AppTheme.NoActionBar" />

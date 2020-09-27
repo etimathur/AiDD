@@ -20,6 +20,25 @@ public class Questions {
             R.drawable.yellow_red,
 
     };
+
+    public static int[] colorss=new int[]{
+            R.drawable.orange,
+            R.drawable.purple,
+            R.drawable.pink,
+            R.drawable.grey,
+            R.drawable.lightblue,
+
+
+    };
+
+    public static String[] match=new String[]{
+            "orange",
+            "purple",
+            "pink",
+            "grey",
+            "lightblue",
+
+    };
     public static boolean[] answers=new boolean[]{
             true,false,false,true,false,true,false,false,true,false,true,false,false,true,false,false
     };

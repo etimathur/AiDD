@@ -3,12 +3,18 @@ package te.project.aidd;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,7 +27,7 @@ import java.util.Random;
 //import te.project.aidd.ui.exercises.ExercisesFragment;
 
 public class ColourMatch extends AppCompatActivity {
-    private TextView score,meaning,level;
+    private TextView score,meaning,level,game_score;
     private ImageView image,image2;
     private boolean answer;
     private Button yes,no;
@@ -32,9 +38,13 @@ public class ColourMatch extends AppCompatActivity {
     private TextView timer ;
     private static final long COUNTDOWN_IN=45000;
     private CountDownTimer cd;
-    private long timeleft;
+    public long timeleft;
+    int flag=1;
     DatabaseHelper db;
+    Animation animation;
     CardView c1,c2;
+    pop popup=new pop(ColourMatch.this);
+
 
 
 
@@ -80,7 +90,7 @@ public class ColourMatch extends AppCompatActivity {
                     }
                 }
                 else {
-                    Toast.makeText(ColourMatch.this, "Wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ColourMatch.this, "Wrong",Toast.LENGTH_SHORT).show();
                     updateScore(points);
                     if(question==Questions.answers.length){
                         question=0;
@@ -129,21 +139,57 @@ public class ColourMatch extends AppCompatActivity {
     private void updateQuestion(){
         image.setImageResource(Questions.images[question]);
         answer=Questions.answers[question];
-        if(points>5){
-            LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) c1.getLayoutParams();
-            layoutParams.height=420;
-            c1.setLayoutParams(layoutParams);
-            c2.setVisibility(View.VISIBLE);
-            level.setText("LEVEL 2");
-            meaning.setVisibility(View.VISIBLE);
-            image.setImageResource(Questions.meaning[question]);
-            image2.setImageResource(Questions.textcolor[question]);
+        animation= AnimationUtils.loadAnimation(ColourMatch.this,R.anim.textanim);
+        image.startAnimation(animation);
+        if(points>=20){
+            Intent intent= new Intent(ColourMatch.this,MakeColor.class);
+            startActivity(intent);
         }
+        else if(points>5){
+            if(flag==1){
+                popup.startlevelpop();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        flag=0;
+                        popup.dismisslevelpop();
+//                        String t= timer.getText()+"";
+//                        t=t.substring(3,5);
+//                        cd.cancel();
+//                        Log.d("sexy",t);
+//                        long timee=Long.parseLong(t);
+//                        Log.d("sexyy",timee+" ");
+//                        timeleft=timee;
+
+
+                    }
+                },2000);
+
+            }
+            level2();
+        }
+
+        else {}
 
         question++;
         no_of_q++;
 
     }
+
+
+    public void level2(){
+        LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) c1.getLayoutParams();
+        layoutParams.height=420;
+        c1.setLayoutParams(layoutParams);
+        c2.setVisibility(View.VISIBLE);
+        level.setText("LEVEL 2");
+        meaning.setVisibility(View.VISIBLE);
+        image.setImageResource(Questions.meaning[question]);
+        image2.setImageResource(Questions.textcolor[question]);
+        image2.startAnimation(animation);
+        answer=Questions.answers[question];
+    }
+
     public void updateScore(int point){
         score.setText(""+points);
     }
@@ -166,12 +212,14 @@ public class ColourMatch extends AppCompatActivity {
                 String naaam=ses.getnaaam();
                 db.addscore(points,naaam);
                 db.time_analysis(results,naaam);
-                cd.cancel();
-                finish();
-                Intent homepage=new Intent(ColourMatch.this, Color_instruct.class);
-                startActivity(homepage);
-
-
+                popup.startpop();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cd.cancel();
+                        finish();
+                    }
+                },4000);
 
             }
         }.start();

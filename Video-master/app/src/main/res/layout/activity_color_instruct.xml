@@ -67,11 +67,11 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="279dp"
-        android:layout_height="88dp"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="20dp"
-        android:text="3.A correct answer gives you 1 point, wrong answer deducts 1 point."
+        android:text="3.A correct answer gives you 1 point."
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,7 +100,7 @@
         android:layout_height="59dp"
         android:layout_marginStart="68dp"
         android:layout_marginTop="15dp"
-        android:text="4. You have 30 secs to complete the challenge."
+        android:text="4. You have 45 secs to complete the challenge."
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
