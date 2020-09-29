@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
+import te.project.aidd.Feedback;
 import te.project.aidd.HomeActivity;
 import te.project.aidd.R;
 import te.project.aidd.SessionManagement;
@@ -28,7 +29,7 @@ public class LogoutFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_logout, container, false);
         y=(Button)root.findViewById(R.id.button3);
         n=(Button)root.findViewById(R.id.button4);
-        y.setOnClickListener(new View.OnClickListener() {
+        n.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SessionManagement sessionManagement=new SessionManagement(LogoutFragment.this.getActivity());
@@ -40,10 +41,10 @@ public class LogoutFragment extends Fragment {
                 startActivity(yIntent);
             }
         });
-        n.setOnClickListener(new View.OnClickListener() {
+        y.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent nIntent=new Intent(LogoutFragment.this.getActivity(), ExercisesFragment.class);
+                Intent nIntent=new Intent(LogoutFragment.this.getActivity(), Feedback.class);
                 startActivity(nIntent);
             }
         });
