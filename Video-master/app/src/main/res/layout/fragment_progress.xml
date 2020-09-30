@@ -10,8 +10,8 @@
 
     <TextView
         android:id="@+id/textView12"
-        android:layout_width="414dp"
-        android:layout_height="63dp"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
         android:background="#A7F2FF"
         android:gravity="center"
         android:text="GAME STATISTICS"
@@ -24,6 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.001" />
 
+
     <Button
         android:id="@+id/cmp"
         android:layout_width="210dp"
@@ -33,11 +34,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.189" />
-
+        app:layout_constraintVertical_bias="0.303" />
 
     <Button
         android:id="@+id/fcp"
@@ -48,9 +48,10 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.421" />
+        app:layout_constraintVertical_bias="0.537" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,13 +9,13 @@
 
     <TextView
         android:id="@+id/textView4"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:gravity="center"
-        android:layout_width="413dp"
-        android:layout_height="100dp"
         android:background="#A7F2FF"
         android:fontFamily="serif"
+        android:gravity="center"
         android:text="Colour Match"
         android:textAlignment="center"
         android:textSize="30sp"
@@ -36,46 +36,56 @@
         android:text="Instructions"
         android:textColor="#000000"
         android:textSize="35sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="12dp"
         android:text="1.A question will be shown"
         android:textColor="#000000"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintVertical_bias="0.046" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="285dp"
         android:layout_height="58dp"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="16dp"
         android:text="2. Answer the question and select the respective option"
         android:textColor="#000000"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.523"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintVertical_bias="0.008" />
 
     <TextView
         android:id="@+id/textView9"
         android:layout_width="280dp"
         android:layout_height="60dp"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="20dp"
         android:text="3.A correct answer gives you 1 point."
         android:textColor="#000000"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/cm"
@@ -98,12 +108,15 @@
         android:id="@+id/textView11"
         android:layout_width="266dp"
         android:layout_height="59dp"
-        android:layout_marginStart="68dp"
         android:layout_marginTop="15dp"
         android:text="4. You have 45 secs to complete the challenge."
         android:textColor="#000000"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        app:layout_constraintVertical_bias="0.02" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

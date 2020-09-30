@@ -19,7 +19,7 @@
         <activity
             android:name=".Feedback"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".YoutubeVideo" />
+
 
         <activity
             android:name=".FindMatchInstruct"

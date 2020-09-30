@@ -70,9 +70,9 @@ public class RegisterActivity extends AppCompatActivity {
                     } else if(!PASSWORD_PATTERN.matcher(password).matches()) {
                         Toast.makeText(RegisterActivity.this, "Please enter a strong Password(atleast 8 characters long)", Toast.LENGTH_SHORT).show();
                     } else {
+                        sendMail(name,mail,user,password);
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
-                            sendMail(name,mail,user,password);
                             Toast.makeText(RegisterActivity.this, "You have registered", Toast.LENGTH_SHORT).show();
                             Intent moveToLogin = new Intent(RegisterActivity.this, HomeActivity.class);
                             startActivity(moveToLogin);
