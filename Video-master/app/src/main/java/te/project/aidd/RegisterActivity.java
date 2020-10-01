@@ -1,9 +1,14 @@
 package te.project.aidd;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
         register = (Button) findViewById(R.id.button_register);
         register.setEnabled(false);
         login = (TextView) findViewById(R.id.textview_login);
+        register.setEnabled(isNetworkAvailable());
         login.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -114,6 +120,36 @@ public class RegisterActivity extends AppCompatActivity {
         JavaMailAPI javaMailAPI=new JavaMailAPI(this,mail,subject,message);
         javaMailAPI.execute();
         id++;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    protected void onStart() {
+        if (!isNetworkAvailable())
+        {
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setMessage("You are not connected to internet.To register, please check your internet connection!");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    Intent par=new Intent(RegisterActivity.this,HomeActivity.class);
+                    par.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(par);
+                    finish();
+                }
+            });
+            AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+        }
+        super.onStart();
     }
 
     private TextWatcher registerTextWatcher = new TextWatcher() {
