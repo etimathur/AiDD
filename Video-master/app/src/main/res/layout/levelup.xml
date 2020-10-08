@@ -24,7 +24,7 @@
             android:layout_width="150dp"
             android:layout_height="120dp"
             android:background="@drawable/tropy"
-            android:layout_marginLeft="100dp"/>
+            android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/congrats"

@@ -41,7 +41,7 @@
             android:layout_height="150dp"
             android:background="@drawable/bu"
             android:layout_below="@+id/game_over"
-            android:layout_marginLeft="100dp"/>
+            android:layout_centerHorizontal="true"/>
 
 
 

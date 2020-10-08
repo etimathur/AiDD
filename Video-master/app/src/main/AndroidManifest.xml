@@ -13,7 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MakeColor"></activity>
+        <activity android:name=".MakeColor"
+            android:theme="@style/AppTheme.NoActionBar"  >
+
+        </activity>
         <activity android:name=".YoutubeVideo" />
 
         <activity

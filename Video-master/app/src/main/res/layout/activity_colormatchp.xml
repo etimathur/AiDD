@@ -41,10 +41,10 @@
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph2"
-                android:layout_width="390dp"
-                android:layout_height="183dp"
+                android:layout_width="367dp"
+                android:layout_height="195dp"
                 android:layout_below="@+id/textView"
-                android:layout_marginLeft="10dp" />
+                android:layout_gravity="center" />
 
             <TextView
                 android:id="@+id/speed"
@@ -60,11 +60,11 @@
 
             <com.jjoe64.graphview.GraphView
                 android:id="@+id/graph"
-                android:layout_width="394dp"
-                android:layout_height="203dp"
+                android:layout_width="367dp"
+                android:layout_height="195dp"
                 android:layout_below="@+id/graph2"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
+                android:layout_gravity="center"
                 />
 
 

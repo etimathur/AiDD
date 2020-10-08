@@ -25,19 +25,37 @@
         app:layout_constraintVertical_bias="0.001" />
 
 
-    <Button
-        android:id="@+id/cmp"
-        android:layout_width="210dp"
-        android:layout_height="79dp"
-        android:background="@drawable/round"
-        android:text="COLOR MATCH PROGRESS"
-        android:textSize="20sp"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/colormatch"
+        android:layout_width="381dp"
+        android:layout_height="113dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="#ffffff"
+        app:cardElevation="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.303" />
+        app:layout_constraintVertical_bias="0.204">
+
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="152dp"
+            android:layout_height="102dp"
+            android:background="@drawable/graph" />
+
+        <TextView
+            android:layout_width="203dp"
+            android:layout_height="69dp"
+            android:layout_gravity="center|end"
+            android:text="\tColor Match\nProgress Report"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
 
     <Button
         android:id="@+id/fcp"
@@ -51,7 +69,7 @@
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.537" />
+        app:layout_constraintVertical_bias="0.667" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

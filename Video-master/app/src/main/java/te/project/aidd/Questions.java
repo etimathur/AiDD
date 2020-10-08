@@ -27,6 +27,11 @@ public class Questions {
             R.drawable.pink,
             R.drawable.grey,
             R.drawable.lightblue,
+            R.drawable.lightpurple,
+            R.drawable.darkblue,
+            R.drawable.greenblue,
+            R.drawable.brown,
+            R.drawable.darkgreen,
 
 
     };
@@ -37,6 +42,12 @@ public class Questions {
             "pink",
             "grey",
             "lightblue",
+            "lightpurple",
+            "darkblue",
+            "greenblue",
+            "brown",
+            "darkgreen",
+
 
     };
     public static boolean[] answers=new boolean[]{
@@ -67,7 +78,7 @@ public class Questions {
             R.drawable.green_green,
             R.drawable.black_red,
             R.drawable.black_black,
-            R.drawable.blue_green,
+            R.drawable.blue_red,
             R.drawable.red_blue,
             R.drawable.blue_black,
             R.drawable.black_blue,

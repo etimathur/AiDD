@@ -91,6 +91,7 @@ public class ColourMatch extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(ColourMatch.this, "Wrong",Toast.LENGTH_SHORT).show();
+                    points=points-1;
                     updateScore(points);
                     if(question==Questions.answers.length){
                         question=0;
@@ -121,6 +122,7 @@ public class ColourMatch extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(ColourMatch.this, "Wrong", Toast.LENGTH_SHORT).show();
+                    points=points-1;
                     updateScore(points);
                     if(question==Questions.answers.length){
                         question=0;
@@ -141,11 +143,14 @@ public class ColourMatch extends AppCompatActivity {
         answer=Questions.answers[question];
         animation= AnimationUtils.loadAnimation(ColourMatch.this,R.anim.textanim);
         image.startAnimation(animation);
-        if(points>=20){
+        if(points>=15){
+            level.setText("LEVEL 3");
             Intent intent= new Intent(ColourMatch.this,MakeColor.class);
+            intent.putExtra("color_points",points);
+            intent.putExtra("no_of_q",no_of_q);
             startActivity(intent);
         }
-        else if(points>5){
+        else if(points>5 | flag==0){
             if(flag==1){
                 popup.startlevelpop();
                 new Handler().postDelayed(new Runnable() {
@@ -153,22 +158,13 @@ public class ColourMatch extends AppCompatActivity {
                     public void run() {
                         flag=0;
                         popup.dismisslevelpop();
-//                        String t= timer.getText()+"";
-//                        t=t.substring(3,5);
-//                        cd.cancel();
-//                        Log.d("sexy",t);
-//                        long timee=Long.parseLong(t);
-//                        Log.d("sexyy",timee+" ");
-//                        timeleft=timee;
 
 
                     }
-                },2000);
-
+                },1250);
             }
             level2();
         }
-
         else {}
 
         question++;
@@ -206,16 +202,20 @@ public class ColourMatch extends AppCompatActivity {
             public void onFinish() {
                 timeleft=0;
                 // analysis of the game without model by 80% to 20% equation
-                analysis= (float) ((0.8*points/no_of_q)+ (0.2*no_of_q/30));
-                int results =(int) (analysis*100);
+                analysis= (float) ((0.8*points/no_of_q)+ (0.2*no_of_q/45));
+                int results =(int)(analysis*100);
                 SessionManagement ses=new SessionManagement(ColourMatch.this);
                 String naaam=ses.getnaaam();
-                db.addscore(points,naaam);
-                db.time_analysis(results,naaam);
+                if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
+                    db.addscore(points,naaam);
+                    db.time_analysis(results,naaam);
+                }
+
                 popup.startpop();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        popup.dismisspop();
                         cd.cancel();
                         finish();
                     }
@@ -237,3 +237,4 @@ public class ColourMatch extends AppCompatActivity {
         }
     }
 }
+

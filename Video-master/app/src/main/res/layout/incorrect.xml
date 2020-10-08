@@ -24,7 +24,7 @@
                 android:id="@+id/tropy"
                 android:layout_width="129dp"
                 android:layout_height="97dp"
-                android:layout_marginLeft="120dp"
+                android:layout_centerHorizontal="true"
                 android:background="@drawable/incorrect" />
 
             <TextView

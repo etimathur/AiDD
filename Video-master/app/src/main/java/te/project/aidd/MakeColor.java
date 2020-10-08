@@ -2,12 +2,24 @@ package te.project.aidd;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import org.tensorflow.lite.Interpreter;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.util.Locale;
 import java.util.Random;
 
 public class MakeColor extends AppCompatActivity {
@@ -15,15 +27,30 @@ public class MakeColor extends AppCompatActivity {
     ImageView yourcolor, givencolor;
     String colorvalue="";
     private int count=-1;
+    private static final long COUNTDOWN_IN=45000;
+    private CountDownTimer cd;
+    public long timeleft;
     String checktag="";
     pop popup=new pop(MakeColor.this);
     Random r=new Random();
     Button clear;
+    DatabaseHelper db;
+    TextView score,timer;
+    Interpreter interpreter;
+    int  level_1_points,no_of_q,no_of_q1=0, points1=0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_color);
+        try {
+            interpreter=new Interpreter(loadModelfile(),null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        db=new DatabaseHelper(this);
         redb=(Button) findViewById(R.id.redb);
         yellowb=(Button) findViewById(R.id.yellowb);
         greenb=(Button) findViewById(R.id.greenb);
@@ -32,9 +59,18 @@ public class MakeColor extends AppCompatActivity {
         whiteb=(Button) findViewById(R.id.whiteb);
         yourcolor=findViewById((R.id.yourcolor));
         givencolor=findViewById((R.id.givencolor));
+        score=findViewById(R.id.score);
         clear=findViewById(R.id.clear);
-        count=r.nextInt(5);
+        timer=findViewById(R.id.time);
+        Intent intent=getIntent();
+        level_1_points=intent.getIntExtra("color_points",level_1_points);
+        no_of_q=intent.getIntExtra("no_of_q",no_of_q);
+
+        count=r.nextInt(Questions.colorss.length);
         newQuestion();
+        timeleft=COUNTDOWN_IN;
+        startCountDown();
+
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,8 +188,40 @@ public class MakeColor extends AppCompatActivity {
                 checktag="green";
                 checkCombination();
                 break;
+            case "redbluewhite":
+            case "whitebluered":
+            case "redwhiteblue":
+            case "blueredwhite":
+                yourcolor.setImageResource(R.drawable.lightpurple);
+                checktag="lightpurple";
+                checkCombination();
+                break;
+            case "greenblue":
+            case "bluegreen":
+                yourcolor.setImageResource(R.drawable.greenblue);
+                checktag="greenblue";
+                checkCombination();
+                break;
+            case "greenblack":
+            case "blackgreen":
+                yourcolor.setImageResource(R.drawable.darkgreen);
+                checktag="darkgreen";
+                checkCombination();
+                break;
+            case "blueblack":
+            case "blackblue":
+                yourcolor.setImageResource(R.drawable.darkblue);
+                checktag="darkblue";
+                checkCombination();
+                break;
+            case "greenred":
+            case "redgreen":
+                yourcolor.setImageResource(R.drawable.brown);
+                checktag="brown";
+                checkCombination();
+                break;
+
             default:
-                colorvalue="";
                 popup.startincorrect();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -163,13 +231,14 @@ public class MakeColor extends AppCompatActivity {
                         newQuestion();
 
                     }
-                },2000);
+                },1000);
 
                 break;
         }
     }
 
     public void newQuestion(){
+        no_of_q1++;
         int len=Questions.colorss.length;
         if(count==(len-1)){
             count=0;
@@ -185,6 +254,8 @@ public class MakeColor extends AppCompatActivity {
     public void checkCombination(){
         String t= givencolor.getTag().toString();
         if(t.equals(checktag)){
+            points1=points1+5;
+            score.setText(points1+"");
             popup.startcorrect();
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -196,20 +267,74 @@ public class MakeColor extends AppCompatActivity {
                 }
             },1000);
         }
-//        else{
-//            popup.startincorrect();
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    popup.dismissincorrect();
-//                    yourcolor.setImageResource(R.drawable.plain);
-//                    newQuestion();
-//
-//                }
-//            },2000);
-//
-//        }
     }
+
+    public void startCountDown(){
+        cd=new CountDownTimer(timeleft,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeleft=millisUntilFinished;
+                updateCountDownText();
+
+            }
+
+            @Override
+            public void onFinish() {
+                timeleft=0;
+                popup.startpop();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        cd.cancel();
+                        SessionManagement ses=new SessionManagement(MakeColor.this);
+                        String naaam=ses.getnaaam();
+                        int analysis=(int)doInference(level_1_points,no_of_q,points1,no_of_q1);
+                        db.addscore((level_1_points+points1),naaam);
+                        db.time_analysis(analysis,naaam);
+                        popup.dismisspop();
+                        finish();
+                    }
+                },3000);
+
+            }
+        }.start();
+
+    }
+    public void updateCountDownText(){
+        int minutes=(int)(timeleft/1000)/60;
+        int seconds=(int)(timeleft/1000)%60;
+        String timeformat=String.format(Locale.getDefault(),"00:%02d",seconds);
+        timer.setText(timeformat);
+        if(timeleft<10000){
+            timer.setTextColor(Color.RED);
+        }else {
+            timer.setTextColor(Color.BLACK);
+        }
+    }
+    private MappedByteBuffer loadModelfile() throws IOException {
+        AssetFileDescriptor assetFileDescriptor=this.getAssets().openFd("colormatch.tflite");
+        FileInputStream fileInputStream=new FileInputStream(assetFileDescriptor.getFileDescriptor());
+        FileChannel fileChannel=fileInputStream.getChannel();
+        long startOffset=assetFileDescriptor.getStartOffset();
+        long length=assetFileDescriptor.getLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,length);
+
+    }
+    public  float doInference(int level1, int no_of_q,int level3, int no_of_q1){
+        float[][] input= new float[1][4];
+        input[0][0]=(float)(level1);
+        input[0][1]=(float)(no_of_q);
+        input[0][2]=(float)(level3);
+        input[0][3]=(float)(no_of_q1);
+        float[][] output=new float[1][1];
+        interpreter.run(input,output);
+        return output[0][0];
+
+
+    }
+
+
+
 
 
 
