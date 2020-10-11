@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -63,9 +62,9 @@ public class FindTheMatch extends AppCompatActivity {
     String Question;
     String critertia="",critertia2="";
     int criteriaIndex,criteriaIndex2;
-    int choice;
+    int choice,noOfQuestions=0;
     int levelImageCount=9,condition=1,level=0;
-    int correctScore=0, wrongScore=0, totalanswers=0;
+    int correctScore=0, wrongScore=0, totalanswers=0,missedScore=0,levelScore=0;
     SessionManagement sessionManagement;
     private TextView timer ;
     private static final long COUNTDOWN_IN=30000;
@@ -75,7 +74,7 @@ public class FindTheMatch extends AppCompatActivity {
     images[] images;
 
     DatabaseHelper db= new DatabaseHelper(this);
-
+    pop popup=new pop(FindTheMatch.this);
 
     public void checkColorShape(View view)
     {
@@ -96,127 +95,141 @@ public class FindTheMatch extends AppCompatActivity {
     }
 
     public void checkAnswers(View view) throws InterruptedException {
-        if(timeleft>1000) {
-            Collections.sort(clickedImageTags);
-            ImageView[] imageViews;
-            if (levelImageCount == 9) {
-                imageViews = new ImageView[]{(ImageView) findViewById(R.id.imageView1), (ImageView) findViewById(R.id.imageView2), (ImageView) findViewById(R.id.imageView3),
-                        (ImageView) findViewById(R.id.imageView4), (ImageView) findViewById(R.id.imageView5), (ImageView) findViewById(R.id.imageView6),
-                        (ImageView) findViewById(R.id.imageView7), (ImageView) findViewById(R.id.imageView8), (ImageView) findViewById(R.id.imageView9)};
-            } else {
-                imageViews = new ImageView[]{(ImageView) findViewById(R.id.imageView1), (ImageView) findViewById(R.id.imageView2), (ImageView) findViewById(R.id.imageView3), (ImageView) findViewById(R.id.imageView4),
-                        (ImageView) findViewById(R.id.imageView5), (ImageView) findViewById(R.id.imageView6), (ImageView) findViewById(R.id.imageView7), (ImageView) findViewById(R.id.imageView8),
-                        (ImageView) findViewById(R.id.imageView9), (ImageView) findViewById(R.id.imageView10), (ImageView) findViewById(R.id.imageView11), (ImageView) findViewById(R.id.imageView12),
-                        (ImageView) findViewById(R.id.imageView13), (ImageView) findViewById(R.id.imageView14), (ImageView) findViewById(R.id.imageView15), (ImageView) findViewById(R.id.imageView16)};
-            }
+        try {
+            if (timeleft > 1000) {
+                Collections.sort(clickedImageTags);
+                ImageView[] imageViews;
+                if (levelImageCount == 9) {
+                    imageViews = new ImageView[]{(ImageView) findViewById(R.id.imageView1), (ImageView) findViewById(R.id.imageView2), (ImageView) findViewById(R.id.imageView3),
+                            (ImageView) findViewById(R.id.imageView4), (ImageView) findViewById(R.id.imageView5), (ImageView) findViewById(R.id.imageView6),
+                            (ImageView) findViewById(R.id.imageView7), (ImageView) findViewById(R.id.imageView8), (ImageView) findViewById(R.id.imageView9)};
+                } else {
+                    imageViews = new ImageView[]{(ImageView) findViewById(R.id.imageView1), (ImageView) findViewById(R.id.imageView2), (ImageView) findViewById(R.id.imageView3), (ImageView) findViewById(R.id.imageView4),
+                            (ImageView) findViewById(R.id.imageView5), (ImageView) findViewById(R.id.imageView6), (ImageView) findViewById(R.id.imageView7), (ImageView) findViewById(R.id.imageView8),
+                            (ImageView) findViewById(R.id.imageView9), (ImageView) findViewById(R.id.imageView10), (ImageView) findViewById(R.id.imageView11), (ImageView) findViewById(R.id.imageView12),
+                            (ImageView) findViewById(R.id.imageView13), (ImageView) findViewById(R.id.imageView14), (ImageView) findViewById(R.id.imageView15), (ImageView) findViewById(R.id.imageView16)};
+                }
 //            Log.i("Image Count ", String.valueOf(levelImageCount));
-            for (int i = 0; i < levelImageCount; i++) {
-                if (choice == 1) {
-                    if (images[i].shape.equals(critertia) && images[i].colour.equals(critertia2)) {
-                        notToClickImageIndex.add(i);
-                    }
-                } else {
-                    if (images[i].colour.equals(critertia) && images[i].shape.equals(critertia2)) {
-                        notToClickImageIndex.add(i);
-                    }
-                }
-
-            }
-            //Log.i("Not to click Index", String.valueOf(notToClickImageIndex));
-            if (choice == 0) {
-                if (condition == 2) {
-                    colourList[criteriaIndex].index.removeAll(notToClickImageIndex);
-                }
-                totalanswers += colourList[criteriaIndex].index.size();
-                if (colourList[criteriaIndex].index.size() == clickedImageTags.size() && colourList[criteriaIndex].index.equals(clickedImageTags)) {
-                    Toast.makeText(this, "Correct Answer!", Toast.LENGTH_SHORT).show();
-                    for (int i = 0; i < clickedImageTags.size(); i++) {
-                        imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
-                        correctScore++;
-                    }
-                } else if (clickedImageTags.containsAll(colourList[criteriaIndex].index)) {
-                    for (int i = 0; i < clickedImageTags.size(); i++) {
-
-                        if (colourList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
-                            correctScore++;
-                        } else {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
-                            wrongScore++;
+                for (int i = 0; i < levelImageCount; i++) {
+                    if (choice == 1) {
+                        if (images[i].shape.equals(critertia) && images[i].colour.equals(critertia2)) {
+                            notToClickImageIndex.add(i);
+                        }
+                    } else {
+                        if (images[i].colour.equals(critertia) && images[i].shape.equals(critertia2)) {
+                            notToClickImageIndex.add(i);
                         }
                     }
-                    Toast.makeText(this, "Extra images selected", Toast.LENGTH_SHORT).show();
 
-
-                } else {
-
-                    for (int i = 0; i < clickedImageTags.size(); i++) {
-
-                        if (colourList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
-                            correctScore++;
-                        } else {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
-                            wrongScore++;
-                        }
+                }
+                //Log.i("Not to click Index", String.valueOf(notToClickImageIndex));
+                if (choice == 0) {
+                    if (condition == 2) {
+                        colourList[criteriaIndex].index.removeAll(notToClickImageIndex);
                     }
-                    Toast.makeText(this, "All images not selected", Toast.LENGTH_SHORT).show();
-
-                }
-            } else {
-                if (condition == 2) {
-                    shapeList[criteriaIndex].index.removeAll(notToClickImageIndex);
-                }
-                totalanswers += shapeList[criteriaIndex].index.size();
-                if (shapeList[criteriaIndex].index.size() == clickedImageTags.size()) {
-                    if (shapeList[criteriaIndex].index.equals(clickedImageTags)) {
+                    totalanswers += colourList[criteriaIndex].index.size();
+                    if (colourList[criteriaIndex].index.size() == clickedImageTags.size() && colourList[criteriaIndex].index.equals(clickedImageTags)) {
                         Toast.makeText(this, "Correct Answer!", Toast.LENGTH_SHORT).show();
                         for (int i = 0; i < clickedImageTags.size(); i++) {
                             imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
                             correctScore++;
+                            levelScore++;
                         }
-                    }
-                } else if (clickedImageTags.containsAll(shapeList[criteriaIndex].index)) {
-                    for (int i = 0; i < clickedImageTags.size(); i++) {
-                        if (shapeList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
-                            correctScore++;
-                        } else {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
-                            wrongScore++;
-                        }
-                    }
-                    Toast.makeText(this, "Extra images selected", Toast.LENGTH_SHORT).show();
+                    } else if (clickedImageTags.containsAll(colourList[criteriaIndex].index)) {
+                        for (int i = 0; i < clickedImageTags.size(); i++) {
 
+                            if (colourList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
+                                correctScore++;
+                                levelScore++;
+                            } else {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
+                                wrongScore++;
+                            }
+                        }
+                        Toast.makeText(this, "Extra images selected", Toast.LENGTH_SHORT).show();
+
+
+                    } else {
+
+                        for (int i = 0; i < clickedImageTags.size(); i++) {
+
+                            if (colourList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
+                                correctScore++;
+                                levelScore++;
+                            } else {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
+                                wrongScore++;
+                            }
+                        }
+                        Toast.makeText(this, "All images not selected", Toast.LENGTH_SHORT).show();
+
+                    }
                 } else {
-                    for (int i = 0; i < clickedImageTags.size(); i++) {
-                        if (shapeList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
-                            correctScore++;
-                        } else {
-                            imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
-                            wrongScore++;
+                    if (condition == 2) {
+                        shapeList[criteriaIndex].index.removeAll(notToClickImageIndex);
+                    }
+                    totalanswers += shapeList[criteriaIndex].index.size();
+                    if (shapeList[criteriaIndex].index.size() == clickedImageTags.size()) {
+                        if (shapeList[criteriaIndex].index.equals(clickedImageTags)) {
+                            Toast.makeText(this, "Correct Answer!", Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < clickedImageTags.size(); i++) {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
+                                correctScore++;
+                                levelScore++;
+                            }
+                        }
+                    } else if (clickedImageTags.containsAll(shapeList[criteriaIndex].index)) {
+                        for (int i = 0; i < clickedImageTags.size(); i++) {
+                            if (shapeList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
+                                correctScore++;
+                                levelScore++;
+                            } else {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
+                                wrongScore++;
+                            }
+                        }
+                        Toast.makeText(this, "Extra images selected", Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        for (int i = 0; i < clickedImageTags.size(); i++) {
+                            if (shapeList[criteriaIndex].index.contains((Object) clickedImageTags.get(i))) {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squaregreen);
+                                correctScore++;
+                                levelScore++;
+                            } else {
+                                imageViews[(int) clickedImageTags.get(i)].setBackgroundResource(R.drawable.squarered);
+                                wrongScore++;
+                            }
+                        }
+                        Toast.makeText(this, "All images not selected", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+
+
+                //Log.i("Score ", correctScore + " " + wrongScore + " " + totalanswers);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            if(timeleft>500) {
+                                reset();
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
                     }
-                    Toast.makeText(this, "All images not selected", Toast.LENGTH_SHORT).show();
-
-                }
+                }, 500);
             }
-
-
-            //Log.i("Score ", correctScore + " " + wrongScore + " " + totalanswers);
-
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        reset();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, 500);
+        }
+        catch(Exception e)
+        {
+            levelCheck();
         }
     }
     @Override
@@ -238,28 +251,31 @@ public class FindTheMatch extends AppCompatActivity {
         sessionManagement=new SessionManagement(FindTheMatch.this);
     }
     public void levelCheck(){
-        if(level!=1)
-            Toast.makeText(this, "Well done, Next Level", Toast.LENGTH_LONG).show();
 
         if(levelImageCount==9) {
             clickedImageTags.clear();
             setContentView(R.layout.activity_findthematch8);
             timer = (TextView) findViewById(R.id.time);
             timeleft = COUNTDOWN_IN;
+            TextView levelTag=(TextView)findViewById(R.id.levelNo);
+            levelTag.setText(Integer.toString(level));
             startCountDown();
             generateImages();
         }
         if(levelImageCount==16) {
             clickedImageTags.clear();
             setContentView(R.layout.activity_findthematch16);
+            TextView levelTag=(TextView)findViewById(R.id.levelNo);
+            levelTag.setText(Integer.toString(level));
             timer = (TextView) findViewById(R.id.time);
-            timeleft = COUNTDOWN_IN;
+            timeleft = COUNTDOWN_IN+15000;
             startCountDown();
             generateImages();
         }
 
     }
     public void generateImages(){
+        noOfQuestions++;
         clickedImageTags.clear();
         Random rand = new Random();
         int[][] drawables=new int[][]{{R.drawable.squareblack, R.drawable.squareblue, R.drawable.squarebrown, R.drawable.squaregrey, R.drawable.squareorange, R.drawable.squarepurple, R.drawable.squarered, R.drawable.squareyellow, R.drawable.squaregreen},{R.drawable.triangleblack, R.drawable.triangleblue, R.drawable.trianglebrown, R.drawable.trianglegrey, R.drawable.triangleorange, R.drawable.trianglepurple, R.drawable.trianglered, R.drawable.triangleyellow, R.drawable.trianglegreen},{R.drawable.circleblack, R.drawable.circleblue, R.drawable.circlebrown, R.drawable.circlegrey, R.drawable.circleorange, R.drawable.circlepurple, R.drawable.circlered, R.drawable.circleyellow, R.drawable.circlegreen}};
@@ -428,7 +444,7 @@ public class FindTheMatch extends AppCompatActivity {
                     code2 = colourCode[i];
                 }
             }
-            Question="Find all <font color="+code1+">"+critertia+"</font> without selecting any <font color="+code2+">"+critertia2+"</font>";
+            Question="Find all <font color="+code1+">"+critertia+"</font> without <br>selecting any <font color="+code2+">"+critertia2+"</font>";
             //Log.i("Question : ","Find all " + critertia + " without selecting any " + critertia2);
             questionTextView.setText(Html.fromHtml(Question));
             for (int i = 0; i < noOfColours; i++) {
@@ -501,20 +517,17 @@ public class FindTheMatch extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timeleft=0;
-                String email=db.getEmailForChild(sessionManagement.getTableID());
-                db.insertScore(email,sessionManagement.getnaaam(),correctScore,wrongScore,totalanswers);
+
                 //Log.i("Level",":"+level+" "+levelImageCount+" "+condition);
 
 
 
-                if(level==1 && correctScore>10)
+                if(level==1 && levelScore>=10)
                 {
-
+                    popup.startlevelpop();
                     levelImageCount=16;
                     level++;
-                    correctScore=0;
-                    wrongScore=0;
-                    totalanswers=0;
+                    levelScore=0;
                     clickedImageTags.clear();
                     notToClickImageIndex.clear();
                     for(int i=0;i<noOfColours;i++){
@@ -531,19 +544,20 @@ public class FindTheMatch extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            popup.dismisslevelpop();
                             levelCheck();
+
                         }
-                    }, 1000);
+                    }, 2000);
 
                 }
-                else if(level==2 && correctScore>15)
+                else if(level==2 && levelScore>=20)
                 {
+                    popup.startlevelpop();
                     levelImageCount=9;
                     condition=2;
                     level++;
-                    correctScore=0;
-                    wrongScore=0;
-                    totalanswers=0;
+                    levelScore=0;
                     clickedImageTags.clear();
                     notToClickImageIndex.clear();
                     for(int i=0;i<noOfColours;i++){
@@ -560,18 +574,19 @@ public class FindTheMatch extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+
+                            popup.dismisslevelpop();
                             levelCheck();
                         }
-                    }, 1000);
+                    }, 3000);
                 }
-                else if(level==3 && correctScore>7)
+                else if(level==3 && levelScore>=7)
                 {
+                    popup.startlevelpop();
                     levelImageCount=16;
                     condition=2;
                     level++;
-                    correctScore=0;
-                    wrongScore=0;
-                    totalanswers=0;
+                    levelScore=0;
                     clickedImageTags.clear();
                     notToClickImageIndex.clear();
                     for(int i=0;i<noOfColours;i++){
@@ -588,15 +603,30 @@ public class FindTheMatch extends AppCompatActivity {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+
+                            popup.dismisslevelpop();
                             levelCheck();
                         }
-                    }, 1000);
+                    }, 3000);
                 }
                 else {
                     gameOver();
-                    Intent homepage=new Intent(FindTheMatch.this, FindMatchInstruct.class);
+                    missedScore=totalanswers-correctScore;
+                    Log.i("Correct Score ",correctScore+"\nWrong Score :"+wrongScore+"\nMissed Score :"+missedScore+"\nTotal Score :"+totalanswers+"\nNo of questions :"+noOfQuestions);
+                    String email=db.getEmailForChild(sessionManagement.getTableID());
+
+
+                    db.insertScore(email,sessionManagement.getnaaam(),correctScore,wrongScore,totalanswers);
+                    noOfQuestions=0;
+                    correctScore=0;
+                    wrongScore=0;
+                    levelScore=0;
+                    totalanswers=0;
+                    missedScore=0;
+                    Intent homepage=new Intent(FindTheMatch.this, FindMatchInstruct.class);;
                     homepage.putExtra("Game","Over");
                     startActivity(homepage);
+                    finish();
                     }
 
             }

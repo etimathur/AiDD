@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE colormatch ( ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1 INTEGER, game_2 INTEGER, game_3 INTEGER, game_4 INTEGER, game_5 INTEGER)");
         db.execSQL("CREATE TABLE colormatchanalysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER)");
 
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_FINDTHEMATCH + "(" + COLFTM_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLFTM_2 + " TEXT,"+COLFTM_3+" TEXT,"+COlFTM_4+" INTEGER, "+COlFTM_5+" INTEGER, "+COlFTM_6+" INTEGER )";
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_FINDTHEMATCH + "(" + COLFTM_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLFTM_2 + " TEXT,"+COLFTM_3+" TEXT,"+COlFTM_4+" INTEGER, "+COlFTM_5+" INTEGER, "+COlFTM_6+" INTEGER)";
 
         db.execSQL(CREATE_TABLE);
 
@@ -135,12 +135,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public int childCheckUser(String name,String password ){
         SQLiteDatabase db=this.getReadableDatabase();
         Cursor cursor=db.rawQuery("select * from registeruser where name=? and childPassword=?", new String[]{name,password});
-        cursor.moveToFirst();
-        int id=cursor.getInt(cursor.getColumnIndex(COL_1));
-        if (cursor.getCount()>0){
+        if(cursor.getCount()>0) {
+            cursor.moveToFirst();
+            int id = cursor.getInt(cursor.getColumnIndex(COL_1));
             return id;
         }
-        else return 0;
+        return 0;
     }
     public void addscore(int score, String name) {
         SQLiteDatabase db = this.getReadableDatabase();

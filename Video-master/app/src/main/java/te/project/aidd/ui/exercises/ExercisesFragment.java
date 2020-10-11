@@ -16,6 +16,7 @@ import te.project.aidd.FindMatchInstruct;
 import te.project.aidd.FindTheMatch;
 import te.project.aidd.Flip_instuct;
 import te.project.aidd.Jigsaw;
+import te.project.aidd.JigsawInstructActivity;
 import te.project.aidd.R;
 
 public class ExercisesFragment extends Fragment {
@@ -54,7 +55,7 @@ public class ExercisesFragment extends Fragment {
         card3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent jigsawIntent=new Intent(ExercisesFragment.this.getActivity(), Jigsaw.class);
+                Intent jigsawIntent=new Intent(ExercisesFragment.this.getActivity(), JigsawInstructActivity.class);
                 startActivity(jigsawIntent);
             }
         });

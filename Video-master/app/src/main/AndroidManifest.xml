@@ -22,7 +22,8 @@
         <activity
             android:name=".Feedback"
             android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity android:name=".JigsawInstructActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <activity
             android:name=".FindMatchInstruct"
