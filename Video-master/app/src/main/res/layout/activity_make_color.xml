@@ -20,10 +20,11 @@
     <TableRow
 
         android:id="@+id/table"
-        android:layout_width="match_parent"
+        android:layout_width="386dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/text"
-        android:layout_gravity="center_horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
         android:background="#FFFFFF">
 
         <TextView
@@ -48,10 +49,10 @@
             android:id="@+id/level"
             android:layout_width="103dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
             android:fontFamily="serif"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center"
             android:text="LEVEL 3"
             android:textColor="@android:color/black"
             android:textSize="22sp"
@@ -148,23 +149,24 @@
 
             <Button
                 android:id="@+id/redb"
-                android:layout_width="120dp"
-                android:layout_height="100dp"
+                android:layout_width="104dp"
+                android:layout_height="85dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/redb" />
 
             <Button
                 android:id="@+id/greenb"
-                android:layout_width="115dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="100dp"
+                android:layout_height="85dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/greenb" />
 
 
             <Button
                 android:id="@+id/blueb"
-                android:layout_width="120dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="104dp"
+                android:layout_height="84dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/blueb" />
         </GridLayout>
 
@@ -172,26 +174,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
+            android:layout_marginLeft="20dp"
             android:background="#c58a6a">
 
             <Button
                 android:id="@+id/yellowb"
-                android:layout_width="120dp"
-                android:layout_height="100dp"
+                android:layout_width="104dp"
+                android:layout_height="83dp"
                 android:background="@drawable/yellowb" />
 
             <Button
                 android:id="@+id/whiteb"
-                android:layout_width="115dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="100dp"
+                android:layout_height="84dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/whiteb" />
 
             <Button
                 android:id="@+id/blackb"
-                android:layout_width="120dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="5dp"
+                android:layout_width="104dp"
+                android:layout_height="84dp"
+                android:layout_marginLeft="20dp"
                 android:background="@drawable/blackb" />
         </GridLayout>
 

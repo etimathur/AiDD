@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import te.project.aidd.Colormatchp;
+import te.project.aidd.FindMatchProgress;
 import te.project.aidd.Flipcardsp;
 import te.project.aidd.HomeActivity;
 import te.project.aidd.R;
@@ -23,8 +24,7 @@ import te.project.aidd.ui.logout.LogoutViewModel;
 
 public class ProgressFragment extends Fragment {
     private ProgressViewModel progressViewModel;
-    Button cmp,fcp;
-    CardView colormatch;
+    CardView colormatch,findmatch;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class ProgressFragment extends Fragment {
                 ViewModelProviders.of(this).get(ProgressViewModel.class);
         View root = inflater.inflate(R.layout.fragment_progress, container, false);
         colormatch=root.findViewById(R.id.colormatch);
-        fcp=(Button)root.findViewById(R.id.fcp);
+        findmatch=root.findViewById(R.id.findmatch);
         colormatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,10 +40,10 @@ public class ProgressFragment extends Fragment {
                 startActivity(cmpin);
             }
         });
-        fcp.setOnClickListener(new View.OnClickListener() {
+        findmatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent fcpin=new Intent(ProgressFragment.this.getActivity(), Flipcardsp.class);
+                Intent fcpin=new Intent(ProgressFragment.this.getActivity(), FindMatchProgress.class);
                 startActivity(fcpin);
             }
         });

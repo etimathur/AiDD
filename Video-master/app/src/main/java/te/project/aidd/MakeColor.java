@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -287,10 +288,11 @@ public class MakeColor extends AppCompatActivity {
                     public void run() {
                         cd.cancel();
                         SessionManagement ses=new SessionManagement(MakeColor.this);
-                        String naaam=ses.getnaaam();
+                        String email=db.getEmailForChild(ses.getTableID());
                         int analysis=(int)doInference(level_1_points,no_of_q,points1,no_of_q1);
-                        db.addscore((level_1_points+points1),naaam);
-                        db.time_analysis(analysis,naaam);
+                        Log.i("hello","points:"+points1+"no of ques:"+no_of_q1+"anal:"+analysis);
+                        db.addscore((level_1_points+points1),email);
+                        db.time_analysis(analysis,email);
                         popup.dismisspop();
                         finish();
                     }

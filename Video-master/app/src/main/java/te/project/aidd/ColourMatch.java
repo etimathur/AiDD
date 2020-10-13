@@ -145,6 +145,16 @@ public class ColourMatch extends AppCompatActivity {
         image.startAnimation(animation);
         if(points>=15){
             level.setText("LEVEL 3");
+            popup.startlevelpop();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    flag=0;
+                    popup.dismisslevelpop();
+
+
+                }
+            },1250);
             Intent intent= new Intent(ColourMatch.this,MakeColor.class);
             intent.putExtra("color_points",points);
             intent.putExtra("no_of_q",no_of_q);
@@ -202,13 +212,14 @@ public class ColourMatch extends AppCompatActivity {
             public void onFinish() {
                 timeleft=0;
                 // analysis of the game without model by 80% to 20% equation
-                analysis= (float) ((0.8*points/no_of_q)+ (0.2*no_of_q/45));
+                analysis= (float) ((0.6*points/no_of_q)+ (0.4*no_of_q/45));
                 int results =(int)(analysis*100);
                 SessionManagement ses=new SessionManagement(ColourMatch.this);
-                String naaam=ses.getnaaam();
+                String email=db.getEmailForChild(ses.getTableID());
                 if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
-                    db.addscore(points,naaam);
-                    db.time_analysis(results,naaam);
+                    db.addscore(points,email);
+                    db.time_analysis(results,email);
+                    Log.i("hello","points:"+ points+"no of ques:"+no_of_q+"anal:"+results);
                 }
 
                 popup.startpop();

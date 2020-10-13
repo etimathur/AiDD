@@ -12,19 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity android:name=".MakeColor"
-            android:theme="@style/AppTheme.NoActionBar"  >
-
-        </activity>
+        <activity android:name=".FindMatchProgress"
+            android:theme="@style/AppTheme.NoActionBar"  ></activity>
+        <activity
+            android:name=".MakeColor"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".YoutubeVideo" />
-
         <activity
             android:name=".Feedback"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".JigsawInstructActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".JigsawInstructActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FindMatchInstruct"
             android:theme="@style/AppTheme.NoActionBar" />

@@ -31,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //For Find the match
     public static final String TABLE_FINDTHEMATCH="findthematch";
+    public static final String TABLE_FINDTHEMATCH_ANALYSIS="findthematchanalysis";
     public static final String COLFTM_1="ID";
     public static final String COLFTM_2="name";
     public static final String COLFTM_3="email";
@@ -51,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE registeruser (ID INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT, email TEXT,username TEXT UNIQUE , password TEXT,childPassword TEXT)");
         db.execSQL("CREATE TABLE colormatch ( ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1 INTEGER, game_2 INTEGER, game_3 INTEGER, game_4 INTEGER, game_5 INTEGER)");
         db.execSQL("CREATE TABLE colormatchanalysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER)");
-
+        db.execSQL("CREATE TABLE findthematchanalysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER)");
         String CREATE_TABLE = "CREATE TABLE " + TABLE_FINDTHEMATCH + "(" + COLFTM_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLFTM_2 + " TEXT,"+COLFTM_3+" TEXT,"+COlFTM_4+" INTEGER, "+COlFTM_5+" INTEGER, "+COlFTM_6+" INTEGER)";
 
         db.execSQL(CREATE_TABLE);
@@ -65,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLOR);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COLORMATCH_ANALYSIS);
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_FINDTHEMATCH);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FINDTHEMATCH_ANALYSIS);
         onCreate(db);
 
     }
@@ -99,6 +101,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long res=db.insert("registeruser",null,cV);
         db.insert(TABLE_COLOR, null, cc);
         db.insert(TABLE_COLORMATCH_ANALYSIS,null,cc);
+        db.insert(TABLE_FINDTHEMATCH_ANALYSIS,null,cc);
+
 
 
 
@@ -142,10 +146,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return 0;
     }
+
+
+    // color match game
     public void addscore(int score, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
-        Cursor cursor = db.rawQuery("SELECT * FROM colormatch WHERE name=?", new String[]{name});
+        Cursor cursor = db.rawQuery("SELECT * FROM colormatch WHERE parentname=?", new String[]{name});
         if (cursor.moveToFirst()) {
             int c1 = cursor.getInt(cursor.getColumnIndex(game_2));
             int c2 = cursor.getInt(cursor.getColumnIndex(game_3));
@@ -157,11 +164,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(game_4, c4);
             values.put(game_5, score);
         }
-        db.update(TABLE_COLOR, values, "name=?", new String[]{name});
+        db.update(TABLE_COLOR, values, "parentname=?", new String[]{name});
         db.close();
 
     }
-
     public int[] color_match_arr(String name) {
         int[] array=new int[5];
         SQLiteDatabase db = this.getReadableDatabase();
@@ -185,7 +191,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void time_analysis(int analysis, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
-        Cursor cursor = db.rawQuery("SELECT * FROM colormatchanalysis  WHERE name=?", new String[]{name});
+        Cursor cursor = db.rawQuery("SELECT * FROM colormatchanalysis  WHERE parentname=?", new String[]{name});
         if (cursor.moveToFirst()) {
             int c1 = cursor.getInt(cursor.getColumnIndex(game_2));
             int c2 = cursor.getInt(cursor.getColumnIndex(game_3));
@@ -197,7 +203,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put(game_4, c4);
             values.put(game_5, analysis);
         }
-        db.update(TABLE_COLORMATCH_ANALYSIS, values, "name=?", new String[]{name});
+        db.update(TABLE_COLORMATCH_ANALYSIS, values, "parentname=?", new String[]{name});
         db.close();
 
     }
@@ -252,5 +258,47 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COlFTM_5,wrongScore);
         contentValues.put(COlFTM_6,totalScore);
         db.insert(TABLE_FINDTHEMATCH,null,contentValues);
+    }
+
+    public void insert_findmatch_analysis(int analysis,String email){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        Cursor cursor = db.rawQuery("SELECT * FROM findthematchanalysis  WHERE parentname=?", new String[]{email});
+        if (cursor.moveToFirst()) {
+            int c1 = cursor.getInt(cursor.getColumnIndex(game_2));
+            int c2 = cursor.getInt(cursor.getColumnIndex(game_3));
+            int c3 = cursor.getInt(cursor.getColumnIndex(game_4));
+            int c4 = cursor.getInt(cursor.getColumnIndex(game_5));
+            values.put(game_1, c1);
+            values.put(game_2, c2);
+            values.put(game_3, c3);
+            values.put(game_4, c4);
+            values.put(game_5, analysis);
+        }
+        db.update(TABLE_FINDTHEMATCH_ANALYSIS, values, "parentname=?", new String[]{email});
+        db.close();
+
+    }
+
+    public int[] find_match_graph(String name) {
+        int[] array=new int[5];
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM findthematchanalysis WHERE parentname=?", new String[]{name});
+        Log.i("data",name);
+        if (cursor.moveToFirst()) {
+            int c1 = cursor.getInt(cursor.getColumnIndex(game_1));
+            int c2 = cursor.getInt(cursor.getColumnIndex(game_2));
+            int c3 = cursor.getInt(cursor.getColumnIndex(game_3));
+            int c4 = cursor.getInt(cursor.getColumnIndex(game_4));
+            int c5 =  cursor.getInt(cursor.getColumnIndex(game_5));
+            array[0]=c1;
+            array[1]=c2;
+            array[2]=c3;
+            array[3]=c4;
+            array[4]=c5;
+
+        }
+        return array;
+
     }
 }

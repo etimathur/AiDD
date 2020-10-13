@@ -3,6 +3,7 @@ package te.project.aidd;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,6 +14,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.tensorflow.lite.Interpreter;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +58,7 @@ class Pair{
 }
 public class FindTheMatch extends AppCompatActivity {
 
-
+    Interpreter interpreter;
     String [] colours={"black","blue","brown","grey","orange","purple","red","yellow","green"};
     String [] colourCode={"#000000","#0000FF","#660000","#CCCCCC","#FF6600","#9900FF","#FF0000","#FFFF00","#339900"};
     int noOfColours=colours.length;
@@ -235,6 +243,11 @@ public class FindTheMatch extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            interpreter=new Interpreter(loadModelfile(),null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         level++;
@@ -614,9 +627,10 @@ public class FindTheMatch extends AppCompatActivity {
                     missedScore=totalanswers-correctScore;
                     Log.i("Correct Score ",correctScore+"\nWrong Score :"+wrongScore+"\nMissed Score :"+missedScore+"\nTotal Score :"+totalanswers+"\nNo of questions :"+noOfQuestions);
                     String email=db.getEmailForChild(sessionManagement.getTableID());
-
-
+                    int analysis=(int) doInference(correctScore,wrongScore,missedScore,totalanswers,noOfQuestions);
                     db.insertScore(email,sessionManagement.getnaaam(),correctScore,wrongScore,totalanswers);
+                    db.insert_findmatch_analysis(analysis,email);
+                    Log.i("anal:"," "+analysis);
                     noOfQuestions=0;
                     correctScore=0;
                     wrongScore=0;
@@ -648,4 +662,30 @@ public class FindTheMatch extends AppCompatActivity {
         //Log.i("Game ","Over");
         Toast.makeText(this,"Game Over",Toast.LENGTH_SHORT);
     }
+
+    private MappedByteBuffer loadModelfile() throws IOException {
+        AssetFileDescriptor assetFileDescriptor=this.getAssets().openFd("findmatch.tflite");
+        FileInputStream fileInputStream=new FileInputStream(assetFileDescriptor.getFileDescriptor());
+        FileChannel fileChannel=fileInputStream.getChannel();
+        long startOffset=assetFileDescriptor.getStartOffset();
+        long length=assetFileDescriptor.getLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,length);
+
+    }
+
+    public  float doInference(int correctScore, int wrongScore,int missedScore, int totalanswers,int noOfQuestions){
+        float[][] input= new float[1][5];
+        input[0][0]=(float)(correctScore);
+        input[0][1]=(float)(wrongScore);
+        input[0][2]=(float)(missedScore);
+        input[0][3]=(float)(totalanswers);
+        input[0][4]=(float)(noOfQuestions);
+        float[][] output=new float[1][1];
+        interpreter.run(input,output);
+        return output[0][0];
+
+
+    }
+
+
 }
