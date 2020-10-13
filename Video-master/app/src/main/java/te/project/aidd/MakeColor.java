@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,7 +28,7 @@ public class MakeColor extends AppCompatActivity {
     Button redb,yellowb,whiteb,blackb,blueb,greenb;
     ImageView yourcolor, givencolor;
     String colorvalue="";
-    private int count=-1;
+    private int count=-1,decision;
     private static final long COUNTDOWN_IN=45000;
     private CountDownTimer cd;
     public long timeleft;
@@ -282,6 +283,7 @@ public class MakeColor extends AppCompatActivity {
             @Override
             public void onFinish() {
                 timeleft=0;
+                if(decision!=1){
                 popup.startpop();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -296,7 +298,7 @@ public class MakeColor extends AppCompatActivity {
                         popup.dismisspop();
                         finish();
                     }
-                },3000);
+                },3000);}
 
             }
         }.start();
@@ -334,6 +336,19 @@ public class MakeColor extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            decision=1;
+            finish();
+
+
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
 
 

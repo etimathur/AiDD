@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -32,7 +33,7 @@ public class ColourMatch extends AppCompatActivity {
     private boolean answer;
     private Button yes,no;
     private int points=0;
-    private int question=0;
+    private int question=0,decision;
     private int no_of_q=0;
     public float analysis;
     private TextView timer ;
@@ -222,6 +223,8 @@ public class ColourMatch extends AppCompatActivity {
                     Log.i("hello","points:"+ points+"no of ques:"+no_of_q+"anal:"+results);
                 }
 
+                if(decision!=1){
+
                 popup.startpop();
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -230,7 +233,7 @@ public class ColourMatch extends AppCompatActivity {
                         cd.cancel();
                         finish();
                     }
-                },4000);
+                },4000);}
 
             }
         }.start();
@@ -246,6 +249,18 @@ public class ColourMatch extends AppCompatActivity {
         }else {
             timer.setTextColor(Color.BLACK);
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            decision=1;
+            finish();
+
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
 
