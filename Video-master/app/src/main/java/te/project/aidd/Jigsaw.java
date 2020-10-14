@@ -88,7 +88,7 @@ public class Jigsaw extends AppCompatActivity {
         }
         Collections.shuffle(shuffle);
         Random rand = new Random();
-        int[] drawables=new int[]{R.drawable.image1,R.drawable.image2,R.drawable.image3,R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,R.drawable.image8,R.drawable.image9,R.drawable.image10};
+        int[] drawables=new int[]{R.drawable.image1,R.drawable.image2,R.drawable.image3,R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10,R.drawable.image11,R.drawable.image12,R.drawable.image13,R.drawable.image14,R.drawable.image15};
         int imageSelection=rand.nextInt(drawables.length);
         Bitmap b = BitmapFactory.decodeResource(getResources(), drawables[imageSelection]);
         images = divideImages(b);
@@ -310,10 +310,15 @@ public class Jigsaw extends AppCompatActivity {
                 @Override
                 public void run() {
                     popup.dismisslevelpop();
-                    generatedImage=false;
-                    generateImage();
+
                 }
-            }, 3000);
+            }, 3000);handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                generatedImage=false;
+                generateImage();
+            }
+        }, 3000);
         }
     }
     public void startCountDown(){

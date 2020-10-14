@@ -9,17 +9,18 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="279dp"
-        android:layout_height="88dp"
+        android:layout_width="286dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
-        android:text="3. Just memorize the alphabets and find all the correct match!"
+        android:text="3. Tap and form the final image!"
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView4"
@@ -59,10 +60,10 @@
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
+        android:layout_width="282dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="1.Turn over any two cards"
+        android:text="1. Picture is divided into a number of tiles."
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,17 +74,18 @@
 
     <TextView
         android:id="@+id/textView8"
-        android:layout_width="285dp"
-        android:layout_height="58dp"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="2. If the two cards match , then its a correct flip."
+        android:text="2. Rotate or swap according to level."
         android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.08" />
+        app:layout_constraintVertical_bias="0.021" />
 
     <Button
         android:id="@+id/flipin"
