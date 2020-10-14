@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -59,6 +60,7 @@ class Pair{
 public class FindTheMatch extends AppCompatActivity {
 
     Interpreter interpreter;
+    int analysis;
     String [] colours={"black","blue","brown","grey","orange","purple","red","yellow","green"};
     String [] colourCode={"#000000","#0000FF","#660000","#CCCCCC","#FF6600","#9900FF","#FF0000","#FFFF00","#339900"};
     int noOfColours=colours.length;
@@ -70,7 +72,7 @@ public class FindTheMatch extends AppCompatActivity {
     String Question;
     String critertia="",critertia2="";
     int criteriaIndex,criteriaIndex2;
-    int choice,noOfQuestions=0;
+    int choice,noOfQuestions=0,decision;
     int levelImageCount=9,condition=1,level=0;
     int correctScore=0, wrongScore=0, totalanswers=0,missedScore=0,levelScore=0;
     SessionManagement sessionManagement;
@@ -624,23 +626,31 @@ public class FindTheMatch extends AppCompatActivity {
                 }
                 else {
                     gameOver();
-                    missedScore=totalanswers-correctScore;
-                    Log.i("Correct Score ",correctScore+"\nWrong Score :"+wrongScore+"\nMissed Score :"+missedScore+"\nTotal Score :"+totalanswers+"\nNo of questions :"+noOfQuestions);
-                    String email=db.getEmailForChild(sessionManagement.getTableID());
-                    int analysis=(int) doInference(correctScore,wrongScore,missedScore,totalanswers,noOfQuestions);
-                    db.insertScore(email,sessionManagement.getnaaam(),correctScore,wrongScore,totalanswers);
-                    db.insert_findmatch_analysis(analysis,email);
-                    Log.i("anal:"," "+analysis);
-                    noOfQuestions=0;
-                    correctScore=0;
-                    wrongScore=0;
-                    levelScore=0;
-                    totalanswers=0;
-                    missedScore=0;
-                    Intent homepage=new Intent(FindTheMatch.this, FindMatchInstruct.class);;
-                    homepage.putExtra("Game","Over");
-                    startActivity(homepage);
-                    finish();
+
+                        missedScore = totalanswers - correctScore;
+                        Log.i("Correct Score ", correctScore + "\nWrong Score :" + wrongScore + "\nMissed Score :" + missedScore + "\nTotal Score :" + totalanswers + "\nNo of questions :" + noOfQuestions);
+                        String email = db.getEmailForChild(sessionManagement.getTableID());
+                        if (correctScore==0){
+                            analysis=0;
+                        }
+                        else{
+                        analysis = (int) doInference(correctScore, wrongScore, missedScore, totalanswers, noOfQuestions);
+                        }
+                        db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers);
+                        db.insert_findmatch_analysis(analysis, email);
+                        Log.i("anal:", " " + analysis);
+                        noOfQuestions = 0;
+                        correctScore = 0;
+                        wrongScore = 0;
+                        levelScore = 0;
+                        totalanswers = 0;
+                        missedScore = 0;
+                        Intent homepage = new Intent(FindTheMatch.this, FindMatchInstruct.class);
+                        ;
+                        homepage.putExtra("Game", "Over");
+                        startActivity(homepage);
+                        finish();
+
                     }
 
             }
@@ -683,9 +693,8 @@ public class FindTheMatch extends AppCompatActivity {
         float[][] output=new float[1][1];
         interpreter.run(input,output);
         return output[0][0];
-
-
     }
+
 
 
 }

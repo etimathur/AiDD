@@ -73,9 +73,11 @@ public class RegisterActivity extends AppCompatActivity {
                 if (mail.isEmpty()) {
                     if (!Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
                         Toast.makeText(RegisterActivity.this, "Please enter a valid Email address", Toast.LENGTH_SHORT).show();
-                    } else if(!PASSWORD_PATTERN.matcher(password).matches()) {
-                        Toast.makeText(RegisterActivity.this, "Please enter a strong Password(atleast 8 characters long)", Toast.LENGTH_SHORT).show();
-                    } else {
+                    }
+//                    else if(!PASSWORD_PATTERN.matcher(password).matches()) {
+//                        Toast.makeText(RegisterActivity.this, "Please enter a strong Password(atleast 8 characters long)", Toast.LENGTH_SHORT).show();
+//                    }
+                    else {
                         sendMail(name,mail,user,password);
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
@@ -89,9 +91,11 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     if (!Patterns.EMAIL_ADDRESS.matcher(user).matches() && !Patterns.EMAIL_ADDRESS.matcher(mail).matches()) {
                         Toast.makeText(RegisterActivity.this, "Please enter a valid Email address", Toast.LENGTH_SHORT).show();
-                    } else if(!PASSWORD_PATTERN.matcher(password).matches()) {
-                        Toast.makeText(RegisterActivity.this, "Please enter a strong Password(atleast 8 characters long)", Toast.LENGTH_SHORT).show();
-                    }else {
+                    }
+//                    else if(!PASSWORD_PATTERN.matcher(password).matches()) {
+//                        Toast.makeText(RegisterActivity.this, "Please enter a strong Password(atleast 8 characters long)", Toast.LENGTH_SHORT).show();
+//                    }
+                    else {
                         long val = db.addUser(name, mail, user, password);
                         if (val > 0) {
                             sendMail(name,mail,user,password);
