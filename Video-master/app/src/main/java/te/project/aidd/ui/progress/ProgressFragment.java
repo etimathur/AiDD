@@ -24,7 +24,7 @@ import te.project.aidd.ui.logout.LogoutViewModel;
 
 public class ProgressFragment extends Fragment {
     private ProgressViewModel progressViewModel;
-    CardView colormatch,findmatch;
+    CardView colormatch,findmatch,jigsaw;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class ProgressFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_progress, container, false);
         colormatch=root.findViewById(R.id.colormatch);
         findmatch=root.findViewById(R.id.findmatch);
+        jigsaw=root.findViewById(R.id.puzzle);
         colormatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +46,14 @@ public class ProgressFragment extends Fragment {
             public void onClick(View v) {
                 Intent fcpin=new Intent(ProgressFragment.this.getActivity(), FindMatchProgress.class);
                 startActivity(fcpin);
+            }
+        });
+        jigsaw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent jpin=new Intent(ProgressFragment.this.getActivity(), Flipcardsp.class);
+                startActivity(jpin);
+
             }
         });
 

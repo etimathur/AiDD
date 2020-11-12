@@ -232,6 +232,7 @@ public class Jigsaw extends AppCompatActivity {
         if(i==(noOfColumn*noOfRows))
         {
             answer.setText("Correct Answer!");
+            Log.i("terms1",swapsDone+" " + swapsRequired+ " " + timetaken);
             Log.i("Hi","Here");
             correctAnswer=true;
 
@@ -295,6 +296,7 @@ public class Jigsaw extends AppCompatActivity {
         }
         if(i==(noOfColumn*noOfRows))
         {
+            Log.i("rotate1",wrongMoves+" " + " " + timetaken);
             correctAnswer=true;
             answer.setText("Correct Answer!!");
         }
@@ -332,6 +334,12 @@ public class Jigsaw extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                if(levelNo.getText().toString().equals("Level : 1") || levelNo.getText().toString().equals("Level : 3")){
+                    Log.i("rotate2",wrongMoves + " "+ timetaken);
+                }
+                else {
+                    Log.i("terms",swapsDone+" " + swapsRequired+ " " + timetaken);
+                }
                 timeleft=0;
                 timetaken=30000;
                 wrongMoves=0;

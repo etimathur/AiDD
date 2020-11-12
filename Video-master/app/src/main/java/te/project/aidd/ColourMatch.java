@@ -217,6 +217,7 @@ public class ColourMatch extends AppCompatActivity {
                 int results =(int)(analysis*100);
                 SessionManagement ses=new SessionManagement(ColourMatch.this);
                 String email=db.getEmailForChild(ses.getTableID());
+                Log.i("youuu",ses.getTableID()+" ");
                 if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
                     db.addscore(points,email);
                     db.time_analysis(results,email);
