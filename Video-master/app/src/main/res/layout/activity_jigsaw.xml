@@ -52,10 +52,10 @@
             android:layout_height="115dp"
             android:layout_row="0"
             android:layout_column="0"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:fadingEdge="horizontal|vertical"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="0"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -65,10 +65,10 @@
             android:layout_height="115dp"
             android:layout_row="0"
             android:layout_column="1"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:fadingEdge="horizontal|vertical"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="1"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -78,9 +78,9 @@
             android:layout_height="115dp"
             android:layout_row="0"
             android:layout_column="2"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="2"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -90,9 +90,9 @@
             android:layout_height="115dp"
             android:layout_row="1"
             android:layout_column="0"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="3"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -102,9 +102,9 @@
             android:layout_height="115dp"
             android:layout_row="1"
             android:layout_column="1"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="4"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -114,9 +114,9 @@
             android:layout_height="115dp"
             android:layout_row="1"
             android:layout_column="2"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="5"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -126,9 +126,9 @@
             android:layout_height="115dp"
             android:layout_row="2"
             android:layout_column="0"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="6"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -138,9 +138,9 @@
             android:layout_height="115dp"
             android:layout_row="2"
             android:layout_column="1"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="7"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -150,9 +150,9 @@
             android:layout_height="115dp"
             android:layout_row="2"
             android:layout_column="2"
-            android:background="#000000"
+            android:background="#FFFFFF"
             android:onClick="onClickImageView"
-            android:padding="1dp"
+            android:padding="6dp"
             android:tag="8"
             tools:srcCompat="@tools:sample/avatars" />
     </GridLayout>

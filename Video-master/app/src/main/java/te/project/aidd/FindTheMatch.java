@@ -80,6 +80,7 @@ public class FindTheMatch extends AppCompatActivity {
     private static final long COUNTDOWN_IN=30000;
     private CountDownTimer cd;
     private long timeleft;
+    int back=0;
 
     images[] images;
 
@@ -531,113 +532,100 @@ public class FindTheMatch extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                timeleft=0;
+                timeleft = 0;
 
                 //Log.i("Level",":"+level+" "+levelImageCount+" "+condition);
 
 
-
-                if(level==1 && levelScore>=10)
-                {
-                    popup.startlevelpop();
-                    levelImageCount=16;
-                    level++;
-                    levelScore=0;
-                    clickedImageTags.clear();
-                    notToClickImageIndex.clear();
-                    for(int i=0;i<noOfColours;i++){
-                        colourList[i].count=0;
-                        colourList[i].index.clear();
-
-                    }
-                    for(int i=0;i<shapes.length;i++)
-                    {
-                        shapeList[i].count=0;
-                        shapeList[i].index.clear();
-                    }
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            popup.dismisslevelpop();
-                            levelCheck();
+                if (back != 1) {
+                    if (level == 1 && levelScore >= 10) {
+                        popup.startlevelpop();
+                        levelImageCount = 16;
+                        level++;
+                        levelScore = 0;
+                        clickedImageTags.clear();
+                        notToClickImageIndex.clear();
+                        for (int i = 0; i < noOfColours; i++) {
+                            colourList[i].count = 0;
+                            colourList[i].index.clear();
 
                         }
-                    }, 2000);
-
-                }
-                else if(level==2 && levelScore>=20)
-                {
-                    popup.startlevelpop();
-                    levelImageCount=9;
-                    condition=2;
-                    level++;
-                    levelScore=0;
-                    clickedImageTags.clear();
-                    notToClickImageIndex.clear();
-                    for(int i=0;i<noOfColours;i++){
-                        colourList[i].count=0;
-                        colourList[i].index.clear();
-
-                    }
-                    for(int i=0;i<shapes.length;i++)
-                    {
-                        shapeList[i].count=0;
-                        shapeList[i].index.clear();
-                    }
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            popup.dismisslevelpop();
-                            levelCheck();
+                        for (int i = 0; i < shapes.length; i++) {
+                            shapeList[i].count = 0;
+                            shapeList[i].index.clear();
                         }
-                    }, 3000);
-                }
-                else if(level==3 && levelScore>=7)
-                {
-                    popup.startlevelpop();
-                    levelImageCount=16;
-                    condition=2;
-                    level++;
-                    levelScore=0;
-                    clickedImageTags.clear();
-                    notToClickImageIndex.clear();
-                    for(int i=0;i<noOfColours;i++){
-                        colourList[i].count=0;
-                        colourList[i].index.clear();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                popup.dismisslevelpop();
+                                levelCheck();
 
-                    }
-                    for(int i=0;i<shapes.length;i++)
-                    {
-                        shapeList[i].count=0;
-                        shapeList[i].index.clear();
-                    }
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+                            }
+                        }, 2000);
 
-                            popup.dismisslevelpop();
-                            levelCheck();
+                    } else if (level == 2 && levelScore >= 20) {
+                        popup.startlevelpop();
+                        levelImageCount = 9;
+                        condition = 2;
+                        level++;
+                        levelScore = 0;
+                        clickedImageTags.clear();
+                        notToClickImageIndex.clear();
+                        for (int i = 0; i < noOfColours; i++) {
+                            colourList[i].count = 0;
+                            colourList[i].index.clear();
+
                         }
-                    }, 3000);
-                }
-                else {
-                    gameOver();
+                        for (int i = 0; i < shapes.length; i++) {
+                            shapeList[i].count = 0;
+                            shapeList[i].index.clear();
+                        }
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                popup.dismisslevelpop();
+                                levelCheck();
+                            }
+                        }, 3000);
+                    } else if (level == 3 && levelScore >= 7) {
+                        popup.startlevelpop();
+                        levelImageCount = 16;
+                        condition = 2;
+                        level++;
+                        levelScore = 0;
+                        clickedImageTags.clear();
+                        notToClickImageIndex.clear();
+                        for (int i = 0; i < noOfColours; i++) {
+                            colourList[i].count = 0;
+                            colourList[i].index.clear();
+
+                        }
+                        for (int i = 0; i < shapes.length; i++) {
+                            shapeList[i].count = 0;
+                            shapeList[i].index.clear();
+                        }
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                popup.dismisslevelpop();
+                                levelCheck();
+                            }
+                        }, 3000);
+                    } else {
+                        gameOver();
 
                         missedScore = totalanswers - correctScore;
                         Log.i("Correct Score ", correctScore + "\nWrong Score :" + wrongScore + "\nMissed Score :" + missedScore + "\nTotal Score :" + totalanswers + "\nNo of questions :" + noOfQuestions);
                         String email = db.getEmailForChild(sessionManagement.getTableID());
-                        if (correctScore==0){
-                            analysis=0;
-                        }
-                        else{
-                        analysis = (int) doInference(correctScore, wrongScore, missedScore, totalanswers, noOfQuestions);
-                        }
-                        if(analysis>=100){
-                            analysis=99;
+                        if (correctScore == 0) {
+                            analysis = 0;
+                        } else {
+                            analysis = (int) doInference(correctScore, wrongScore, missedScore, totalanswers, noOfQuestions);
                         }
                         db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers);
                         db.insert_findmatch_analysis(analysis, email);
@@ -656,6 +644,7 @@ public class FindTheMatch extends AppCompatActivity {
 
                     }
 
+                }
             }
         }.start();
 
@@ -699,5 +688,14 @@ public class FindTheMatch extends AppCompatActivity {
     }
 
 
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            back=1;
+            finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 }

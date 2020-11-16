@@ -6,11 +6,17 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,6 +45,7 @@ public class Jigsaw extends AppCompatActivity {
     ArrayList<Integer> clickedImageTags;
     ImageView[] imageViews;
     ArrayList<Bitmap> images;
+    int decision=0;
     int[] arr;
 
     int swapsRequired,swapsDone;
@@ -56,7 +63,7 @@ public class Jigsaw extends AppCompatActivity {
         setContentView(R.layout.activity_jigsaw);
         currentTime = Calendar.getInstance().getTime();
         time.add(currentTime);
-        Log.i("From ","Oncreate");
+        //Log.i("From ","Oncreate");
         generateImage();
 
     }
@@ -88,7 +95,7 @@ public class Jigsaw extends AppCompatActivity {
         }
         Collections.shuffle(shuffle);
         Random rand = new Random();
-        int[] drawables=new int[]{R.drawable.image1,R.drawable.image2,R.drawable.image3,R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10,R.drawable.image11,R.drawable.image12,R.drawable.image13,R.drawable.image14,R.drawable.image15};
+        int[] drawables=new int[]{R.drawable.image1,R.drawable.image2,R.drawable.image3,R.drawable.image3,R.drawable.image4,R.drawable.image5,R.drawable.image6,R.drawable.image7,R.drawable.image8,R.drawable.image9,R.drawable.image10,R.drawable.image12,R.drawable.image13,R.drawable.image14};
         int imageSelection=rand.nextInt(drawables.length);
         Bitmap b = BitmapFactory.decodeResource(getResources(), drawables[imageSelection]);
         images = divideImages(b);
@@ -107,7 +114,7 @@ public class Jigsaw extends AppCompatActivity {
             rotatedBy=new int[noOfColumn*noOfRows];
             question.setText("Rotate to find the Final Image");
             for (int i = 0; i < imageViews.length; i++) {
-                Log.i("Counter", String.valueOf((i)));
+                //Log.i("Counter", String.valueOf((i)));
                 int x = rand.nextInt(3);
                 rotationBy[i] = 3 - x;
                 imageViews[i].animate().rotationBy(90 + x * 90);
@@ -124,9 +131,9 @@ public class Jigsaw extends AppCompatActivity {
             {
                 arr[x]=shuffle.get(x)+1;
             }
-            Log.i("Shuffle", String.valueOf(shuffle));
-            Log.i("Array", Arrays.toString(arr));
-            swapsRequired =Sort.minimumSwaps(arr);
+            //Log.i("Shuffle", String.valueOf(shuffle));
+            //Log.i("Array", Arrays.toString(arr));
+            swapsRequired =Sort.minSwaps(arr,arr.length);
             question.setText("Swap tiles to find the Final Image");
             for (int i = 0; i < noOfRows*noOfColumn; i++) {
                 imageViews[i].setImageBitmap(images.get(shuffle.get(i)));
@@ -142,7 +149,7 @@ public class Jigsaw extends AppCompatActivity {
             }
         }, 200);
         generatedImage=true;
-        Log.i("Original ", Arrays.toString(rotationBy));
+        //Log.i("Original ", Arrays.toString(rotationBy));
     }
     private ArrayList<Bitmap> divideImages(Bitmap b) {
 
@@ -174,6 +181,10 @@ public class Jigsaw extends AppCompatActivity {
             if (generatedImage && diff > 500) {
                 final ImageView image = (ImageView) view;
                 if (level == 1 || level == 3) {
+//                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha);
+//                    image.startAnimation(animation);
+
+
                     currentTime = Calendar.getInstance().getTime();
                     time.add(currentTime);
                     Long time1 = time.get(time.size() - 1).getTime();
@@ -181,8 +192,29 @@ public class Jigsaw extends AppCompatActivity {
 
                     long difference = time1 - time2;
                     if (difference > 200) {
-                        Log.i("Rotated by 90", "Successfull");
+                        //Log.i("Rotated by 90", "Successfull");
+                        //image.setColorFilter(Color.CYAN, PorterDuff.Mode.LIGHTEN);
                         //image.animate().rotationBy(90).start();
+                        image.setOnTouchListener(new View.OnTouchListener() {
+                            private Rect rect;
+
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                                    image.setColorFilter(Color.argb(50, 0, 0, 0));
+                                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                }
+                                if(event.getAction() == MotionEvent.ACTION_UP){
+                                    image.setColorFilter(Color.argb(0, 0, 0, 0));
+                                }
+                                if(event.getAction() == MotionEvent.ACTION_MOVE){
+                                    if(!rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())){
+                                        image.setColorFilter(Color.argb(0, 0, 0, 0));
+                                    }
+                                }
+                                return false;
+                            }
+                        });
                         image.setRotation(image.getRotation() + 90F);
                         int taggedCounter = Integer.parseInt(image.getTag().toString());
                         rotatedBy[taggedCounter]++;
@@ -191,16 +223,30 @@ public class Jigsaw extends AppCompatActivity {
                         if (rotatedBy[taggedCounter] == 4) {
                             rotatedBy[taggedCounter] = 0;
                         }
-
+//                        Handler handler = new Handler();
+//
+//                        handler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                image.setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
+//                            }
+//                        }, 100);
                         checkAnswers();
                     }
 
                 } else if (level == 2 || level == 4) {
 
                     int taggedCounter = Integer.parseInt(image.getTag().toString());
+
                     if (clickedImageTags.contains((taggedCounter))) {
+                        //image.setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
+                        image.setBackgroundResource(R.drawable.squarewhite);
+                        clickedImageTags.remove(clickedImageTags.indexOf(taggedCounter));
                     } else {
                         clickedImageTags.add(taggedCounter);
+                        //image.setColorFilter(0xD3D3D3, PorterDuff.Mode.LIGHTEN);
+
+                        image.setBackgroundResource(R.drawable.squareblack);
                     }
 
                     if (clickedImageTags.size() == 2) {
@@ -210,9 +256,11 @@ public class Jigsaw extends AppCompatActivity {
                         imageViews[firstTagImage].setImageBitmap(images.get(shuffle.get(secondTagImage)));
                         imageViews[secondTagImage].setImageBitmap(images.get(shuffle.get(firstTagImage)));
                         Collections.swap(shuffle, firstTagImage, secondTagImage);
+                        imageViews[firstTagImage].setBackgroundResource(R.drawable.squarewhite);
+                        imageViews[secondTagImage].setBackgroundResource(R.drawable.squarewhite);
                         clickedImageTags.clear();
                         Log.i("Shuffle ", String.valueOf(shuffle));
-
+                        image.setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
                         checkAnswers2();
                     }
                 }
@@ -232,9 +280,9 @@ public class Jigsaw extends AppCompatActivity {
         if(i==(noOfColumn*noOfRows))
         {
             answer.setText("Correct Answer!");
-            Log.i("terms1",swapsDone+" " + swapsRequired+ " " + timetaken);
             Log.i("Hi","Here");
             correctAnswer=true;
+
 
         }
         if(correctAnswer && level==2)
@@ -242,6 +290,7 @@ public class Jigsaw extends AppCompatActivity {
             popup.startlevelpop();
             level++;
             timetaken=30000-timeleft;
+            Log.i("Terms :",swapsDone+" "+swapsRequired+" "+timetaken);
             timeleft=0;
             noOfColumn=4;
             noOfRows=4;
@@ -266,6 +315,7 @@ public class Jigsaw extends AppCompatActivity {
         if(correctAnswer && level==4)
         {
             timetaken=30000-timeleft;
+            Log.i("Terms :",swapsDone+" "+swapsRequired+" "+timetaken);
             popup.startpop();
             Handler handler = new Handler();
 
@@ -273,8 +323,8 @@ public class Jigsaw extends AppCompatActivity {
                 @Override
                 public void run() {
                     popup.dismisspop();
-                    }
-                }, 1000);
+                }
+            }, 1000);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -287,6 +337,8 @@ public class Jigsaw extends AppCompatActivity {
 
     }
 
+
+
     public void checkAnswers() {
         int i;
         for(i=0;i<noOfRows*noOfColumn;i++)
@@ -296,7 +348,6 @@ public class Jigsaw extends AppCompatActivity {
         }
         if(i==(noOfColumn*noOfRows))
         {
-            Log.i("rotate1",wrongMoves+" " + " " + timetaken);
             correctAnswer=true;
             answer.setText("Correct Answer!!");
         }
@@ -304,6 +355,7 @@ public class Jigsaw extends AppCompatActivity {
         {
             level++;
             timetaken=30000-timeleft;
+            Log.i("Terms :",wrongMoves+" "+timetaken);
             popup.startlevelpop();
             timeleft=0;
             wrongMoves=0;
@@ -334,42 +386,40 @@ public class Jigsaw extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                if(levelNo.getText().toString().equals("Level : 1") || levelNo.getText().toString().equals("Level : 3")){
-                    Log.i("rotate2",wrongMoves + " "+ timetaken);
+                timeleft = 0;
+                timetaken = 30000;
+                wrongMoves = 0;
+                level = 1;
+                noOfColumn = 3;
+                noOfRows = 3;
+                //Log.i("Terms :",swapsDone+" "+swapsRequired+" "+timetaken);
+                //Log.i("Terms :",wrongMoves+" "+timetaken);
+                if (decision != 1 && !correctAnswer) {
+                    popup.startpop();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            popup.dismisspop();
+                        }
+                    }, 3000);
+
+
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Intent homepage = new Intent(Jigsaw.this, JigsawInstructActivity.class);
+                            startActivity(homepage);
+                        }
+                    }, 1000);
+
+                    //Log.i("From","onFinish");
                 }
-                else {
-                    Log.i("terms",swapsDone+" " + swapsRequired+ " " + timetaken);
-                }
-                timeleft=0;
-                timetaken=30000;
-                wrongMoves=0;
-                level=1;
-                noOfColumn=3;
-                noOfRows=3;
-                popup.startpop();
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        popup.dismisspop();
-                    }
-                }, 3000);
-
-
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Intent homepage=new Intent(Jigsaw.this, JigsawInstructActivity.class);
-                        startActivity(homepage);
-                    }
-                }, 1000);
-
-                Log.i("From","onFinish");
             }
         }.start();
-
     }
+
     public void updateCountDownText(){
         int minutes=(int)(timeleft/1000)/60;
         int seconds=(int)(timeleft/1000)%60;
@@ -380,5 +430,16 @@ public class Jigsaw extends AppCompatActivity {
         }else {
             timer.setTextColor(Color.BLACK);
         }
+    }
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            decision=1;
+            finish();
+
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
