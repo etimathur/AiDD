@@ -27,10 +27,10 @@ public class Colormatchp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_colormatchp);
-        pbparent=(ProgressBar) findViewById(R.id.progresss);
-        tparent=(TextView) findViewById(R.id.parenttext);
-        pbdoc=(ProgressBar) findViewById(R.id.docpro);
-        tdoc=(TextView) findViewById(R.id.doctext);
+        //pbparent=(ProgressBar) findViewById(R.id.progresss);
+        //tparent=(TextView) findViewById(R.id.parenttext);
+        //pbdoc=(ProgressBar) findViewById(R.id.docpro);
+        //tdoc=(TextView) findViewById(R.id.doctext);
         db=new DatabaseHelper(this);
         SessionManagement ses=new SessionManagement(Colormatchp.this);
         String naaam=ses.getnaaam();
@@ -53,6 +53,7 @@ public class Colormatchp extends AppCompatActivity {
         //scoregraph.getViewport().setYAxisBoundsManual(true);
         //scoregraph.getViewport().setScalableY(true);
         scoregraph.getGridLabelRenderer().setNumHorizontalLabels(6);
+        scoregraph.getLegendRenderer().setBackgroundColor(Color.LTGRAY);
         scoregraph.setBackgroundColor(Color.WHITE);
         scoregraph.getLegendRenderer().setVisible(true);
         scoregraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
@@ -94,6 +95,7 @@ public class Colormatchp extends AppCompatActivity {
 
         timegraph.addSeries(series1);
         timegraph.getGridLabelRenderer().setNumHorizontalLabels(6);
+        timegraph.getLegendRenderer().setBackgroundColor(Color.LTGRAY);
         timegraph.setBackgroundColor(Color.WHITE);
         timegraph.getViewport().setScalableY(true);
         timegraph.getLegendRenderer().setVisible(true);
@@ -104,14 +106,14 @@ public class Colormatchp extends AppCompatActivity {
         series1.setAnimated(true);
         series1.setDrawDataPoints(true);
         series1.setDataPointsRadius(10);
-
-        pbparent.setMax(100);
-        pbparent.setProgress(60);
-        tparent.setText(60+"%");
-
-        pbdoc.setMax(100);
-        pbdoc.setProgress(75);
-        tdoc.setText(75+"%");
+//
+//        pbparent.setMax(100);
+//        pbparent.setProgress(60);
+//        tparent.setText(60+"%");
+//
+//        pbdoc.setMax(100);
+//        pbdoc.setProgress(75);
+//        tdoc.setText(75+"%");
 
 
     }

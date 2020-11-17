@@ -12,13 +12,13 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
+        android:layout_height="84dp"
         android:background="#A7F2FF"
         android:fontFamily="serif"
         android:gravity="center"
-        android:textStyle="bold"
         android:text="FIND THE MATCH STATISTICS"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
@@ -31,8 +31,8 @@
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/accgraph"
-        android:layout_width="372dp"
-        android:layout_height="237dp"
+        android:layout_width="363dp"
+        android:layout_height="262dp"
         android:layout_below="@+id/textView"
         android:layout_gravity="center" />
 

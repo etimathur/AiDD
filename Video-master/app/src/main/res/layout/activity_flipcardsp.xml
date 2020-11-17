@@ -18,24 +18,25 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/mem"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="37dp"-->
-<!--        android:fontFamily="serif"-->
-<!--        android:gravity="center"-->
-<!--        android:text="MEMORY GRAPH"-->
-<!--        android:layout_below="@+id/flip"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:textAppearance="@style/TextAppearance.AppCompat.Large" />-->
+    <TextView
+        android:id="@+id/mem"
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="PROBLEM SOLVING"
+        android:textStyle="bold"
+        android:layout_below="@+id/flip"
+        android:layout_marginTop="20dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-<!--    <com.jjoe64.graphview.GraphView-->
-<!--        android:id="@+id/graphmp"-->
-<!--        android:layout_width="390dp"-->
-<!--        android:layout_height="183dp"-->
-<!--        android:layout_below="@+id/flip"-->
-<!--        android:layout_marginLeft="10dp"-->
-<!--        android:layout_marginTop="70dp"/>-->
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graphmp"
+        android:layout_width="392dp"
+        android:layout_height="237dp"
+        android:layout_below="@+id/flip"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="70dp" />
 
 
 <!--    <RelativeLayout-->
@@ -126,31 +127,6 @@
 <!--    </RelativeLayout>-->
 
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/puzzle"
-        android:layout_width="match_parent"
-        android:layout_height="201dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentBottom="true"
-        android:layout_gravity="center"
-        android:layout_marginTop="201dp"
-        android:layout_marginBottom="257dp"
-        app:cardBackgroundColor="#ffffff"
-        app:cardElevation="7dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.533"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.53">
-
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/comingsoon"
-            android:scaleType="centerCrop" />
-    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>

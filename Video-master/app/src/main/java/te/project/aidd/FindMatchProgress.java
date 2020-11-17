@@ -40,6 +40,7 @@ public class FindMatchProgress extends AppCompatActivity {
         Log.i("yoooo"," "+accuracy[4]);
         accuracygraph.addSeries(series);
         accuracygraph.getGridLabelRenderer().setNumHorizontalLabels(6);
+        accuracygraph.getLegendRenderer().setBackgroundColor(Color.LTGRAY);
         accuracygraph.getViewport().setMinY(0);
         accuracygraph.getViewport().setMaxY(100);
         accuracygraph.getViewport().setYAxisBoundsManual(true);

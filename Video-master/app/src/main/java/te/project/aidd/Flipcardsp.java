@@ -17,6 +17,9 @@ public class Flipcardsp extends AppCompatActivity {
     ProgressBar pb,pb1;
     private int i=0,j=0;
     private TextView textView,textView1;
+    int list[]=new int[6];
+    DatabaseHelper db;
+
 
 
     @Override
@@ -27,26 +30,38 @@ public class Flipcardsp extends AppCompatActivity {
 //        textView=(TextView) findViewById(R.id.tst);
 //        textView1=(TextView) findViewById(R.id.ttxt);
 //        pb1=(ProgressBar) findViewById(R.id.progress2);
-//
-//        LineGraphSeries<DataPoint> series3 = new LineGraphSeries<DataPoint>(new DataPoint[]{
-//                new DataPoint(1, 45),
-//
-//                new DataPoint(2, 25),
-//                new DataPoint(3, 25),
-//                new DataPoint(4, 35),
-//                new DataPoint(5, 60)
-//        });
-//        //graph3.addSeries(series3);
-//
-//
-//        GraphView graphA = (GraphView) findViewById(R.id.graphmp);
-//// graph.getGridLabelRenderer().setVerticalAxisTitle("Match Value");
-//        graphA.getGridLabelRenderer().setHorizontalAxisTitle(" NO OF GAMES");
-//        graphA.getLegendRenderer().setVisible(true);
-//       // graphA.getGridLabelRenderer().setVerticalAxisTitle("MEMORY");
-//        graphA.getViewport().setMinY(0);
-//        graphA.getViewport().setMaxY(100);
-//        graphA.getViewport().setYAxisBoundsManual(true);
+        db=new DatabaseHelper(this);
+        SessionManagement ses=new SessionManagement(Flipcardsp.this);
+        String naaam=ses.getnaaam();
+        int id=ses.getTableID();
+        list=db.puzzle_graph(naaam);
+        LineGraphSeries<DataPoint> puzzle_series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+                new DataPoint(1, list[0]),
+                new DataPoint(2,list[1]),
+                new DataPoint(3,list[2]),
+                new DataPoint(4, list[3]),
+                new DataPoint(5, list[4]),
+                new DataPoint(6,list[5]),
+        });
+        GraphView puzzlegraph = (GraphView) findViewById(R.id.graphmp);
+        puzzlegraph.getGridLabelRenderer().setHorizontalAxisTitle(" NO OF GAMES");
+        puzzlegraph.getLegendRenderer().setVisible(true);
+        puzzlegraph.getViewport().setMinY(0);
+        puzzlegraph.getViewport().setMaxY(100);
+        puzzlegraph.getViewport().setYAxisBoundsManual(true);
+        puzzlegraph.addSeries(puzzle_series);
+        puzzlegraph.setBackgroundColor(Color.WHITE);
+        puzzlegraph.getLegendRenderer().setVisible(true);
+        puzzlegraph.getGridLabelRenderer().setNumHorizontalLabels(6);
+        puzzlegraph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.TOP);
+        puzzlegraph.getLegendRenderer().setBackgroundColor(Color.LTGRAY);
+        puzzle_series.setTitle("SCORE");
+        puzzle_series.setThickness(7);
+        puzzle_series.setColor(Color.DKGRAY);
+        puzzle_series.setAnimated(true);
+        puzzle_series.setDrawDataPoints(true);
+        puzzle_series.setDataPointsRadius(10);
+
 //
 //        LineGraphSeries<DataPoint> series4 = new LineGraphSeries<DataPoint>(new DataPoint[]{
 //                new DataPoint(1, 10),

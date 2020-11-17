@@ -56,7 +56,7 @@ public class Questions {
     public static int[] meaning=new int[]{
             R.drawable.black_red,
             R.drawable.red_blue,
-            R.drawable.blue_red,
+            R.drawable.blue_black,
             R.drawable.green_red,
             R.drawable.blue_red,
             R.drawable.black_red,
@@ -86,7 +86,7 @@ public class Questions {
             R.drawable.blue_green,
             R.drawable.blue_blue,
             R.drawable.yellow_yellow,
-            R.drawable.black_red,
+            R.drawable.green_red,
             R.drawable.black_blue,
 
 
