@@ -37,7 +37,7 @@
             android:name=".Color_instruct"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Flip_instuct"
+            android:name=".SimonInstruct"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ParentNavActivity"
@@ -50,7 +50,7 @@
             android:name=".Jigsaw"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FlipCards"
+            android:name=".SimonGame"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FindTheMatch"

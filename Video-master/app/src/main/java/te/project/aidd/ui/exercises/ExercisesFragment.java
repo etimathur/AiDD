@@ -13,9 +13,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import te.project.aidd.Color_instruct;
 import te.project.aidd.FindMatchInstruct;
-import te.project.aidd.FindTheMatch;
-import te.project.aidd.Flip_instuct;
-import te.project.aidd.Jigsaw;
+import te.project.aidd.SimonInstruct;
 import te.project.aidd.JigsawInstructActivity;
 import te.project.aidd.R;
 
@@ -48,7 +46,7 @@ public class ExercisesFragment extends Fragment {
         card2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent flipcardsIntent=new Intent(ExercisesFragment.this.getActivity(), Flip_instuct.class);
+                Intent flipcardsIntent=new Intent(ExercisesFragment.this.getActivity(), SimonInstruct.class);
                 startActivity(flipcardsIntent);
             }
         });
