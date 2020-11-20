@@ -337,6 +337,14 @@ public class Jigsaw extends AppCompatActivity {
             int timetakens = (int) timetaken / 1000;
             int analysis_swap1 = (int) doInference1(swapsRequired, swapsDone, timetakens);
             analysis_swap=(analysis_swap+analysis_swap1)/2;
+            SessionManagement ses = new SessionManagement(Jigsaw.this);
+            String email = db.getEmailForChild(ses.getTableID());
+            final_result = (int) ((analysis_rotate + analysis_swap) / 2);
+            if(final_result>100){
+                final_result=99;
+            }
+            db.insert_puzzle_analysis(final_result, email);
+            db.puzzle_30(email,ses.getnaaam(),final_result);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
