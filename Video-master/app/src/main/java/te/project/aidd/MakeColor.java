@@ -169,7 +169,7 @@ public class MakeColor extends AppCompatActivity {
                 checkCombination();
                 break;
             case "white":
-                yourcolor.setImageResource(R.drawable.plain);
+                yourcolor.setImageResource(R.drawable.white);
                 checktag="white";
                 checkCombination();
                 break;
@@ -295,6 +295,7 @@ public class MakeColor extends AppCompatActivity {
                         Log.i("hello","points:"+points1+"no of ques:"+no_of_q1+"anal:"+analysis);
                         db.addscore((level_1_points+points1),email);
                         db.time_analysis(analysis,email);
+                        db.color_match_30(email,ses.getnaaam(),(level_1_points+points1),analysis);
                         popup.dismisspop();
                         finish();
                     }

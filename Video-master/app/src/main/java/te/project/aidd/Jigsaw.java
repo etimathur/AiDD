@@ -373,7 +373,7 @@ public class Jigsaw extends AppCompatActivity {
             int timetakens = (int) timetaken / 1000;
             Log.i("Terms :", wrongMoves + " " + timetaken);
             analysis_rotate = (int) doInference(wrongMoves, timetakens);
-            Log.i("modell : ", analysis_rotate + " ");
+            Log.i("modell : ", analysis_rotate + " "+ analysis_swap);
             popup.startlevelpop();
             timeleft = 0;
             wrongMoves = 0;
@@ -418,7 +418,11 @@ public class Jigsaw extends AppCompatActivity {
                     SessionManagement ses = new SessionManagement(Jigsaw.this);
                     String email = db.getEmailForChild(ses.getTableID());
                     final_result = (int) ((analysis_rotate + analysis_swap) / 2);
+                    if(final_result>100){
+                        final_result=99;
+                    }
                     db.insert_puzzle_analysis(final_result, email);
+                    db.puzzle_30(email,ses.getnaaam(),final_result);
                     Log.i("final",final_result+" ");
                     Log.i("data", "saved");
                     popup.startpop();

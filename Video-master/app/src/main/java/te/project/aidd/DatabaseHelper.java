@@ -55,7 +55,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE colormatchanalysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER,game_6 INTEGER)");
         db.execSQL("CREATE TABLE findthematchanalysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER,game_6 INTEGER)");
         db.execSQL("CREATE TABLE puzzle_analysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER,game_6 INTEGER)");
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_FINDTHEMATCH + "(" + COLFTM_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLFTM_2 + " TEXT," + COLFTM_3 + " TEXT," + COlFTM_4 + " INTEGER, " + COlFTM_5 + " INTEGER, " + COlFTM_6 + " INTEGER)";
+        db.execSQL("CREATE TABLE records_30_colormatch(ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, score  INTEGER, analysis  INTEGER)");
+        db.execSQL("CREATE TABLE records_30_puzzle(ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR,  analysis  INTEGER)");
+        db.execSQL("CREATE TABLE simon_analysis (  ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, game_1  INTEGER, game_2  INTEGER, game_3  INTEGER, game_4  INTEGER, game_5  INTEGER,game_6 INTEGER)");
+        db.execSQL("CREATE TABLE records_30_simon(ID INTEGER PRIMARY KEY AUTOINCREMENT , name VARCHAR,parentname VARCHAR, score  INTEGER, analysis  INTEGER)");
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_FINDTHEMATCH + "(" + COLFTM_1 + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLFTM_2 + " TEXT," + COLFTM_3 + " TEXT," + COlFTM_4 + " INTEGER, " + COlFTM_5 + " INTEGER, " + COlFTM_6 + " INTEGER ,analysis INTEGER )";
 
         db.execSQL(CREATE_TABLE);
 
@@ -70,6 +74,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FINDTHEMATCH);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FINDTHEMATCH_ANALYSIS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PUZZLE);
+        db.execSQL("DROP TABLE IF EXISTS "+ "simon_analysis");
+        db.execSQL("DROP TABLE IF EXISTS "+ "records_30_colormatch");
+        db.execSQL("DROP TABLE IF EXISTS "+ "records_30_puzzle");
+        db.execSQL("DROP TABLE IF EXISTS "+ "records_30_simon");
         onCreate(db);
 
     }
@@ -107,6 +115,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_COLORMATCH_ANALYSIS, null, cc);
         db.insert(TABLE_FINDTHEMATCH_ANALYSIS, null, cc);
         db.insert(TABLE_PUZZLE, null, cc);
+        db.insert("simon_analysis", null, cc);
+
+
+
 
 
 //        ContentValues cV2 = new ContentValues();
@@ -153,6 +165,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     // color match game
+    public void color_match_30(String email, String name, int score, int analysis) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        Log.d("Email ", email);
+        contentValues.put("name", name);
+        contentValues.put("parentname", email);
+        contentValues.put("score", score);
+        contentValues.put("analysis", analysis);
+        db.insert("records_30_colormatch", null, contentValues);
+    }
     public void addscore(int score, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues values = new ContentValues();
@@ -262,7 +284,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //For Find the Match
 
-    public void insertScore(String email, String name, int correctScore, int wrongScore, int totalScore) {
+    public void insertScore(String email, String name, int correctScore, int wrongScore, int totalScore,int analysis) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         Log.d("Email ", email);
@@ -271,6 +293,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(COlFTM_4, correctScore);
         contentValues.put(COlFTM_5, wrongScore);
         contentValues.put(COlFTM_6, totalScore);
+        contentValues.put("analysis",analysis);
         db.insert(TABLE_FINDTHEMATCH, null, contentValues);
     }
 
@@ -342,6 +365,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public void puzzle_30(String email, String name, int analysis) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        Log.d("Email ", email);
+        contentValues.put("name", name);
+        contentValues.put("parentname", email);
+        contentValues.put("analysis", analysis);
+        db.insert("records_30_puzzle", null, contentValues);
+    }
+
     public int[] puzzle_graph(String name) {
         int[] array = new int[6];
         SQLiteDatabase db = this.getReadableDatabase();
@@ -365,4 +399,66 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return array;
 
     }
+
+    // SIMON GAME
+    public void simon_30(String email, String name, int score, int analysis) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        Log.d("Email ", email);
+        contentValues.put("name", name);
+        contentValues.put("parentname", email);
+        contentValues.put("score", score);
+        contentValues.put("analysis", analysis);
+        db.insert("records_30_simon", null, contentValues);
+    }
+
+    public void simon_analysis(int analysis, String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        Cursor cursor = db.rawQuery("SELECT * FROM simon_analysis  WHERE parentname=?", new String[]{name});
+        if (cursor.moveToFirst()) {
+            int c1 = cursor.getInt(cursor.getColumnIndex(game_2));
+            int c2 = cursor.getInt(cursor.getColumnIndex(game_3));
+            int c3 = cursor.getInt(cursor.getColumnIndex(game_4));
+            int c4 = cursor.getInt(cursor.getColumnIndex(game_5));
+            int c5 = cursor.getInt(cursor.getColumnIndex(game_6));
+            values.put(game_1, c1);
+            values.put(game_2, c2);
+            values.put(game_3, c3);
+            values.put(game_4, c4);
+            values.put(game_5, c5);
+            values.put(game_6, analysis);
+        }
+        Log.i("data","saved");
+        db.update("simon_analysis", values, "parentname=?", new String[]{name});
+        db.close();
+
+    }
+
+    public int[] simon_graph(String name) {
+        int[] array = new int[6];
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM simon_analysis WHERE parentname=?", new String[]{name});
+        Log.i("data", name);
+        if (cursor.moveToFirst()) {
+            int c1 = cursor.getInt(cursor.getColumnIndex(game_1));
+            int c2 = cursor.getInt(cursor.getColumnIndex(game_2));
+            int c3 = cursor.getInt(cursor.getColumnIndex(game_3));
+            int c4 = cursor.getInt(cursor.getColumnIndex(game_4));
+            int c5 = cursor.getInt(cursor.getColumnIndex(game_5));
+            int c6 = cursor.getInt(cursor.getColumnIndex(game_6));
+            array[0] = c1;
+            array[1] = c2;
+            array[2] = c3;
+            array[3] = c4;
+            array[4] = c5;
+            array[5] = c6;
+
+        }
+        return array;
+
+    }
+
+
+
 }

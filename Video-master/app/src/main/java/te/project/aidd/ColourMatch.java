@@ -221,6 +221,7 @@ public class ColourMatch extends AppCompatActivity {
                 if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
                     db.addscore(points,email);
                     db.time_analysis(results,email);
+                    db.color_match_30(email,ses.getnaaam(),points,results);
                     Log.i("hello","points:"+ points+"no of ques:"+no_of_q+"anal:"+results);
                 }
 

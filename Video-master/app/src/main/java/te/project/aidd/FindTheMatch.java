@@ -627,7 +627,7 @@ public class FindTheMatch extends AppCompatActivity {
                         } else {
                             analysis = (int) doInference(correctScore, wrongScore, missedScore, totalanswers, noOfQuestions);
                         }
-                        db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers);
+                        db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers,analysis);
                         db.insert_findmatch_analysis(analysis, email);
                         Log.i("anal:", " " + analysis);
                         noOfQuestions = 0;

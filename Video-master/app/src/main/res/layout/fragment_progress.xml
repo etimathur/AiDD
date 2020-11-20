@@ -103,5 +103,36 @@
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/simon"
+        android:layout_width="381dp"
+        android:layout_height="113dp"
+        android:layout_gravity="center"
+        app:cardBackgroundColor="#ffffff"
+        app:cardElevation="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.787">
+
+
+        <ImageView
+            android:layout_width="148dp"
+            android:layout_height="103dp"
+            android:background="@drawable/simon"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="203dp"
+            android:layout_height="69dp"
+            android:layout_gravity="center|end"
+            android:text="\t\tBlink and click\nProgress Report"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

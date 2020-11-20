@@ -4,12 +4,14 @@ package te.project.aidd;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -18,7 +20,13 @@ import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.tensorflow.lite.Interpreter;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.reflect.Array;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -39,7 +47,7 @@ public class SimonGame extends AppCompatActivity {
     ImageView[] imageViews;
     ImageView[] selected=new ImageView[100];
     final Handler handler = new Handler();
-    int blinkDelay=0;
+    int blinkDelay=0,decision;
     List clickedImageTags=new ArrayList();
     int lastIndex=0;
     ArrayList<Integer> selans=new ArrayList<>();
@@ -49,6 +57,9 @@ public class SimonGame extends AppCompatActivity {
     static int score=0;
     int blinkingOn=0;
     long elapsedMillis=0;
+    Interpreter interpreter;
+    DatabaseHelper db;
+    int analysis;
 
 
 
@@ -56,6 +67,12 @@ public class SimonGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simon_game);
+        db=new DatabaseHelper(this);
+        try {
+            interpreter = new Interpreter(loadModelfile(), null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         levelcheck();
     }
     public void levelcheck() {
@@ -84,7 +101,7 @@ public class SimonGame extends AppCompatActivity {
     public void generateImages() {
             selans.clear();
             answer.clear();
-            myImageList = new int[]{R.drawable.circleorange, R.drawable.circlegreen, R.drawable.circleyellow, R.drawable.circleorange, R.drawable.circlegreen, R.drawable.circleyellow, R.drawable.circleorange, R.drawable.circlegreen, R.drawable.circleyellow};
+            myImageList = new int[]{R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom};
             list = new ArrayList<>();
             for (int i = 0; i < myImageList.length; i++) {
                 list.add(myImageList[i]);
@@ -131,7 +148,18 @@ public class SimonGame extends AppCompatActivity {
                     Log.d(TAG, "select: not same");
                     time.stop();
                     showElapsedTime();
-                    Log.i("Score",score+" Time Taken: "+elapsedMillis);
+                    if(score==0){
+                         analysis=0;
+                    }
+                    else{
+                         analysis= (int) doInference(score,(int)(elapsedMillis/1000));
+                    }
+                    Log.i("Score",score+" Time Taken: "+elapsedMillis + "analysis"+ analysis);
+                    SessionManagement ses = new SessionManagement(SimonGame.this);
+                    String email = db.getEmailForChild(ses.getTableID());
+                    db.simon_analysis(analysis,email);
+                    db.simon_30(email,ses.getnaaam(),score,analysis);
+
                     Toast.makeText(SimonGame.this, "Wrong answer", Toast.LENGTH_SHORT).show();
                     Intent go = new Intent(SimonGame.this, SimonInstruct.class);
                     startActivity(go);
@@ -203,5 +231,36 @@ public class SimonGame extends AppCompatActivity {
                 image.setAlpha(255);
             }
         }, 500);
+    }
+
+    private MappedByteBuffer loadModelfile() throws IOException {
+        AssetFileDescriptor assetFileDescriptor = this.getAssets().openFd("simon.tflite");
+        FileInputStream fileInputStream = new FileInputStream(assetFileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = fileInputStream.getChannel();
+        long startOffset = assetFileDescriptor.getStartOffset();
+        long length = assetFileDescriptor.getLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, length);
+
+    }
+
+    public float doInference(int score, int elapsedMillis) {
+        float[][] input = new float[1][2];
+        input[0][0] = (float) (score);
+        input[0][1] = (float) (elapsedMillis);
+        float[][] output = new float[1][1];
+        interpreter.run(input, output);
+        return output[0][0];
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if ((keyCode == KeyEvent.KEYCODE_BACK))
+        {
+            decision=1;
+            finish();
+
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

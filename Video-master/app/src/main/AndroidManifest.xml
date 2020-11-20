@@ -12,11 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FindMatchProgress"
-            android:theme="@style/AppTheme.NoActionBar"  ></activity>
+        <activity android:name=".Simon_progress"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".FindMatchProgress"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".MakeColor"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".YoutubeVideo" />
         <activity
             android:name=".Feedback"
