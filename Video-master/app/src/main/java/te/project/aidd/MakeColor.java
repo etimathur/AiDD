@@ -39,7 +39,7 @@ public class MakeColor extends AppCompatActivity {
     DatabaseHelper db;
     TextView score,timer;
     Interpreter interpreter;
-    int  level_1_points,no_of_q,no_of_q1=0, points1=0;
+    int  level_1_results,no_of_q,no_of_q1=0, points1=0,level_1_points;
 
 
     @Override
@@ -65,8 +65,9 @@ public class MakeColor extends AppCompatActivity {
         clear=findViewById(R.id.clear);
         timer=findViewById(R.id.time);
         Intent intent=getIntent();
+        level_1_results=intent.getIntExtra("level_1_results",level_1_results);
         level_1_points=intent.getIntExtra("color_points",level_1_points);
-        no_of_q=intent.getIntExtra("no_of_q",no_of_q);
+        //no_of_q=intent.getIntExtra("no_of_q",no_of_q);
 
         count=r.nextInt(Questions.colorss.length);
         newQuestion();
@@ -256,7 +257,7 @@ public class MakeColor extends AppCompatActivity {
     public void checkCombination(){
         String t= givencolor.getTag().toString();
         if(t.equals(checktag)){
-            points1=points1+5;
+            points1=points1+2;
             score.setText(points1+"");
             popup.startcorrect();
             new Handler().postDelayed(new Runnable() {
@@ -291,8 +292,12 @@ public class MakeColor extends AppCompatActivity {
                         cd.cancel();
                         SessionManagement ses=new SessionManagement(MakeColor.this);
                         String email=db.getEmailForChild(ses.getTableID());
-                        int analysis=(int)doInference(level_1_points,no_of_q,points1,no_of_q1);
-                        Log.i("hello","points:"+points1+"no of ques:"+no_of_q1+"anal:"+analysis);
+                       // int analysis=(int)doInference(level_1_results,no_of_q,points1,no_of_q1);
+                        Log.i("level 2  ","points: "+points1+"  no of ques:"+no_of_q1);
+                        float level_2_results=  (points1 *100 )/(2*no_of_q1);
+                        //level_2_results= level_2_results*100;
+                        int analysis=(int) (level_1_results+level_2_results)/2;
+                        Log.i("level 2__  ","analysissss "+analysis+"levelll"+level_2_results);
                         db.addscore((level_1_points+points1),email);
                         db.time_analysis(analysis,email);
                         db.color_match_30(email,ses.getnaaam(),(level_1_points+points1),analysis);

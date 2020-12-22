@@ -22,14 +22,19 @@ public class Questions {
     };
 
     public static int[] colorss=new int[]{
+            R.drawable.red,
             R.drawable.orange,
             R.drawable.purple,
+            R.drawable.green,
             R.drawable.pink,
+            R.drawable.blue,
+            R.drawable.yelloe,
             R.drawable.grey,
             R.drawable.lightblue,
             R.drawable.lightpurple,
             R.drawable.darkblue,
             R.drawable.greenblue,
+            R.drawable.black,
             R.drawable.brown,
             R.drawable.darkgreen,
 
@@ -37,14 +42,19 @@ public class Questions {
     };
 
     public static String[] match=new String[]{
+            "red",
             "orange",
             "purple",
+            "green",
             "pink",
+            "blue",
+            "yellow",
             "grey",
             "lightblue",
             "lightpurple",
             "darkblue",
             "greenblue",
+            "black",
             "brown",
             "darkgreen",
 

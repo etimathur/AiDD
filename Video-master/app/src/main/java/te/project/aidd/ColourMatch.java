@@ -37,10 +37,10 @@ public class ColourMatch extends AppCompatActivity {
     private int no_of_q=0;
     public float analysis;
     private TextView timer ;
-    private static final long COUNTDOWN_IN=45000;
+    private static final long COUNTDOWN_IN=30000;
     private CountDownTimer cd;
     public long timeleft;
-    int flag=1;
+    int flag=1, fla=1;
     DatabaseHelper db;
     Animation animation;
     CardView c1,c2;
@@ -145,7 +145,7 @@ public class ColourMatch extends AppCompatActivity {
         animation= AnimationUtils.loadAnimation(ColourMatch.this,R.anim.textanim);
         image.startAnimation(animation);
         if(points>=15){
-            level.setText("LEVEL 3");
+            level.setText("LEVEL 2");
             popup.startlevelpop();
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -157,26 +157,33 @@ public class ColourMatch extends AppCompatActivity {
                 }
             },1250);
             Intent intent= new Intent(ColourMatch.this,MakeColor.class);
+            long timetaken=30000-timeleft;
+            timetaken=timetaken/1000;
+            analysis= (float) ((0.6*points/no_of_q)+ (0.4*no_of_q/timetaken));
+            int results =(int)(analysis*100);
+            fla=0;
+            Log.i("level_1","points:"+ points+"no of ques:"+no_of_q+"anal:"+results+"timetaken:"+timetaken);
             intent.putExtra("color_points",points);
             intent.putExtra("no_of_q",no_of_q);
+            intent.putExtra("level_1_results",results);
             startActivity(intent);
         }
-        else if(points>5 | flag==0){
-            if(flag==1){
-                popup.startlevelpop();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        flag=0;
-                        popup.dismisslevelpop();
-
-
-                    }
-                },1250);
-            }
-            level2();
-        }
-        else {}
+//        else if(points>5 | flag==0){
+//            if(flag==1){
+//                popup.startlevelpop();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        flag=0;
+//                        popup.dismisslevelpop();
+//
+//
+//                    }
+//                },1250);
+//            }
+//            level2();
+//        }
+//        else {}
 
         question++;
         no_of_q++;
@@ -184,18 +191,18 @@ public class ColourMatch extends AppCompatActivity {
     }
 
 
-    public void level2(){
-        LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) c1.getLayoutParams();
-        layoutParams.height=420;
-        c1.setLayoutParams(layoutParams);
-        c2.setVisibility(View.VISIBLE);
-        level.setText("LEVEL 2");
-        meaning.setVisibility(View.VISIBLE);
-        image.setImageResource(Questions.meaning[question]);
-        image2.setImageResource(Questions.textcolor[question]);
-        image2.startAnimation(animation);
-        answer=Questions.answers[question];
-    }
+//    public void level2(){
+//        LinearLayout.LayoutParams layoutParams=(LinearLayout.LayoutParams) c1.getLayoutParams();
+//        layoutParams.height=420;
+//        c1.setLayoutParams(layoutParams);
+//        c2.setVisibility(View.VISIBLE);
+//        level.setText("LEVEL 2");
+//        meaning.setVisibility(View.VISIBLE);
+//        image.setImageResource(Questions.meaning[question]);
+//        image2.setImageResource(Questions.textcolor[question]);
+//        image2.startAnimation(animation);
+//        answer=Questions.answers[question];
+//    }
 
     public void updateScore(int point){
         score.setText(""+points);
@@ -211,14 +218,18 @@ public class ColourMatch extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                long timetaken=30000-timeleft;
+                timetaken=timetaken/1000;
                 timeleft=0;
-                // analysis of the game without model by 80% to 20% equation
-                analysis= (float) ((0.6*points/no_of_q)+ (0.4*no_of_q/45));
+                // analysis of the game without model by 60% to 40% equation
+                analysis= (float) ((0.6*points/no_of_q)+ (0.4*no_of_q/timetaken));
                 int results =(int)(analysis*100);
+                if (fla==1)
+                {
                 SessionManagement ses=new SessionManagement(ColourMatch.this);
                 String email=db.getEmailForChild(ses.getTableID());
                 Log.i("youuu",ses.getTableID()+" ");
-                if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
+                //if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
                     db.addscore(points,email);
                     db.time_analysis(results,email);
                     db.color_match_30(email,ses.getnaaam(),points,results);
