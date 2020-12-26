@@ -16,6 +16,8 @@ public class JigsawInstructActivity extends AppCompatActivity {
     }
     public void goTo(View view){
         Intent homepage=new Intent(JigsawInstructActivity.this, Jigsaw.class);
+        homepage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homepage);
+        finish();
     }
 }

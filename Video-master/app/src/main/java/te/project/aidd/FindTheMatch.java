@@ -1,7 +1,9 @@
 package te.project.aidd;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
@@ -693,7 +695,25 @@ public class FindTheMatch extends AppCompatActivity {
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         {
             back=1;
-            finish();
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to quit AiDD?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                   FindTheMatch.super.onBackPressed();
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+
         }
         return super.onKeyDown(keyCode, event);
     }

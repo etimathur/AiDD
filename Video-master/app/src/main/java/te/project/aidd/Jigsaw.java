@@ -1,7 +1,9 @@
 package te.project.aidd;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -45,11 +47,7 @@ public class Jigsaw extends AppCompatActivity {
     int analysis_swap = 0;
     int final_result = 0;
     int wrongMoves = 0;
-    private TextView timer;
-    private static final long COUNTDOWN_IN1 = 30000;
-    private static final long COUNTDOWN_IN2 = 30000;
-    private CountDownTimer cd;
-    private long timeleft, timetaken;
+    private long timetaken;
     boolean correctAnswer = false;
     ArrayList<Integer> shuffle;
     ArrayList<Integer> clickedImageTags;
@@ -61,6 +59,8 @@ public class Jigsaw extends AppCompatActivity {
     int swapsRequired, swapsDone;
     Date currentTime;
     Date generateTime;
+    Date currentTime1;
+    Date generateTime1;
     Interpreter interpreter;
     DatabaseHelper db;
     ArrayList<Date> time = new ArrayList<>();
@@ -93,31 +93,22 @@ public class Jigsaw extends AppCompatActivity {
     }
 
     public void generateImage() {
+        correctAnswer=false;
 
         generateTime = Calendar.getInstance().getTime();
+        generateTime1 = Calendar.getInstance().getTime();
         answer = (TextView) findViewById(R.id.correctAns);
         levelNo = (TextView) findViewById(R.id.level);
         answer.setText("");
         ArrayList<Bitmap> bs = new ArrayList<Bitmap>();
-        timer = (TextView) findViewById(R.id.time);
-        if (correctAnswer) {
-            cd.cancel();
-        }
-        correctAnswer = false;
-        if (level == 1 || level == 2) {
-            timeleft = COUNTDOWN_IN1;
-        } else {
-            timeleft = COUNTDOWN_IN2;
-        }
 
-        startCountDown();
         shuffle = new ArrayList();
         for (int i = 0; i < noOfColumn * noOfRows; i++) {
             shuffle.add(i);
         }
         Collections.shuffle(shuffle);
         Random rand = new Random();
-        int[] drawables = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10, R.drawable.image12, R.drawable.image13, R.drawable.image14};
+        int[] drawables = new int[]{R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image3, R.drawable.image4, R.drawable.image5, R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10, R.drawable.image12};
         int imageSelection = rand.nextInt(drawables.length);
         Bitmap b = BitmapFactory.decodeResource(getResources(), drawables[imageSelection]);
         images = divideImages(b);
@@ -128,7 +119,7 @@ public class Jigsaw extends AppCompatActivity {
             imageViews = new ImageView[]{(ImageView) findViewById(R.id.imageView1), (ImageView) findViewById(R.id.imageView2), (ImageView) findViewById(R.id.imageView3), (ImageView) findViewById(R.id.imageView4), (ImageView) findViewById(R.id.imageView5), (ImageView) findViewById(R.id.imageView6), (ImageView) findViewById(R.id.imageView7), (ImageView) findViewById(R.id.imageView8), (ImageView) findViewById(R.id.imageView9), (ImageView) findViewById(R.id.imageView10), (ImageView) findViewById(R.id.imageView11), (ImageView) findViewById(R.id.imageView12), (ImageView) findViewById(R.id.imageView13), (ImageView) findViewById(R.id.imageView14), (ImageView) findViewById(R.id.imageView15), (ImageView) findViewById(R.id.imageView16)};
         }
         levelNo.setText("Level : " + level);
-        if (level == 1 || level == 3) {
+        if (level == 1 || level == 2) {
 
             rotationBy = new int[noOfColumn * noOfRows];
             rotatedBy = new int[noOfColumn * noOfRows];
@@ -143,7 +134,7 @@ public class Jigsaw extends AppCompatActivity {
                 imageViews[i].setBackgroundColor(Color.WHITE);
 
             }
-        } else if (level == 2 || level == 4) {
+        } else if (level == 3 || level == 4) {
             arr = new int[shuffle.size()];
             for (int x = 0; x < shuffle.size(); x++) {
                 arr[x] = shuffle.get(x) + 1;
@@ -196,9 +187,11 @@ public class Jigsaw extends AppCompatActivity {
         if (!correctAnswer) {
             Date now = Calendar.getInstance().getTime();
             long diff = now.getTime() - generateTime.getTime();
+            // Log.i("Level", String.valueOf(level));
+
             if (generatedImage && diff > 500) {
                 final ImageView image = (ImageView) view;
-                if (level == 1 || level == 3) {
+                if (level == 1 || level == 2) {
 //                    Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha);
 //                    image.startAnimation(animation);
 
@@ -252,8 +245,7 @@ public class Jigsaw extends AppCompatActivity {
                         checkAnswers();
                     }
 
-                } else if (level == 2 || level == 4) {
-
+                } else if (level == 3 || level == 4) {
                     int taggedCounter = Integer.parseInt(image.getTag().toString());
 
                     if (clickedImageTags.contains((taggedCounter))) {
@@ -277,7 +269,7 @@ public class Jigsaw extends AppCompatActivity {
                         imageViews[firstTagImage].setBackgroundResource(R.drawable.squarewhite);
                         imageViews[secondTagImage].setBackgroundResource(R.drawable.squarewhite);
                         clickedImageTags.clear();
-                        Log.i("Shuffle ", String.valueOf(shuffle));
+                        //Log.i("Shuffle ", String.valueOf(shuffle));
                         image.setColorFilter(0xFFFFFFFF, PorterDuff.Mode.MULTIPLY);
                         checkAnswers2();
                     }
@@ -295,22 +287,24 @@ public class Jigsaw extends AppCompatActivity {
         }
         if (i == (noOfColumn * noOfRows)) {
             answer.setText("Correct Answer!");
-            Log.i("Hi", "Here");
+            //Log.i("Hi", "Here");
             correctAnswer = true;
 
 
         }
-        if (correctAnswer && level == 2) {
+        if (correctAnswer && level == 3) {
             popup.startlevelpop();
             level++;
-            timetaken = 30000 - timeleft;
+            Date now1 = Calendar.getInstance().getTime();
+            long diff1 = now1.getTime() - generateTime1.getTime();
+            timetaken = diff1;
             Log.i("Terms :", swapsDone + " " + swapsRequired + " " + timetaken);
             int timetakens = (int) timetaken / 1000;
             analysis_swap = (int) doInference1(swapsRequired, swapsDone, timetakens);
             Log.i("swaps_model", analysis_swap + " ");
-            timeleft = 0;
             noOfColumn = 4;
             noOfRows = 4;
+            correctAnswer=false;
             Handler handler = new Handler();
 
             handler.postDelayed(new Runnable() {
@@ -324,27 +318,24 @@ public class Jigsaw extends AppCompatActivity {
                 @Override
                 public void run() {
                     setContentView(R.layout.activity_jigsaw16);
+
                     generateImage();
                 }
             }, 1000);
 
         }
         if (correctAnswer && level == 4) {
-            timetaken = 30000 - timeleft;
+            //Log.i("Level","4");
+            Date now1 = Calendar.getInstance().getTime();
+            long diff1 = now1.getTime() - generateTime1.getTime();
+            timetaken = diff1;
             Log.i("Terms :", swapsDone + " " + swapsRequired + " " + timetaken);
             popup.startpop();
             Handler handler = new Handler();
             int timetakens = (int) timetaken / 1000;
             int analysis_swap1 = (int) doInference1(swapsRequired, swapsDone, timetakens);
+
             analysis_swap=(analysis_swap+analysis_swap1)/2;
-            SessionManagement ses = new SessionManagement(Jigsaw.this);
-            String email = db.getEmailForChild(ses.getTableID());
-            final_result = (int) ((analysis_rotate + analysis_swap) / 2);
-            if(final_result>100){
-                final_result=99;
-            }
-            db.insert_puzzle_analysis(final_result, email);
-            db.puzzle_30(email,ses.getnaaam(),final_result);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -358,6 +349,45 @@ public class Jigsaw extends AppCompatActivity {
                     startActivity(homepage);
                 }
             }, 1000);
+
+//            timeleft = 0;
+//            timetaken = 30000;
+//            wrongMoves = 0;
+//            level = 1;
+//            noOfColumn = 3;
+//            noOfRows = 3;
+            //Log.i("Terms :",swapsDone+" "+swapsRequired+" "+timetaken);
+            //Log.i("Terms :",wrongMoves+" "+timetaken);
+            if (decision != 1) {
+                SessionManagement ses = new SessionManagement(Jigsaw.this);
+                String email = db.getEmailForChild(ses.getTableID());
+                final_result = (int) ((analysis_rotate/2 + analysis_swap) / 2);
+                if(final_result>100)
+                    final_result=100;
+                db.insert_puzzle_analysis(final_result, email);
+                Log.i("final",final_result+" ");
+                Log.i("data", "saved");
+                popup.startpop();
+                handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        popup.dismisspop();
+                    }
+                }, 3000);
+
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Intent homepage = new Intent(Jigsaw.this, JigsawInstructActivity.class);
+                        startActivity(homepage);
+                    }
+                }, 1000);
+
+                //Log.i("From","onFinish");
+            }
 
         }
 
@@ -375,15 +405,27 @@ public class Jigsaw extends AppCompatActivity {
             correctAnswer = true;
             answer.setText("Correct Answer!!");
         }
-        if (correctAnswer && (level == 1 || level == 3)) {
+        if (correctAnswer && (level == 1 || level == 2)) {
+            if(level==1)
+            {
+                noOfColumn=4;
+                noOfRows=4;
+
+            }
+            else if(level==2)
+            {
+                noOfColumn=3;
+                noOfRows=3;
+            }
             level++;
-            timetaken = 30000 - timeleft;
+            Date now1 = Calendar.getInstance().getTime();
+            long diff1 = now1.getTime() - generateTime1.getTime();
+            timetaken = diff1;
             int timetakens = (int) timetaken / 1000;
             Log.i("Terms :", wrongMoves + " " + timetaken);
-            analysis_rotate = (int) doInference(wrongMoves, timetakens);
-            Log.i("modell : ", analysis_rotate + " "+ analysis_swap);
+            analysis_rotate += (int) doInference(wrongMoves, timetakens);
+            Log.i("modell : ", analysis_rotate + " ");
             popup.startlevelpop();
-            timeleft = 0;
             wrongMoves = 0;
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -397,83 +439,60 @@ public class Jigsaw extends AppCompatActivity {
                 @Override
                 public void run() {
                     generatedImage = false;
+                    if(level==2)
+                    {
+                        setContentView(R.layout.activity_jigsaw16);
+                    }
+                    else if(level==3)
+                    {
+                        setContentView(R.layout.activity_jigsaw);
+                    }
                     generateImage();
                 }
             }, 3000);
         }
     }
 
-    public void startCountDown() {
-        cd = new CountDownTimer(timeleft, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timeleft = millisUntilFinished;
-                updateCountDownText();
-
-            }
-
-            @Override
-            public void onFinish() {
-                timeleft = 0;
-                timetaken = 30000;
-                wrongMoves = 0;
-                level = 1;
-                noOfColumn = 3;
-                noOfRows = 3;
-                //Log.i("Terms :",swapsDone+" "+swapsRequired+" "+timetaken);
-                //Log.i("Terms :",wrongMoves+" "+timetaken);
-                if (decision != 1 && !correctAnswer) {
-                    SessionManagement ses = new SessionManagement(Jigsaw.this);
-                    String email = db.getEmailForChild(ses.getTableID());
-                    final_result = (int) ((analysis_rotate + analysis_swap) / 2);
-                    if(final_result>100){
-                        final_result=99;
-                    }
-                    db.insert_puzzle_analysis(final_result, email);
-                    db.puzzle_30(email,ses.getnaaam(),final_result);
-                    Log.i("final",final_result+" ");
-                    Log.i("data", "saved");
-                    popup.startpop();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            popup.dismisspop();
-                        }
-                    }, 3000);
 
 
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
+    public void onBackPressed() {
 
-                            Intent homepage = new Intent(Jigsaw.this, JigsawInstructActivity.class);
-                            startActivity(homepage);
-                        }
-                    }, 1000);
 
-                    //Log.i("From","onFinish");
-                }
-            }
-        }.start();
     }
 
-    public void updateCountDownText() {
-        int minutes = (int) (timeleft / 1000) / 60;
-        int seconds = (int) (timeleft / 1000) % 60;
-        String timeformat = String.format(Locale.getDefault(), "00:%02d", seconds);
-        timer.setText(timeformat);
-        if (timeleft < 10000) {
-            timer.setTextColor(Color.RED);
-        } else {
-            timer.setTextColor(Color.BLACK);
-        }
-    }
+
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+
             decision = 1;
-            finish();
+            AlertDialog.Builder builder=new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to exit the game?");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Jigsaw.super.onBackPressed();
+                    if(level>1) {
+                        SessionManagement ses = new SessionManagement(Jigsaw.this);
+                        String email = db.getEmailForChild(ses.getTableID());
+                        final_result = (int) ((analysis_rotate / 2 + analysis_swap) / 2);
+                        db.insert_puzzle_analysis(final_result, email);
+                        Log.i("final", final_result + " ");
+                        Log.i("data", "saved");
+                    }
+                    finish();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alertDialog=builder.create();
+            alertDialog.show();
+
 
 
         }
@@ -518,3 +537,4 @@ public class Jigsaw extends AppCompatActivity {
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, length);
     }
 }
+

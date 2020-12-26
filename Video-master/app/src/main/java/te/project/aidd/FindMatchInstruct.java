@@ -20,7 +20,9 @@ Button ftm;
             @Override
             public void onClick(View v) {
                 Intent cmin=new Intent(FindMatchInstruct.this,FindTheMatch.class);
+                cmin.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(cmin);
+                finish();
             }
         });
     }
