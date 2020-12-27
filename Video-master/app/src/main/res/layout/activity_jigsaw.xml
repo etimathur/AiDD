@@ -18,7 +18,7 @@
         android:background="#A7F2FF"
         android:fontFamily="serif"
         android:gravity="center"
-        android:text="Puzzle"
+        android:text="PUZZLE"
         android:textAlignment="center"
         android:textSize="30sp"
         android:textStyle="bold"

@@ -15,8 +15,8 @@
         android:background="#A7F2FF"
         android:fontFamily="serif"
         android:gravity="center"
-        android:text="BLINK and CLICK STATISTICS"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="BLINK AND CLICK STATISTICS"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView

@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class HomeActivity extends AppCompatActivity {
     public Button button2;
     public Button button;
+    TextView parRegister;
     public void init2(){
         button2=(Button)findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
@@ -30,6 +32,15 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent par=new Intent(HomeActivity.this,ChildLoginActivity.class);
                 startActivity(par);
+            }
+        });
+        parRegister=(TextView) findViewById(R.id.textview_register);
+        parRegister.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view){
+                Intent registerIntent=new Intent(HomeActivity.this,RegisterActivity.class);
+                startActivity(registerIntent);
             }
         });
     }

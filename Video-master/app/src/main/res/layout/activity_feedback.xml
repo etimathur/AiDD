@@ -28,7 +28,7 @@
                 android:background="#A7F2FF"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="Feedback"
+                android:text="FEEDBACK"
                 android:textAlignment="center"
                 android:textSize="30sp"
                 android:textStyle="bold"

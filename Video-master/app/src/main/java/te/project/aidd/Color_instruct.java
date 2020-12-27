@@ -19,7 +19,12 @@ Button cm;
             public void onClick(View v) {
                 Intent cmin=new Intent(Color_instruct.this,ColourMatch.class);
                 startActivity(cmin);
+
+
+                finish();
             }
         });
+
+
     }
 }

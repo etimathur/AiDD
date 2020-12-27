@@ -9,6 +9,7 @@ import android.widget.Button;
 
 public class SimonInstruct extends AppCompatActivity {
  Button flipinstrut;
+    int decision=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,7 +20,10 @@ public class SimonInstruct extends AppCompatActivity {
             public void onClick(View v) {
                 Intent fin=new Intent(SimonInstruct.this, SimonGame.class);
                 startActivity(fin);
+                finish();
+
             }
         });
+
     }
 }

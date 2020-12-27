@@ -17,7 +17,7 @@
         android:fontFamily="serif"
         android:gravity="center"
         android:text="FIND THE MATCH STATISTICS"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="22sp"
         android:textStyle="bold" />
 
     <TextView

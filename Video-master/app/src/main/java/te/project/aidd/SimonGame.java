@@ -3,6 +3,7 @@ package te.project.aidd;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
@@ -60,6 +61,8 @@ public class SimonGame extends AppCompatActivity {
     Interpreter interpreter;
     DatabaseHelper db;
     int analysis;
+    int wrongAnswers=0;
+    pop popup=new pop(SimonGame.this);
 
 
 
@@ -85,12 +88,37 @@ public class SimonGame extends AppCompatActivity {
 
             public void onChronometerTick(Chronometer chronometer) {
                 showElapsedTime();
-                if(elapsedMillis>60000) {
+                if(elapsedMillis>75000) {
                     Log.i("Score",score+" Time Taken: "+elapsedMillis);
                     time.stop();
-                    finish();
+                    analysis= (int) doInference(score,wrongAnswers);
+                    if(score==0){
+                        analysis=0;
+                    }
+                    else if(analysis>100){
+                        analysis= 96;
+                    }
+                    else{}
+                    Log.i("Score", score +  "analysis" + analysis);
+                    SessionManagement ses = new SessionManagement(SimonGame.this);
+                    String email = db.getEmailForChild(ses.getTableID());
+                    db.simon_analysis(analysis,email);
+                    db.simon_30(email,ses.getnaaam(),score,analysis);
+                    Log.i("wrongAnswers: " ,wrongAnswers+" ");
+                    if(decision!=1){
+
+                        popup.startpop();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                popup.dismisspop();
+                                finish();
+                            }
+                        },4000);}
+
                     Intent go = new Intent(SimonGame.this, SimonInstruct.class);
                     startActivity(go);
+
 
                 }
 
@@ -99,72 +127,85 @@ public class SimonGame extends AppCompatActivity {
         });
     }
     public void generateImages() {
-            selans.clear();
-            answer.clear();
-            myImageList = new int[]{R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom};
-            list = new ArrayList<>();
-            for (int i = 0; i < myImageList.length; i++) {
-                list.add(myImageList[i]);
-            }
-            Collections.shuffle(list);
-            imageViews = new ImageView[]{findViewById(R.id.v0), findViewById(R.id.v1), findViewById(R.id.v2), findViewById(R.id.v3), findViewById(R.id.v4), findViewById(R.id.v5), findViewById(R.id.v6), findViewById(R.id.v7), findViewById(R.id.v8)};
-            for (int i = 0; i < 9; i++) {
-                imageViews[i].setImageResource(list.get(i));
-            }
-            handler.postDelayed(new Runnable() {
-
-                @Override
-                public void run() {
-                    outLoop++;
-                    BlinkingImages(outLoop);
-                    Log.d(TAG, "run: " + outLoop);
-                }
-            }, 1000);
+        selans.clear();
+        answer.clear();
+        myImageList = new int[]{R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom};
+        list = new ArrayList<>();
+        for (int i = 0; i < myImageList.length; i++) {
+            list.add(myImageList[i]);
         }
+        Collections.shuffle(list);
+        imageViews = new ImageView[]{findViewById(R.id.v0), findViewById(R.id.v1), findViewById(R.id.v2), findViewById(R.id.v3), findViewById(R.id.v4), findViewById(R.id.v5), findViewById(R.id.v6), findViewById(R.id.v7), findViewById(R.id.v8)};
+        for (int i = 0; i < 9; i++) {
+            imageViews[i].setImageResource(list.get(i));
+        }
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                outLoop++;
+                BlinkingImages(outLoop);
+                Log.d(TAG, "run: " + outLoop);
+            }
+        }, 1000);
+    }
 
     public void select(View view)
     {
         if(blinkingOn==1) {
-            ImageView counter = (ImageView) view;
+            final ImageView counter = (ImageView) view;
             selected[lastIndex] = counter;
             int taggedCounter = Integer.parseInt(counter.getTag().toString());
             selans.add(taggedCounter);
             if (clickedImageTags.isEmpty()) {
-                counter.setBackgroundResource(R.drawable.squareselect);
+                //counter.setBackgroundResource(R.drawable.squareselect);
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        counter.setBackgroundResource(R.drawable.squareselect);
+                    }
+                },100);
                 clickedImageTags.add(taggedCounter);
                 lastIndex++;
             } else {
                 int x = lastIndex - 1;
                 selected[x].setBackgroundColor(Color.WHITE);
-                counter.setBackgroundResource(R.drawable.squareselect);
+                handler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        counter.setBackgroundResource(R.drawable.squareselect);
+                    }
+                },100);
                 clickedImageTags.add(taggedCounter);
                 lastIndex++;
 
             }
             Log.d(TAG, "select:" + selans);
             Log.d(TAG, "answer:" + answer);
-            for (int i = 0; i < selans.size(); i++) {
+            for (int i = 0; i <selans.size(); i++) {
                 if (selans.get(i) != answer.get(i)) {
-                    Log.d(TAG, "select: not same");
-                    time.stop();
+                    Log.d(TAG, "select: not same" + selans.get(i) + " " + answer.get(i));
+
                     showElapsedTime();
-                    if(score==0){
-                         analysis=0;
-                    }
-                    else{
-                         analysis= (int) doInference(score,(int)(elapsedMillis/1000));
-                    }
-                    Log.i("Score",score+" Time Taken: "+elapsedMillis + "analysis"+ analysis);
-                    SessionManagement ses = new SessionManagement(SimonGame.this);
-                    String email = db.getEmailForChild(ses.getTableID());
-                    db.simon_analysis(analysis,email);
-                    db.simon_30(email,ses.getnaaam(),score,analysis);
+
 
                     Toast.makeText(SimonGame.this, "Wrong answer", Toast.LENGTH_SHORT).show();
-                    Intent go = new Intent(SimonGame.this, SimonInstruct.class);
-                    startActivity(go);
-                    break;
+                    handler.postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            counter.setBackgroundResource(R.drawable.squarered);
+                        }
+                    }, 100);
+                    wrongAnswers++;
+                    selans.clear();
+                    answer.clear();
+                    blinkingOn = 0;
+                    BlinkingImages(outLoop);
                 }
+            }
                 if (selans.size() == answer.size()) {
                     score++;
                     Toast.makeText(SimonGame.this, "Correct answer", Toast.LENGTH_SHORT).show();
@@ -175,17 +216,14 @@ public class SimonGame extends AppCompatActivity {
                             selected[lastIndex - 1].setBackgroundColor(Color.WHITE);
                         }
                     }, 1000);
+                    selans.clear();
+                    answer.clear();
                     outLoop++;
                     blinkingOn=0;
                     BlinkingImages(outLoop);
                 }
-            }
+
             showElapsedTime();
-//            if(elapsedMillis>60000) {
-//                time.stop();
-//                Intent go = new Intent(SimonGame.this, SimonInstruct.class);
-//                startActivity(go);
-//            }
         }
     }
 
@@ -243,10 +281,10 @@ public class SimonGame extends AppCompatActivity {
 
     }
 
-    public float doInference(int score, int elapsedMillis) {
+    public float doInference(int score, int wrongAnswers) {
         float[][] input = new float[1][2];
         input[0][0] = (float) (score);
-        input[0][1] = (float) (elapsedMillis);
+        input[0][1] = (float) (wrongAnswers);
         float[][] output = new float[1][1];
         interpreter.run(input, output);
         return output[0][0];

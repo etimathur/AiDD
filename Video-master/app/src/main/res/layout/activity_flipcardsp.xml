@@ -15,8 +15,8 @@
         android:fontFamily="serif"
         android:gravity="center"
         android:text="JIGSAW STATISTICS"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="24sp" />
+        android:textSize="26sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/mem"
