@@ -695,25 +695,7 @@ public class FindTheMatch extends AppCompatActivity {
         if ((keyCode == KeyEvent.KEYCODE_BACK))
         {
             back=1;
-            AlertDialog.Builder builder=new AlertDialog.Builder(this);
-            builder.setMessage("Are you sure you want to quit AiDD?");
-            builder.setCancelable(false);
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                   FindTheMatch.super.onBackPressed();
-                    finish();
-                }
-            });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog alertDialog=builder.create();
-            alertDialog.show();
-
+            finish();
         }
         return super.onKeyDown(keyCode, event);
     }
