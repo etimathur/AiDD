@@ -367,6 +367,7 @@ public class Jigsaw extends AppCompatActivity {
                 db.insert_puzzle_analysis(final_result, email);
                 Log.i("final",final_result+" ");
                 Log.i("data", "saved");
+
                 popup.startpop();
                 handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -383,6 +384,7 @@ public class Jigsaw extends AppCompatActivity {
 
                         Intent homepage = new Intent(Jigsaw.this, JigsawInstructActivity.class);
                         startActivity(homepage);
+                        finish();
                     }
                 }, 1000);
 
