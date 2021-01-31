@@ -292,7 +292,7 @@ public class ColourMatch extends AppCompatActivity {
     }
     private void addItemToSheet() {
 
-        final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
+        //final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
         //final String name = editTextItemName.getText().toString().trim();
         //final String brand = editTextBrand.getText().toString().trim();
         SessionManagement ses=new SessionManagement(ColourMatch.this);
@@ -311,7 +311,7 @@ public class ColourMatch extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        loading.dismiss();
+                        //loading.dismiss();
                         //Toast.makeText(Additems.this, response, Toast.LENGTH_LONG).show();
                         //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         //startActivity(intent);

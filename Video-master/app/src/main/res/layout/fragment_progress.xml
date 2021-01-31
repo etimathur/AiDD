@@ -97,7 +97,7 @@
             android:layout_width="203dp"
             android:layout_height="69dp"
             android:layout_gravity="center|end"
-            android:text="\t\t\t\tJigsaw\nProgress Report"
+            android:text="\t\t\t\tPuzzle\nProgress Report"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
             android:textStyle="bold" />

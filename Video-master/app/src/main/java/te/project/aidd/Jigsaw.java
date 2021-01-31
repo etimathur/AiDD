@@ -3,6 +3,7 @@ package te.project.aidd;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -23,6 +24,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.tensorflow.lite.Interpreter;
 
 import java.io.FileInputStream;
@@ -34,7 +44,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class Jigsaw extends AppCompatActivity {
@@ -66,6 +78,8 @@ public class Jigsaw extends AppCompatActivity {
     ArrayList<Date> time = new ArrayList<>();
     TextView answer, levelNo;
     boolean generatedImage = false;
+    int sheet_list[]=new int[6];
+
 
 
     pop popup = new pop(Jigsaw.this);
@@ -365,6 +379,7 @@ public class Jigsaw extends AppCompatActivity {
                 if(final_result>100)
                     final_result=100;
                 db.insert_puzzle_analysis(final_result, email);
+                addItemToSheet();
                 Log.i("final",final_result+" ");
                 Log.i("data", "saved");
 
@@ -480,6 +495,7 @@ public class Jigsaw extends AppCompatActivity {
                         String email = db.getEmailForChild(ses.getTableID());
                         final_result = (int) ((analysis_rotate / 2 + analysis_swap) / 2);
                         db.insert_puzzle_analysis(final_result, email);
+                        addItemToSheet();
                         Log.i("final", final_result + " ");
                         Log.i("data", "saved");
                     }
@@ -538,5 +554,74 @@ public class Jigsaw extends AppCompatActivity {
         long length = assetFileDescriptor.getLength();
         return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, length);
     }
+
+    private void addItemToSheet() {
+
+        //final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
+        //final String name = editTextItemName.getText().toString().trim();
+        //final String brand = editTextBrand.getText().toString().trim();
+        SessionManagement ses=new SessionManagement(Jigsaw.this);
+        final String email=db.getEmailForChild(ses.getTableID());
+        final String child_name=ses.getnaaam();
+        sheet_list=db.puzzle_graph(email);
+        final String game_1=sheet_list[0]+"";
+        final String game_2=sheet_list[1]+"";
+        final String game_3=sheet_list[2]+"";
+        final String game_4=sheet_list[3]+"";
+        final String game_5=sheet_list[4]+"";
+        final  String game_6=sheet_list[5]+"";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwrmJWC4ZMYBohPpGq5xWTJ5qfWYgQuso200ow7P_jWltnjMIFwNdxz5g/exec?",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        //loading.dismiss();
+                        //Toast.makeText(Additems.this, response, Toast.LENGTH_LONG).show();
+                        //Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        //startActivity(intent);
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> parmas = new HashMap<>();
+
+                //here we pass params
+                parmas.put("action", "addItem");
+                parmas.put("child_name", child_name);
+                parmas.put("email",email);
+                parmas.put("game_1",game_1);
+                parmas.put("game_2",game_2);
+                parmas.put("game_3",game_3);
+                parmas.put("game_4",game_4);
+                parmas.put("game_5",game_5);
+                parmas.put("game_6",game_6);
+
+                return parmas;
+            }
+        };
+
+        int socketTimeOut = 50000;
+
+        RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(retryPolicy);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        queue.add(stringRequest);
+
+
+    }
+
+
 }
+
 

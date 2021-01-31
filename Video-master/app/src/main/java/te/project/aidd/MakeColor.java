@@ -371,7 +371,7 @@ public class MakeColor extends AppCompatActivity {
 
     private void addItemToSheet() {
 
-        final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
+        //final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
 
         SessionManagement ses=new SessionManagement(MakeColor.this);
         final String email=db.getEmailForChild(ses.getTableID());
@@ -389,7 +389,7 @@ public class MakeColor extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        loading.dismiss();
+                        //loading.dismiss();
 
                     }
                 },
