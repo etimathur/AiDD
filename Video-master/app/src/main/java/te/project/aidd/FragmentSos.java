@@ -16,7 +16,7 @@ public class FragmentSos extends Fragment {
     View v;
     private RecyclerView recyclerView;
     private ArrayList<Model> models;
-    MyAdapter myAdapter;
+    MyAdapter1 myAdapter;
     public FragmentSos() {
     }
     @Nullable
@@ -24,7 +24,7 @@ public class FragmentSos extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         v=inflater.inflate(R.layout.fragment_sos,container,false);
         recyclerView=(RecyclerView)v.findViewById(R.id.tutorials_recyclerview);
-        myAdapter=new MyAdapter(getContext(),models);
+        myAdapter=new MyAdapter1(getContext(),models);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(myAdapter);
         return v;
@@ -33,9 +33,7 @@ public class FragmentSos extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         models=new ArrayList<>();
-        models.add(new Model("Fire", R.drawable.fire));
-        models.add(new Model("Earthquake", R.drawable.earthquake));
-        models.add(new Model("Snake Bite", R.drawable.snakebite));
+        models.add(new Model("Disaster", R.drawable.earthquake));
         models.add(new Model("Healthy Routine", R.drawable.dailyschedule));
 
     }

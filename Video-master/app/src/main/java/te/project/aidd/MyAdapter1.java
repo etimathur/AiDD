@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 
-public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
+public class MyAdapter1 extends RecyclerView.Adapter<MyHolder> {
 
     Context c;
     ArrayList<Model> models;
 
-    public MyAdapter(Context c, ArrayList<Model> models) {
+    public MyAdapter1(Context c, ArrayList<Model> models) {
         this.c = c;
         this.models = models;
     }
@@ -37,17 +37,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
                 int a=myholder.getAdapterPosition();
                 Toast.makeText(c,"test click"+String.valueOf(myholder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
                 if(a==0){
-                    c.startActivity(new Intent(c, YoutubeVideo5.class));
+                    c.startActivity(new Intent(c, YoutubeVideo4.class));
                 }
                 else if(a==1){
-                    c.startActivity(new Intent(c, YoutubeVideo1.class));
+                    c.startActivity(new Intent(c, YoutubeVideo5.class));
                 }
-                else if(a==2){
-                    c.startActivity(new Intent(c, YoutubeVideo2.class));
-                }
-                else if(a==3) {
-                    c.startActivity(new Intent(c, YoutubeVideo3.class));
-                }
+
             }
         });
         return myholder;

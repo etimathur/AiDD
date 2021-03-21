@@ -40,9 +40,7 @@ public class FragmentTutorials extends Fragment {
         models=new ArrayList<>();
         models.add(new Model("Find The Match", R.drawable.findthematch));
         models.add(new Model("Colour Match", R.drawable.colour));
-        models.add(new Model("Jigsaw Puzzle", R.drawable.jigsaw));
-        models.add(new Model("Flip The cards", R.drawable.flip));
-        models.add(new Model("Lost in maze", R.drawable.maze));
-        models.add(new Model("Lost in maze", R.drawable.maze));
+        models.add(new Model("Puzzle", R.drawable.jigsaw));
+        models.add(new Model("Blink and click", R.drawable.simon_cover));
     }
 }
