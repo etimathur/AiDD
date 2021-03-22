@@ -52,7 +52,41 @@ public class MakeColor extends AppCompatActivity {
     int sheet_list[]=new int[6];
     TextView score,timer;
     Interpreter interpreter;
+    long timetaken;
     int  level_1_results,no_of_q,no_of_q1=0, points1=0,level_1_points;
+    private static Integer[] array;
+    static {
+        array = new Integer[6];
+        array[0]=0;
+        array[1]=0;
+        array[2]=0;
+        array[3]=0;
+        array[4]=0;
+        array[5]=0;
+
+    }
+    private static Integer[] questions;
+    static {
+        questions = new Integer[6];
+        questions[0]=0;
+        questions[1]=0;
+        questions[2]=0;
+        questions[3]=0;
+        questions[4]=0;
+        questions[5]=0;
+
+    }
+    private static Integer[] tt;
+    static {
+        tt = new Integer[6];
+        tt[0]=0;
+        tt[1]=0;
+        tt[2]=0;
+        tt[3]=0;
+        tt[4]=0;
+        tt[5]=0;
+
+    }
 
 
     @Override
@@ -296,10 +330,14 @@ public class MakeColor extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                timetaken=45000-timeleft;
+                timetaken=timetaken/1000;
+                final int neww=(int)timetaken;
                 timeleft=0;
                 if(decision!=1){
                 popup.startpop();
-                new Handler().postDelayed(new Runnable() {
+                    final long finalTimetaken = timetaken;
+                    new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         cd.cancel();
@@ -314,6 +352,25 @@ public class MakeColor extends AppCompatActivity {
                         db.addscore((level_1_points+points1),email);
                         db.time_analysis(analysis,email);
                         db.color_match_30(email,ses.getnaaam(),(level_1_points+points1),analysis);
+                        array[0]=array[1];
+                        array[1]=array[2];
+                        array[2]=array[3];
+                        array[3]=array[4];
+                        array[4]=array[5];
+                        array[5]=points1;
+                        questions[0]=questions[1];
+                        questions[1]=questions[2];
+                        questions[2]=questions[3];
+                        questions[3]=questions[4];
+                        questions[4]=questions[5];
+                        questions[5]=no_of_q1;
+                        tt[0]=tt[1];
+                        tt[1]=tt[2];
+                        tt[2]=tt[3];
+                        tt[3]=tt[4];
+                        tt[4]=tt[5];
+                        tt[5]=neww;
+
                         addItemToSheet();
                         popup.dismisspop();
                         finish();
@@ -377,12 +434,13 @@ public class MakeColor extends AppCompatActivity {
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.time_analysis_graph(email);
-        final String game_1=sheet_list[0]+"";
-        final String game_2=sheet_list[1]+"";
-        final String game_3=sheet_list[2]+"";
-        final String game_4=sheet_list[3]+"";
-        final String game_5=sheet_list[4]+"";
-        final  String game_6=sheet_list[5]+"";
+        final String game_1="Level:2" +"\n" +  "Score:" + array[0] +"\n"+ "No of questions attempted:"+questions[0]+"\n"+ "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:2" +"\n" +  "Score:" + array[1] +"\n"+ "No of questions attempted:"+questions[1]+"\n"+ "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:2" +"\n" +  "Score:" + array[2] +"\n"+ "No of questions attempted:"+questions[2]+"\n"+ "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:2" +"\n" +  "Score:" + array[3] +"\n"+ "No of questions attempted:"+questions[3]+"\n"+ "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:2" +"\n" +  "Score:" + array[4] +"\n"+ "No of questions attempted:"+questions[4]+"\n"+ "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:2" +"\n" +  "Score:" +array[5] +"\n"+ "No of questions attempted:"+questions[5]+"\n"+ "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbz91TkRELYJEBgNUI3Wj5zQfWsdon05SgfbWabEdjtmupLtPCqkJXmy4w/exec?",
                 new Response.Listener<String>() {

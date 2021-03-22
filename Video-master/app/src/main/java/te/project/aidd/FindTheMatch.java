@@ -96,6 +96,61 @@ public class FindTheMatch extends AppCompatActivity {
     private long timeleft;
     int back=0;
     int sheet_list[]=new int[6];
+    private static Integer[] array;
+    static {
+        array = new Integer[6];
+        array[0]=0;
+        array[1]=0;
+        array[2]=0;
+        array[3]=0;
+        array[4]=0;
+        array[5]=0;
+
+    }
+    private static Integer[] questions;
+    static {
+        questions = new Integer[6];
+        questions[0]=0;
+        questions[1]=0;
+        questions[2]=0;
+        questions[3]=0;
+        questions[4]=0;
+        questions[5]=0;
+
+    }
+    private static Integer[] tt;
+    static {
+        tt = new Integer[6];
+        tt[0]=0;
+        tt[1]=0;
+        tt[2]=0;
+        tt[3]=0;
+        tt[4]=0;
+        tt[5]=0;
+
+    }
+    private static Integer[] tt1;
+    static {
+        tt1 = new Integer[6];
+        tt1[0]=0;
+        tt1[1]=0;
+        tt1[2]=0;
+        tt1[3]=0;
+        tt1[4]=0;
+        tt1[5]=0;
+
+    }
+    private static Integer[] tt2;
+    static {
+        tt2 = new Integer[6];
+        tt2[0]=0;
+        tt2[1]=0;
+        tt2[2]=0;
+        tt2[3]=0;
+        tt2[4]=0;
+        tt2[5]=0;
+
+    }
 
     images[] images;
 
@@ -644,6 +699,37 @@ public class FindTheMatch extends AppCompatActivity {
                         }
                         db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers,analysis);
                         db.insert_findmatch_analysis(analysis, email);
+                        array[0]=array[1];
+                        array[1]=array[2];
+                        array[2]=array[3];
+                        array[3]=array[4];
+                        array[4]=array[5];
+                        array[5]=correctScore;
+                        questions[0]=questions[1];
+                        questions[1]=questions[2];
+                        questions[2]=questions[3];
+                        questions[3]=questions[4];
+                        questions[4]=questions[5];
+                        questions[5]=wrongScore;
+                        tt[0]=tt[1];
+                        tt[1]=tt[2];
+                        tt[2]=tt[3];
+                        tt[3]=tt[4];
+                        tt[4]=tt[5];
+                        tt[5]=missedScore;
+                        tt1[0]=tt1[1];
+                        tt1[1]=tt1[2];
+                        tt1[2]=tt1[3];
+                        tt1[3]=tt1[4];
+                        tt1[4]=tt1[5];
+                        tt1[5]=totalanswers;
+                        tt2[0]=tt2[1];
+                        tt2[1]=tt2[2];
+                        tt2[2]=tt2[3];
+                        tt2[3]=tt2[4];
+                        tt2[4]=tt2[5];
+                        tt2[5]=noOfQuestions;
+
                         addItemToSheet();
                         Log.i("anal:", " " + analysis);
                         noOfQuestions = 0;
@@ -724,12 +810,13 @@ public class FindTheMatch extends AppCompatActivity {
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.find_match_graph(email);
-        final String game_1=sheet_list[0]+"";
-        final String game_2=sheet_list[1]+"";
-        final String game_3=sheet_list[2]+"";
-        final String game_4=sheet_list[3]+"";
-        final String game_5=sheet_list[4]+"";
-        final  String game_6=sheet_list[5]+"";
+        final String game_1="Level:"+level +"\n" +  "Correct answers:" + array[0] +"\n"+ "Wrong answers:"+questions[0]+"\n"+ "Missed answers"+tt[0]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:"+level +"\n" +  "Correct answers:" + array[1] +"\n"+ "Wrong answers:"+questions[1]+"\n"+ "Missed answers"+tt[1]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:"+level +"\n" +  "Correct answers:" + array[2] +"\n"+ "Wrong answers:"+questions[2]+"\n"+ "Missed answers"+tt[2]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:"+level +"\n" +  "Correct answers:" + array[3] +"\n"+ "Wrong answers:"+questions[3]+"\n"+ "Missed answers"+tt[3]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:"+level+"\n" +   "Correct answers:" + array[4] +"\n"+ "Wrong answers:"+questions[4]+"\n"+ "Missed answers"+tt[4]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:"+level +"\n" + "Correct answers:" + array[5] +"\n"+ "Wrong answers:"+questions[5]+"\n"+ "Missed answers"+tt[5]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[5]+"";
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbxZM8AW7d-MeAroy2MhojwgdQx8ZW6HieQtUy5v6gI71w76FsuJVsNl/exec?",
                 new Response.Listener<String>() {

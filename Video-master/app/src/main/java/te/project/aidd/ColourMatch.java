@@ -46,7 +46,7 @@ public class ColourMatch extends AppCompatActivity {
     private boolean answer;
     private Button yes,no;
     private int points=0;
-    private int question=0,decision;
+    private int question=0,decision,neww;
     private int no_of_q=0;
     public float analysis;
     private TextView timer ;
@@ -58,7 +58,41 @@ public class ColourMatch extends AppCompatActivity {
     Animation animation;
     CardView c1,c2;
     int sheet_list[]=new int[6];
+    int item=0;
     pop popup=new pop(ColourMatch.this);
+    private static Integer[] array;
+    static {
+        array = new Integer[6];
+        array[0]=0;
+        array[1]=0;
+        array[2]=0;
+        array[3]=0;
+        array[4]=0;
+        array[5]=0;
+
+    }
+    private static Integer[] questions;
+    static {
+        questions = new Integer[6];
+        questions[0]=0;
+        questions[1]=0;
+        questions[2]=0;
+        questions[3]=0;
+        questions[4]=0;
+        questions[5]=0;
+
+    }
+    private static Integer[] timer_timer;
+    static {
+        timer_timer = new Integer[6];
+        timer_timer[0]=0;
+        timer_timer[1]=0;
+        timer_timer[2]=0;
+        timer_timer[3]=0;
+        timer_timer[4]=0;
+        timer_timer[5]=0;
+
+    }
 
 
 
@@ -158,7 +192,7 @@ public class ColourMatch extends AppCompatActivity {
         answer=Questions.answers[question];
         animation= AnimationUtils.loadAnimation(ColourMatch.this,R.anim.textanim);
         image.startAnimation(animation);
-        if(points>=15){
+        if(points>=10){
             level.setText("LEVEL 2");
             popup.startlevelpop();
             new Handler().postDelayed(new Runnable() {
@@ -234,6 +268,7 @@ public class ColourMatch extends AppCompatActivity {
             public void onFinish() {
                 long timetaken=30000-timeleft;
                 timetaken=timetaken/1000;
+                neww= (int) timetaken;
                 timeleft=0;
                 // analysis of the game without model by 60% to 40% equation
                 analysis= (float) ((0.6*points/no_of_q)+ (0.4*no_of_q/timetaken));
@@ -247,6 +282,27 @@ public class ColourMatch extends AppCompatActivity {
                     db.addscore(points,email);
                     db.time_analysis(results,email);
                     db.color_match_30(email,ses.getnaaam(),points,results);
+                    array[0]=array[1];
+                    array[1]=array[2];
+                    array[2]=array[3];
+                    array[3]=array[4];
+                    array[4]=array[5];
+                    array[5]=points;
+                    questions[0]=questions[1];
+                    questions[1]=questions[2];
+                    questions[2]=questions[3];
+                    questions[3]=questions[4];
+                    questions[4]=questions[5];
+                    questions[5]=no_of_q;
+                    Log.d("hello",timer_timer+"");
+                    timer_timer[0]=timer_timer[1];
+                    timer_timer[1]=timer_timer[2];
+                    timer_timer[2]=timer_timer[3];
+                    timer_timer[3]=timer_timer[4];
+                    timer_timer[4]=timer_timer[5];
+                    timer_timer[5]=neww;
+
+
                     addItemToSheet();
                     Log.i("hello","points:"+ points+"no of ques:"+no_of_q+"anal:"+results);
                 }
@@ -299,12 +355,13 @@ public class ColourMatch extends AppCompatActivity {
          final String email=db.getEmailForChild(ses.getTableID());
          final String child_name=ses.getnaaam();
          sheet_list=db.time_analysis_graph(email);
-         final String game_1=sheet_list[0]+"";
-         final String game_2=sheet_list[1]+"";
-         final String game_3=sheet_list[2]+"";
-         final String game_4=sheet_list[3]+"";
-         final String game_5=sheet_list[4]+"";
-         final  String game_6=sheet_list[5]+"";
+         Log.d("yooo","yooo");
+         final String game_1="Level:1" +"\n" +  "Score:" + array[0] +"\n"+ "No of questions attempted:"+questions[0]+"\n"+ "Timetaken:"+timer_timer[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+         final String game_2="Level:1" +"\n" +  "Score:" + array[1] +"\n"+ "No of questions attempted:"+questions[1]+"\n"+ "Timetaken:"+timer_timer[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+         final String game_3="Level:1" +"\n" +  "Score:" + array[2] +"\n"+ "No of questions attempted:"+questions[2]+"\n"+ "Timetaken:"+timer_timer[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+         final String game_4="Level:1" +"\n" +  "Score:" + array[3] +"\n"+ "No of questions attempted:"+questions[3]+"\n"+ "Timetaken:"+timer_timer[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+         final String game_5="Level:1" +"\n" +  "Score:" + array[4] +"\n"+ "No of questions attempted:"+questions[4]+"\n"+ "Timetaken:"+timer_timer[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+         final  String game_6="Level:1" +"\n" +  "Score:" +array[5] +"\n"+ "No of questions attempted:"+questions[5]+"\n"+ "Timetaken:"+timer_timer[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbz91TkRELYJEBgNUI3Wj5zQfWsdon05SgfbWabEdjtmupLtPCqkJXmy4w/exec?",
                 new Response.Listener<String>() {

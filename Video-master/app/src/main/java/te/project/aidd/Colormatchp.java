@@ -37,7 +37,7 @@ public class Colormatchp extends AppCompatActivity {
         int id=ses.getTableID();
         list=db.color_match_arr(naaam);
         // graph for calculating the score
-        GraphView scoregraph = (GraphView) findViewById(R.id.graph2);
+        GraphView scoregraph     = (GraphView) findViewById(R.id.graph2);
         scoregraph.getGridLabelRenderer().setHorizontalAxisTitle("NO OF GAMES");
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
                 new DataPoint(1,list[0]),

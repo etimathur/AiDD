@@ -76,6 +76,39 @@ public class SimonGame extends AppCompatActivity {
     int sheet_list[]=new int[6];
     int wrongAnswers=0;
     pop popup=new pop(SimonGame.this);
+    private static Integer[] array;
+    static {
+        array = new Integer[6];
+        array[0]=0;
+        array[1]=0;
+        array[2]=0;
+        array[3]=0;
+        array[4]=0;
+        array[5]=0;
+
+    }
+    private static Integer[] questions;
+    static {
+        questions = new Integer[6];
+        questions[0]=0;
+        questions[1]=0;
+        questions[2]=0;
+        questions[3]=0;
+        questions[4]=0;
+        questions[5]=0;
+
+    }
+    private static Integer[] tt;
+    static {
+        tt = new Integer[6];
+        tt[0]=0;
+        tt[1]=0;
+        tt[2]=0;
+        tt[3]=0;
+        tt[4]=0;
+        tt[5]=0;
+
+    }
 
 
 
@@ -117,6 +150,25 @@ public class SimonGame extends AppCompatActivity {
                     String email = db.getEmailForChild(ses.getTableID());
                     db.simon_analysis(analysis,email);
                     db.simon_30(email,ses.getnaaam(),score,analysis);
+                    array[0]=array[1];
+                    array[1]=array[2];
+                    array[2]=array[3];
+                    array[3]=array[4];
+                    array[4]=array[5];
+                    array[5]=wrongAnswers;
+                    questions[0]=questions[1];
+                    questions[1]=questions[2];
+                    questions[2]=questions[3];
+                    questions[3]=questions[4];
+                    questions[4]=questions[5];
+                    questions[5]=score;
+                    tt[0]=tt[1];
+                    tt[1]=tt[2];
+                    tt[2]=tt[3];
+                    tt[3]=tt[4];
+                    tt[4]=tt[5];
+                    tt[5]=(int)elapsedMillis/1000;
+
                     addItemToSheet();
                     Log.i("wrongAnswers: " ,wrongAnswers+" ");
                     if(decision!=1){
@@ -318,19 +370,18 @@ public class SimonGame extends AppCompatActivity {
 
     private void addItemToSheet() {
 
-        //final ProgressDialog loading = ProgressDialog.show(this, "Adding Item", "Please wait");
-        //final String name = editTextItemName.getText().toString().trim();
-        //final String brand = editTextBrand.getText().toString().trim();
         SessionManagement ses=new SessionManagement(SimonGame.this);
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.simon_graph(email);
-        final String game_1=sheet_list[0]+"";
-        final String game_2=sheet_list[1]+"";
-        final String game_3=sheet_list[2]+"";
-        final String game_4=sheet_list[3]+"";
-        final String game_5=sheet_list[4]+"";
-        final  String game_6=sheet_list[5]+"";
+        final String game_1="Level:1" +"\n" +  "Wrong answers:" + array[0] +"\n"+ "Score:"+questions[0]+"\n"+ "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:1" +"\n" +  "Wrong answers:" + array[1] +"\n"+ "Score:"+questions[1]+"\n"+ "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:1" +"\n" +  "Wrong answers:" + array[2] +"\n"+ "Score:"+questions[2]+"\n"+ "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:1" +"\n" +  "Wrong answers:" + array[3] +"\n"+ "Score:"+questions[3]+"\n"+ "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:1" +"\n" +  "Wrong answers:" + array[4] +"\n"+ "Score:"+questions[4]+"\n"+ "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:1" +"\n" + "Wrong answers:" + array[5] +"\n"+ "Score:"+questions[5]+"\n"+ "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbx6LCx7JFgOBOk4XwGxig21JtnuGotPjrG2DlOseAU13Gf-4B1K3MeqUw/exec?",
                 new Response.Listener<String>() {

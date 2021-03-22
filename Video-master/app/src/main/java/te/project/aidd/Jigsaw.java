@@ -67,6 +67,7 @@ public class Jigsaw extends AppCompatActivity {
     ArrayList<Bitmap> images;
     int decision = 0;
     int[] arr;
+    int total_time=0;
 
     int swapsRequired, swapsDone;
     Date currentTime;
@@ -79,6 +80,39 @@ public class Jigsaw extends AppCompatActivity {
     TextView answer, levelNo;
     boolean generatedImage = false;
     int sheet_list[]=new int[6];
+    private static Integer[] array;
+    static {
+        array = new Integer[6];
+        array[0]=0;
+        array[1]=0;
+        array[2]=0;
+        array[3]=0;
+        array[4]=0;
+        array[5]=0;
+
+    }
+    private static Integer[] questions;
+    static {
+        questions = new Integer[6];
+        questions[0]=0;
+        questions[1]=0;
+        questions[2]=0;
+        questions[3]=0;
+        questions[4]=0;
+        questions[5]=0;
+
+    }
+    private static Integer[] tt;
+    static {
+        tt = new Integer[6];
+        tt[0]=0;
+        tt[1]=0;
+        tt[2]=0;
+        tt[3]=0;
+        tt[4]=0;
+        tt[5]=0;
+
+    }
 
 
 
@@ -312,8 +346,10 @@ public class Jigsaw extends AppCompatActivity {
             Date now1 = Calendar.getInstance().getTime();
             long diff1 = now1.getTime() - generateTime1.getTime();
             timetaken = diff1;
+
             Log.i("Terms :", swapsDone + " " + swapsRequired + " " + timetaken);
             int timetakens = (int) timetaken / 1000;
+            total_time=total_time+timetakens;
             analysis_swap = (int) doInference1(swapsRequired, swapsDone, timetakens);
             Log.i("swaps_model", analysis_swap + " ");
             noOfColumn = 4;
@@ -348,6 +384,7 @@ public class Jigsaw extends AppCompatActivity {
             Handler handler = new Handler();
             int timetakens = (int) timetaken / 1000;
             int analysis_swap1 = (int) doInference1(swapsRequired, swapsDone, timetakens);
+            total_time=total_time+timetakens;
 
             analysis_swap=(analysis_swap+analysis_swap1)/2;
             handler.postDelayed(new Runnable() {
@@ -379,6 +416,14 @@ public class Jigsaw extends AppCompatActivity {
                 if(final_result>100)
                     final_result=100;
                 db.insert_puzzle_analysis(final_result, email);
+
+                tt[0]=tt[1];
+                tt[1]=tt[2];
+                tt[2]=tt[3];
+                tt[3]=tt[4];
+                tt[4]=tt[5];
+                tt[5]=(int)timetakens;
+
                 addItemToSheet();
                 Log.i("final",final_result+" ");
                 Log.i("data", "saved");
@@ -440,6 +485,7 @@ public class Jigsaw extends AppCompatActivity {
             timetaken = diff1;
             int timetakens = (int) timetaken / 1000;
             Log.i("Terms :", wrongMoves + " " + timetaken);
+            total_time=total_time+timetakens;
             analysis_rotate += (int) doInference(wrongMoves, timetakens);
             Log.i("modell : ", analysis_rotate + " ");
             popup.startlevelpop();
@@ -494,7 +540,18 @@ public class Jigsaw extends AppCompatActivity {
                         SessionManagement ses = new SessionManagement(Jigsaw.this);
                         String email = db.getEmailForChild(ses.getTableID());
                         final_result = (int) ((analysis_rotate / 2 + analysis_swap) / 2);
+                        Date now1 = Calendar.getInstance().getTime();
+                        long diff1 = now1.getTime() - generateTime1.getTime();
+                        timetaken = diff1;
+                        int timetakens=(int)timetaken/1000;
                         db.insert_puzzle_analysis(final_result, email);
+                        tt[0]=tt[1];
+                        tt[1]=tt[2];
+                        tt[2]=tt[3];
+                        tt[3]=tt[4];
+                        tt[4]=tt[5];
+                        tt[5]=total_time;
+
                         addItemToSheet();
                         Log.i("final", final_result + " ");
                         Log.i("data", "saved");
@@ -564,12 +621,13 @@ public class Jigsaw extends AppCompatActivity {
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.puzzle_graph(email);
-        final String game_1=sheet_list[0]+"";
-        final String game_2=sheet_list[1]+"";
-        final String game_3=sheet_list[2]+"";
-        final String game_4=sheet_list[3]+"";
-        final String game_5=sheet_list[4]+"";
-        final  String game_6=sheet_list[5]+"";
+        final String game_1="Level:"+level +"\n" +  "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:"+level +"\n" +  "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:"+level +"\n" +  "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:" +level+"\n" +  "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:" +level+"\n" +  "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:"+level +"\n" +  "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwrmJWC4ZMYBohPpGq5xWTJ5qfWYgQuso200ow7P_jWltnjMIFwNdxz5g/exec?",
                 new Response.Listener<String>() {
