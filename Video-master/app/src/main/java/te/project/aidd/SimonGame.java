@@ -141,8 +141,11 @@ public class SimonGame extends AppCompatActivity {
                     if(score==0){
                         analysis=0;
                     }
-                    else if(analysis>100){
+                    if(analysis>100){
                         analysis= 96;
+                    }
+                    else if(analysis<0){
+                        analysis=0;
                     }
                     else{}
                     Log.i("Score", score +  "analysis" + analysis);
@@ -269,6 +272,7 @@ public class SimonGame extends AppCompatActivity {
                     selans.clear();
                     answer.clear();
                     blinkingOn = 0;
+                    outLoop=1;
                     BlinkingImages(outLoop);
                 }
             }
@@ -304,9 +308,12 @@ public class SimonGame extends AppCompatActivity {
 //            Intent go = new Intent(SimonGame.this, SimonInstruct.class);
 //            startActivity(go);
 //        }
+
         blinkingOn=0;
         int i;
+
         for(i=1;i<=count;i++){
+
             Random randomNum = new Random();
             final int num = randomNum.nextInt(8);
             answer.add(num);
@@ -319,11 +326,15 @@ public class SimonGame extends AppCompatActivity {
                 }
             }, 1000 * i);
         }
+        for(int bk=0; bk<myImageList.length;bk++){
+            imageViews[bk].setEnabled(true);
+        }
 //        Arrays.fill(answer, 0);
         if(i==count+1)
             blinkingOn=1;
     }
     public void blink(final int num) {
+
         Log.i("Blink","now"+String.valueOf(num));
         final ImageView image=imageViews[num];
         image.setAlpha(0);
@@ -335,6 +346,9 @@ public class SimonGame extends AppCompatActivity {
                 image.setAlpha(255);
             }
         }, 500);
+        for(int bk=0; bk<myImageList.length;bk++){
+            imageViews[bk].setBackgroundColor(Color.WHITE);
+        }
     }
 
     private MappedByteBuffer loadModelfile() throws IOException {
