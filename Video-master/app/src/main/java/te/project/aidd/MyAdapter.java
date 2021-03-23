@@ -35,9 +35,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyHolder> {
             public void onClick(View v) {
 //                c.startActivity(new Intent(c, YoutubeVideo.class));
                 int a=myholder.getAdapterPosition();
-                Toast.makeText(c,"test click"+String.valueOf(myholder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(c,"test click"+String.valueOf(myholder.getAdapterPosition()),Toast.LENGTH_SHORT).show();
                 if(a==0){
-                    c.startActivity(new Intent(c, YoutubeVideo5.class));
+                    c.startActivity(new Intent(c, YoutubeVideo.class));
                 }
                 else if(a==1){
                     c.startActivity(new Intent(c, YoutubeVideo1.class));
