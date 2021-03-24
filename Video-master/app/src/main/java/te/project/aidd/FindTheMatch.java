@@ -151,6 +151,17 @@ public class FindTheMatch extends AppCompatActivity {
         tt2[5]=0;
 
     }
+    private static Integer[] tt3;
+    static {
+        tt3 = new Integer[6];
+        tt3[0]=0;
+        tt3[1]=0;
+        tt3[2]=0;
+        tt3[3]=0;
+        tt3[4]=0;
+        tt3[5]=0;
+
+    }
 
     images[] images;
 
@@ -695,7 +706,15 @@ public class FindTheMatch extends AppCompatActivity {
                         if (correctScore == 0) {
                             analysis = 0;
                         } else {
+
                             analysis = (int) doInference(correctScore, wrongScore, missedScore, totalanswers, noOfQuestions);
+                        }
+
+                        if(analysis>100){
+                            analysis=100;
+                        }
+                        else if(analysis<0){
+                            analysis=0;
                         }
                         db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers,analysis);
                         db.insert_findmatch_analysis(analysis, email);
@@ -729,6 +748,13 @@ public class FindTheMatch extends AppCompatActivity {
                         tt2[3]=tt2[4];
                         tt2[4]=tt2[5];
                         tt2[5]=noOfQuestions;
+                        tt3[0]=tt3[1];
+                        tt3[1]=tt3[2];
+                        tt3[2]=tt3[3];
+                        tt3[3]=tt3[4];
+                        tt3[4]=tt3[5];
+                        tt3[5]=level;
+
 
                         addItemToSheet();
                         Log.i("anal:", " " + analysis);
@@ -810,12 +836,12 @@ public class FindTheMatch extends AppCompatActivity {
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.find_match_graph(email);
-        final String game_1="Level:"+level +"\n" +  "Correct answers:" + array[0] +"\n"+ "Wrong answers:"+questions[0]+"\n"+ "Missed answers"+tt[0]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:"+level +"\n" +  "Correct answers:" + array[1] +"\n"+ "Wrong answers:"+questions[1]+"\n"+ "Missed answers"+tt[1]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:"+level +"\n" +  "Correct answers:" + array[2] +"\n"+ "Wrong answers:"+questions[2]+"\n"+ "Missed answers"+tt[2]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:"+level +"\n" +  "Correct answers:" + array[3] +"\n"+ "Wrong answers:"+questions[3]+"\n"+ "Missed answers"+tt[3]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:"+level+"\n" +   "Correct answers:" + array[4] +"\n"+ "Wrong answers:"+questions[4]+"\n"+ "Missed answers"+tt[4]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:"+level +"\n" + "Correct answers:" + array[5] +"\n"+ "Wrong answers:"+questions[5]+"\n"+ "Missed answers"+tt[5]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        final String game_1="Level:"+tt3[0]+"\n" +  "Correct answers:" + array[0] +"\n"+ "Wrong answers:"+questions[0]+"\n"+ "Missed answers"+tt[0]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:"+tt3[1] +"\n" +  "Correct answers:" + array[1] +"\n"+ "Wrong answers:"+questions[1]+"\n"+ "Missed answers"+tt[1]+"\n"+"total answers"+tt1[1]+"\n"+"No of questions"+tt2[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:"+tt3[2] +"\n" +  "Correct answers:" + array[2] +"\n"+ "Wrong answers:"+questions[2]+"\n"+ "Missed answers"+tt[2]+"\n"+"total answers"+tt1[2]+"\n"+"No of questions"+tt2[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:"+tt3[3] +"\n" +  "Correct answers:" + array[3] +"\n"+ "Wrong answers:"+questions[3]+"\n"+ "Missed answers"+tt[3]+"\n"+"total answers"+tt1[3]+"\n"+"No of questions"+tt2[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:"+tt3[4]+"\n" +   "Correct answers:" + array[4] +"\n"+ "Wrong answers:"+questions[4]+"\n"+ "Missed answers"+tt[4]+"\n"+"total answers"+tt1[4]+"\n"+"No of questions"+tt2[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:"+tt3[5] +"\n" + "Correct answers:" + array[5] +"\n"+ "Wrong answers:"+questions[5]+"\n"+ "Missed answers"+tt[5]+"\n"+"total answers"+tt1[5]+"\n"+"No of questions"+tt2[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbxZM8AW7d-MeAroy2MhojwgdQx8ZW6HieQtUy5v6gI71w76FsuJVsNl/exec?",

@@ -32,15 +32,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import te.project.aidd.MakeColor;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import static te.project.aidd.MakeColor.questions;
+
 //import te.project.aidd.ui.exercises.ExercisesFragment;
 
-public class ColourMatch extends AppCompatActivity {
+public class ColourMatch extends AppCompatActivity{
     private TextView score,meaning,level,game_score;
     private ImageView image,image2;
     private boolean answer;
@@ -53,46 +56,65 @@ public class ColourMatch extends AppCompatActivity {
     private static final long COUNTDOWN_IN=30000;
     private CountDownTimer cd;
     public long timeleft;
+
     int flag=1, fla=1;
     DatabaseHelper db;
     Animation animation;
     CardView c1,c2;
     int sheet_list[]=new int[6];
     int item=0;
+    int level_no=1;
     pop popup=new pop(ColourMatch.this);
-    private static Integer[] array;
+    public static Integer[] total_questions;
     static {
-        array = new Integer[6];
-        array[0]=0;
-        array[1]=0;
-        array[2]=0;
-        array[3]=0;
-        array[4]=0;
-        array[5]=0;
+        total_questions = new Integer[6];
+        total_questions[0]=0;
+        total_questions[1]=0;
+        total_questions[2]=0;
+        total_questions[3]=0;
+        total_questions[4]=0;
+        total_questions[5]=0;
 
     }
-    private static Integer[] questions;
+
+    public static Integer[] level_tell;
     static {
-        questions = new Integer[6];
-        questions[0]=0;
-        questions[1]=0;
-        questions[2]=0;
-        questions[3]=0;
-        questions[4]=0;
-        questions[5]=0;
+        level_tell = new Integer[6];
+        level_tell[0]=0;
+        level_tell[1]=0;
+        level_tell[2]=0;
+        level_tell[3]=0;
+        level_tell[4]=0;
+        level_tell[5]=0;
 
     }
-    private static Integer[] timer_timer;
+    public static Integer[] marks;
     static {
-        timer_timer = new Integer[6];
-        timer_timer[0]=0;
-        timer_timer[1]=0;
-        timer_timer[2]=0;
-        timer_timer[3]=0;
-        timer_timer[4]=0;
-        timer_timer[5]=0;
+        marks = new Integer[6];
+        marks[0]=0;
+        marks[1]=0;
+        marks[2]=0;
+        marks[3]=0;
+        marks[4]=0;
+        marks[5]=0;
 
     }
+    public static Integer[] wakt;
+    static {
+        wakt = new Integer[6];
+        wakt[0]=0;
+        wakt[1]=0;
+        wakt[2]=0;
+        wakt[3]=0;
+        wakt[4]=0;
+        wakt[5]=0;
+
+    }
+
+
+
+
+
 
 
 
@@ -117,6 +139,8 @@ public class ColourMatch extends AppCompatActivity {
         updateQuestion();
         timeleft=COUNTDOWN_IN;
         startCountDown();
+
+
 
 
 
@@ -194,6 +218,7 @@ public class ColourMatch extends AppCompatActivity {
         image.startAnimation(animation);
         if(points>=10){
             level.setText("LEVEL 2");
+            level_no++;
             popup.startlevelpop();
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -214,6 +239,7 @@ public class ColourMatch extends AppCompatActivity {
             intent.putExtra("color_points",points);
             intent.putExtra("no_of_q",no_of_q);
             intent.putExtra("level_1_results",results);
+            intent.putExtra("level",level_no);
             startActivity(intent);
         }
 //        else if(points>5 | flag==0){
@@ -282,25 +308,40 @@ public class ColourMatch extends AppCompatActivity {
                     db.addscore(points,email);
                     db.time_analysis(results,email);
                     db.color_match_30(email,ses.getnaaam(),points,results);
-                    array[0]=array[1];
-                    array[1]=array[2];
-                    array[2]=array[3];
-                    array[3]=array[4];
-                    array[4]=array[5];
-                    array[5]=points;
-                    questions[0]=questions[1];
-                    questions[1]=questions[2];
-                    questions[2]=questions[3];
-                    questions[3]=questions[4];
-                    questions[4]=questions[5];
-                    questions[5]=no_of_q;
-                    Log.d("hello",timer_timer+"");
-                    timer_timer[0]=timer_timer[1];
-                    timer_timer[1]=timer_timer[2];
-                    timer_timer[2]=timer_timer[3];
-                    timer_timer[3]=timer_timer[4];
-                    timer_timer[4]=timer_timer[5];
-                    timer_timer[5]=neww;
+                    MakeColor obj=new MakeColor();
+                    total_questions=obj.questions;
+                    level_tell=obj.level_tell1;
+                    marks=obj.marks1;
+                    wakt=obj.wakt1;
+
+                    total_questions[0]=total_questions[1];
+                    total_questions[1]=total_questions[2];
+                    total_questions[2]=total_questions[3];
+                    total_questions[3]=total_questions[4];
+                    total_questions[4]=total_questions[5];
+                    total_questions[5]=no_of_q;
+
+                    level_tell[0]=level_tell[1];
+                    level_tell[1]=level_tell[2];
+                    level_tell[2]=level_tell[3];
+                    level_tell[3]=level_tell[4];
+                    level_tell[4]=level_tell[5];
+                    level_tell[5]=level_no;
+
+                    marks[0]=marks[1];
+                    marks[1]=marks[2];
+                    marks[2]=marks[3];
+                    marks[3]=marks[4];
+                    marks[4]=marks[5];
+                    marks[5]=points;
+
+                    wakt[0]=wakt[1];
+                    wakt[1]=wakt[2];
+                    wakt[2]=wakt[3];
+                    wakt[3]=wakt[4];
+                    wakt[4]=wakt[5];
+                    wakt[5]=(int)timetaken;
+
 
 
                     addItemToSheet();
@@ -356,12 +397,12 @@ public class ColourMatch extends AppCompatActivity {
          final String child_name=ses.getnaaam();
          sheet_list=db.time_analysis_graph(email);
          Log.d("yooo","yooo");
-         final String game_1="Level:1" +"\n" +  "Score:" + array[0] +"\n"+ "No of questions attempted:"+questions[0]+"\n"+ "Timetaken:"+timer_timer[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-         final String game_2="Level:1" +"\n" +  "Score:" + array[1] +"\n"+ "No of questions attempted:"+questions[1]+"\n"+ "Timetaken:"+timer_timer[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-         final String game_3="Level:1" +"\n" +  "Score:" + array[2] +"\n"+ "No of questions attempted:"+questions[2]+"\n"+ "Timetaken:"+timer_timer[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-         final String game_4="Level:1" +"\n" +  "Score:" + array[3] +"\n"+ "No of questions attempted:"+questions[3]+"\n"+ "Timetaken:"+timer_timer[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-         final String game_5="Level:1" +"\n" +  "Score:" + array[4] +"\n"+ "No of questions attempted:"+questions[4]+"\n"+ "Timetaken:"+timer_timer[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-         final  String game_6="Level:1" +"\n" +  "Score:" +array[5] +"\n"+ "No of questions attempted:"+questions[5]+"\n"+ "Timetaken:"+timer_timer[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+         final String game_1="Level:"+level_tell[0]+"\n"+"Score:"+marks[0]+"\n"+"No of questions attempted:"+total_questions[0]+"\n"+"Timetaken:"+wakt[0]+"\n"+ "Analysis:"+ sheet_list[0]+"";
+         final String game_2="Level:"+level_tell[1]+"\n"+"Score:"+marks[1]+"\n"+"No of questions attempted:"+total_questions[1]+"\n"+ "Timetaken:"+wakt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+         final String game_3="Level:"+level_tell[2]+"\n"+"Score:"+marks[2]+"\n"+"No of questions attempted:"+total_questions[2]+"\n"+ "Timetaken:"+wakt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+         final String game_4="Level:"+level_tell[3]+"\n"+"Score:"+marks[3]+"\n"+"No of questions attempted:"+total_questions[3]+"\n"+ "Timetaken:"+wakt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+         final String game_5="Level:"+level_tell[4]+"\n"+"Score:"+marks[4]+"\n"+"No of questions attempted:"+total_questions[4]+"\n"+ "Timetaken:"+wakt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+         final  String game_6="Level:"+level_tell[5]+"\n"+"Score:"+marks[5]+"\n"+"No of questions attempted:"+total_questions[5]+"\n"+"Timetaken:"+wakt[5]+"\n"+ "Analysis:"+ sheet_list[5]+"";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbz91TkRELYJEBgNUI3Wj5zQfWsdon05SgfbWabEdjtmupLtPCqkJXmy4w/exec?",
                 new Response.Listener<String>() {

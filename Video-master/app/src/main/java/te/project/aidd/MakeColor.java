@@ -53,19 +53,10 @@ public class MakeColor extends AppCompatActivity {
     TextView score,timer;
     Interpreter interpreter;
     long timetaken;
-    int  level_1_results,no_of_q,no_of_q1=0, points1=0,level_1_points;
-    private static Integer[] array;
-    static {
-        array = new Integer[6];
-        array[0]=0;
-        array[1]=0;
-        array[2]=0;
-        array[3]=0;
-        array[4]=0;
-        array[5]=0;
+    int  level_1_results,no_of_q,no_of_q1=0, points1=0,level_1_points,level_no=2,l;
+    ColourMatch obj=new ColourMatch();
 
-    }
-    private static Integer[] questions;
+    public static Integer[] questions;
     static {
         questions = new Integer[6];
         questions[0]=0;
@@ -76,17 +67,47 @@ public class MakeColor extends AppCompatActivity {
         questions[5]=0;
 
     }
-    private static Integer[] tt;
+
+    public static Integer[] level_tell1;
     static {
-        tt = new Integer[6];
-        tt[0]=0;
-        tt[1]=0;
-        tt[2]=0;
-        tt[3]=0;
-        tt[4]=0;
-        tt[5]=0;
+        level_tell1 = new Integer[6];
+        level_tell1[0]=0;
+        level_tell1[1]=0;
+        level_tell1[2]=0;
+        level_tell1[3]=0;
+        level_tell1[4]=0;
+        level_tell1[5]=0;
 
     }
+
+    public static Integer[] marks1;
+    static {
+        marks1 = new Integer[6];
+        marks1[0]=0;
+        marks1[1]=0;
+        marks1[2]=0;
+        marks1[3]=0;
+        marks1[4]=0;
+        marks1[5]=0;
+
+    }
+    public static Integer[] wakt1;
+    static {
+        wakt1 = new Integer[6];
+        wakt1[0]=0;
+        wakt1[1]=0;
+        wakt1[2]=0;
+        wakt1[3]=0;
+        wakt1[4]=0;
+        wakt1[5]=0;
+
+    }
+
+
+
+
+
+
 
 
     @Override
@@ -114,7 +135,13 @@ public class MakeColor extends AppCompatActivity {
         Intent intent=getIntent();
         level_1_results=intent.getIntExtra("level_1_results",level_1_results);
         level_1_points=intent.getIntExtra("color_points",level_1_points);
-        //no_of_q=intent.getIntExtra("no_of_q",no_of_q);
+
+        no_of_q=intent.getIntExtra("no_of_q",no_of_q);
+        Log.d("questionss",no_of_q+"");
+        questions=obj.total_questions;
+        level_tell1=obj.level_tell;
+        marks1=obj.marks;
+        wakt1=obj.wakt;
 
         count=r.nextInt(Questions.colorss.length);
         newQuestion();
@@ -332,7 +359,6 @@ public class MakeColor extends AppCompatActivity {
             public void onFinish() {
                 timetaken=45000-timeleft;
                 timetaken=timetaken/1000;
-                final int neww=(int)timetaken;
                 timeleft=0;
                 if(decision!=1){
                 popup.startpop();
@@ -344,7 +370,7 @@ public class MakeColor extends AppCompatActivity {
                         SessionManagement ses=new SessionManagement(MakeColor.this);
                         String email=db.getEmailForChild(ses.getTableID());
                        // int analysis=(int)doInference(level_1_results,no_of_q,points1,no_of_q1);
-                        Log.i("level 2  ","points: "+points1+"  no of ques:"+no_of_q1);
+                        Log.i("level 2  ","points: "+points1+level_1_points+"  no of ques:"+no_of_q1);
                         float level_2_results=  (points1 *100 )/(2*no_of_q1);
                         //level_2_results= level_2_results*100;
                         int analysis=(int) (level_1_results+level_2_results)/2;
@@ -352,24 +378,38 @@ public class MakeColor extends AppCompatActivity {
                         db.addscore((level_1_points+points1),email);
                         db.time_analysis(analysis,email);
                         db.color_match_30(email,ses.getnaaam(),(level_1_points+points1),analysis);
-                        array[0]=array[1];
-                        array[1]=array[2];
-                        array[2]=array[3];
-                        array[3]=array[4];
-                        array[4]=array[5];
-                        array[5]=points1;
                         questions[0]=questions[1];
                         questions[1]=questions[2];
                         questions[2]=questions[3];
                         questions[3]=questions[4];
                         questions[4]=questions[5];
-                        questions[5]=no_of_q1;
-                        tt[0]=tt[1];
-                        tt[1]=tt[2];
-                        tt[2]=tt[3];
-                        tt[3]=tt[4];
-                        tt[4]=tt[5];
-                        tt[5]=neww;
+                        questions[5]=no_of_q1+no_of_q;
+
+
+                        level_tell1[0]=level_tell1[1];
+                        level_tell1[1]=level_tell1[2];
+                        level_tell1[2]=level_tell1[3];
+                        level_tell1[3]=level_tell1[4];
+                        level_tell1[4]=level_tell1[5];
+                        level_tell1[5]=level_no;
+
+                        marks1[0]=marks1[1];
+                        marks1[1]=marks1[2];
+                        marks1[2]=marks1[3];
+                        marks1[3]=marks1[4];
+                        marks1[4]=marks1[5];
+                        marks1[5]=points1+level_1_points;
+
+                        wakt1[0]=wakt1[1];
+                        wakt1[1]=wakt1[2];
+                        wakt1[2]=wakt1[3];
+                        wakt1[3]=wakt1[4];
+                        wakt1[4]=wakt1[5];
+                        wakt1[5]=(int)timetaken;
+
+
+                        Intent swara=new Intent(MakeColor.this,ColourMatch.class);
+                        swara.putExtra("array",questions);
 
                         addItemToSheet();
                         popup.dismisspop();
@@ -434,12 +474,12 @@ public class MakeColor extends AppCompatActivity {
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.time_analysis_graph(email);
-        final String game_1="Level:2" +"\n" +  "Score:" + array[0] +"\n"+ "No of questions attempted:"+questions[0]+"\n"+ "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:2" +"\n" +  "Score:" + array[1] +"\n"+ "No of questions attempted:"+questions[1]+"\n"+ "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:2" +"\n" +  "Score:" + array[2] +"\n"+ "No of questions attempted:"+questions[2]+"\n"+ "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:2" +"\n" +  "Score:" + array[3] +"\n"+ "No of questions attempted:"+questions[3]+"\n"+ "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:2" +"\n" +  "Score:" + array[4] +"\n"+ "No of questions attempted:"+questions[4]+"\n"+ "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:2" +"\n" +  "Score:" +array[5] +"\n"+ "No of questions attempted:"+questions[5]+"\n"+ "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        final String game_1="Level:"+level_tell1[0]+"\n"+"Score:"+marks1[0]+"\n"+"No of questions attempted:"+questions[0]+"\n"+"Timetaken:"+wakt1[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:"+level_tell1[1]+"\n"+"Score:"+marks1[1]+"\n"+"No of questions attempted:"+questions[1]+"\n"+"Timetaken:"+wakt1[1]+"\n"+ "Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:"+level_tell1[2]+"\n"+"Score:"+marks1[2]+"\n"+"No of questions attempted:"+questions[2]+"\n"+"Timetaken:"+wakt1[2]+"\n"+ "Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:"+level_tell1[3]+"\n"+"Score:"+marks1[3]+"\n"+"No of questions attempted:"+questions[3]+"\n"+"Timetaken:"+wakt1[3]+"\n"+ "Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:"+level_tell1[4]+"\n"+"Score:"+marks1[4]+"\n"+"No of questions attempted:"+questions[4]+"\n"+"Timetaken:"+wakt1[4]+"\n"+ "Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:"+level_tell1[5]+"\n"+"Score:"+marks1[5]+"\n"+"No of questions attempted:"+questions[5]+"\n"+"Timetaken:"+wakt1[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbz91TkRELYJEBgNUI3Wj5zQfWsdon05SgfbWabEdjtmupLtPCqkJXmy4w/exec?",

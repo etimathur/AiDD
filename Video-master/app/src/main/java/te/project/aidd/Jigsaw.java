@@ -114,6 +114,18 @@ public class Jigsaw extends AppCompatActivity {
 
     }
 
+    private static Integer[] tt1;
+    static {
+        tt1 = new Integer[6];
+        tt1[0]=0;
+        tt1[1]=0;
+        tt1[2]=0;
+        tt1[3]=0;
+        tt1[4]=0;
+        tt1[5]=0;
+
+    }
+
 
 
     pop popup = new pop(Jigsaw.this);
@@ -423,6 +435,12 @@ public class Jigsaw extends AppCompatActivity {
                 tt[3]=tt[4];
                 tt[4]=tt[5];
                 tt[5]=(int)timetakens;
+                tt1[0]=tt1[1];
+                tt1[1]=tt1[2];
+                tt1[2]=tt1[3];
+                tt1[3]=tt1[4];
+                tt1[4]=tt1[5];
+                tt1[5]=level;
 
                 addItemToSheet();
                 Log.i("final",final_result+" ");
@@ -544,6 +562,7 @@ public class Jigsaw extends AppCompatActivity {
                         long diff1 = now1.getTime() - generateTime1.getTime();
                         timetaken = diff1;
                         int timetakens=(int)timetaken/1000;
+                        total_time=total_time+timetakens;
                         db.insert_puzzle_analysis(final_result, email);
                         tt[0]=tt[1];
                         tt[1]=tt[2];
@@ -621,12 +640,12 @@ public class Jigsaw extends AppCompatActivity {
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
         sheet_list=db.puzzle_graph(email);
-        final String game_1="Level:"+level +"\n" +  "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:"+level +"\n" +  "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:"+level +"\n" +  "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:" +level+"\n" +  "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:" +level+"\n" +  "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:"+level +"\n" +  "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        final String game_1="Level:"+tt1[0]+"\n" +  "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
+        final String game_2="Level:"+tt1[1]+"\n" +  "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
+        final String game_3="Level:"+tt1[2]+"\n" +  "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
+        final String game_4="Level:" +tt1[3]+"\n" +  "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
+        final String game_5="Level:" +tt1[4]+"\n" +  "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
+        final  String game_6="Level:"+tt1[5]+"\n" +  "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
 
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwrmJWC4ZMYBohPpGq5xWTJ5qfWYgQuso200ow7P_jWltnjMIFwNdxz5g/exec?",
