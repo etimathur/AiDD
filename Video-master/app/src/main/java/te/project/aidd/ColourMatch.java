@@ -134,8 +134,8 @@ public class ColourMatch extends AppCompatActivity{
         c1= findViewById(R.id.c1);
         c2= findViewById(R.id.c2);
         image2= (ImageView) findViewById(R.id.bb);
-        Random ran=new Random();
-        question=ran.nextInt(14);
+        //Random ran=new Random();
+        //question=ran.nextInt(14);
         updateQuestion();
         timeleft=COUNTDOWN_IN;
         startCountDown();
@@ -212,6 +212,8 @@ public class ColourMatch extends AppCompatActivity{
 
 
     private void updateQuestion(){
+        Random ran=new Random();
+        question=ran.nextInt(15);
         image.setImageResource(Questions.images[question]);
         answer=Questions.answers[question];
         animation= AnimationUtils.loadAnimation(ColourMatch.this,R.anim.textanim);
@@ -240,7 +242,8 @@ public class ColourMatch extends AppCompatActivity{
             intent.putExtra("no_of_q",no_of_q);
             intent.putExtra("level_1_results",results);
             intent.putExtra("level",level_no);
-            startActivity(intent);
+            Intent instrut2=new Intent(ColourMatch.this,Color_Instruct2.class);
+            startActivity(instrut2);
         }
 //        else if(points>5 | flag==0){
 //            if(flag==1){

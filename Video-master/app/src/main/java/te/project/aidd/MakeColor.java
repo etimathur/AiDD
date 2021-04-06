@@ -40,6 +40,7 @@ public class MakeColor extends AppCompatActivity {
     Button redb,yellowb,whiteb,blackb,blueb,greenb;
     ImageView yourcolor, givencolor;
     String colorvalue="";
+
     private int count=-1,decision;
     private static final long COUNTDOWN_IN=45000;
     private CountDownTimer cd;
@@ -315,17 +316,26 @@ public class MakeColor extends AppCompatActivity {
     }
 
     public void newQuestion(){
-        no_of_q1++;
-        int len=Questions.colorss.length;
-        if(count==(len-1)){
-            count=0;
+        if(points1>=15){
+         Intent in=new Intent(MakeColor.this,Color_Instruct3.class);
+         startActivity(in);
         }
-        else {
-            count++;
+        else{
+
+            no_of_q1++;
+            int len=Questions.colorss.length;
+            if(count==(len-1)){
+                count=0;
+            }
+            else {
+                count++;
+            }
+            givencolor.setImageResource(Questions.colorss[count]);
+            givencolor.setTag(Questions.match[count]);
+            colorvalue="";
+
         }
-        givencolor.setImageResource(Questions.colorss[count]);
-        givencolor.setTag(Questions.match[count]);
-        colorvalue="";
+
     }
 
     public void checkCombination(){

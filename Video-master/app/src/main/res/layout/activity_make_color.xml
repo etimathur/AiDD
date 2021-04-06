@@ -20,7 +20,7 @@
     <TableRow
 
         android:id="@+id/table"
-        android:layout_width="386dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/text"
         android:layout_centerHorizontal="true"
