@@ -299,7 +299,7 @@ public class SimonGame extends AppCompatActivity {
                             outLoop=1;
                             Log.i("In","wrong");
                             BlinkingImages(outLoop);
-                            //enableImages();
+                            enableImages();
 
                         }
                     },3000);
@@ -330,7 +330,7 @@ public class SimonGame extends AppCompatActivity {
                     blinkingOn=0;
                     Log.i("In","correct anwser");
                     BlinkingImages(outLoop);
-                    //enableImages();
+                    enableImages();
 
                 }
 
