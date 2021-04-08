@@ -98,31 +98,43 @@
         app:layout_constraintVertical_bias="0.021" />
 
     <Button
+        android:id="@+id/tutorial_jigsaw"
+        android:layout_width="146dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/round"
+        android:fontFamily="serif"
+        android:text="Tutorial"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <Button
         android:id="@+id/flipin"
         android:layout_width="146dp"
         android:layout_height="48dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/round"
-        android:onClick="goTo"
-        android:text="PLAY"
         android:fontFamily="serif"
+        android:text="PLAY"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.807"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:layout_constraintVertical_bias="0.097" />
+        app:layout_constraintVertical_bias="0.093" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="You are ready to play!"
-        android:textColor="#000000"
         android:fontFamily="serif"
-        android:textSize="30sp"
+        android:text="Need a demo?Watch tutorial!"
+        android:textColor="#000000"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.476"

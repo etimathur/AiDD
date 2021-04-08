@@ -198,7 +198,22 @@ public class SimonGame extends AppCompatActivity {
     public void generateImages() {
         selans.clear();
         answer.clear();
-        myImageList = new int[]{R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom, R.drawable.jerry, R.drawable.pikachu, R.drawable.tom};
+        int [] myImageList1=new int[]{R.drawable.jerry, R.drawable.pikachu, R.drawable.tom,R.drawable.bac7,R.drawable.bac8,R.drawable.bac9,R.drawable.bac10,R.drawable.bac11};
+        myImageList = new int[9];
+        Random rand = new Random();
+        List face=new ArrayList();
+        for(int i=0;i<9;i+=3)
+        {
+            int x= rand.nextInt(myImageList1.length);
+            while(face.contains(x))
+            {
+                x=rand.nextInt(myImageList1.length);
+            }
+            face.add(x);
+            myImageList[i]=myImageList1[x];
+            myImageList[i+1]=myImageList1[x];
+            myImageList[i+2]=myImageList1[x];
+        }
         list = new ArrayList<>();
         for (int i = 0; i < myImageList.length; i++) {
             list.add(myImageList[i]);
@@ -207,6 +222,8 @@ public class SimonGame extends AppCompatActivity {
         imageViews = new ImageView[]{findViewById(R.id.v0), findViewById(R.id.v1), findViewById(R.id.v2), findViewById(R.id.v3), findViewById(R.id.v4), findViewById(R.id.v5), findViewById(R.id.v6), findViewById(R.id.v7), findViewById(R.id.v8)};
         for (int i = 0; i < 9; i++) {
             imageViews[i].setImageResource(list.get(i));
+            
+            imageViews[i].setClickable(false);
         }
         handler.postDelayed(new Runnable() {
 
@@ -214,6 +231,7 @@ public class SimonGame extends AppCompatActivity {
             public void run() {
                 outLoop++;
                 BlinkingImages(outLoop);
+                enableImages();
                 Log.d(TAG, "run: " + outLoop);
             }
         }, 1000);
@@ -253,12 +271,13 @@ public class SimonGame extends AppCompatActivity {
             }
             Log.d(TAG, "select:" + selans);
             Log.d(TAG, "answer:" + answer);
+            int checkAnswer=0;
             for (int i = 0; i <selans.size(); i++) {
                 if (selans.get(i) != answer.get(i)) {
                     Log.d(TAG, "select: not same" + selans.get(i) + " " + answer.get(i));
 
                     showElapsedTime();
-
+                    checkAnswer=1;
 
                     Toast.makeText(SimonGame.this, "Wrong answer", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(new Runnable() {
@@ -269,14 +288,33 @@ public class SimonGame extends AppCompatActivity {
                         }
                     }, 100);
                     wrongAnswers++;
-                    selans.clear();
-                    answer.clear();
-                    blinkingOn = 0;
-                    outLoop=1;
-                    BlinkingImages(outLoop);
+                    popup.startincorrect();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            popup.dismissincorrect();
+                            selans.clear();
+                            answer.clear();
+                            blinkingOn = 0;
+                            outLoop=1;
+                            Log.i("In","wrong");
+                            BlinkingImages(outLoop);
+                            //enableImages();
+
+                        }
+                    },3000);
+
+                    break;
+
+//                    new Thread(new Runnable() {
+//                        public void run() {
+//
+//                        }
+//                    }).start();
+
                 }
             }
-                if (selans.size() == answer.size()) {
+                if (selans.size() == answer.size() && checkAnswer==0) {
                     score++;
                     Toast.makeText(SimonGame.this, "Correct answer", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(new Runnable() {
@@ -290,7 +328,10 @@ public class SimonGame extends AppCompatActivity {
                     answer.clear();
                     outLoop++;
                     blinkingOn=0;
+                    Log.i("In","correct anwser");
                     BlinkingImages(outLoop);
+                    //enableImages();
+
                 }
 
             showElapsedTime();
@@ -302,6 +343,7 @@ public class SimonGame extends AppCompatActivity {
         //Toast.makeText(SimonGame.this, "Elapsed milliseconds,score: " + elapsedMillis+"+"+score,Toast.LENGTH_SHORT).show();
     }
     public void BlinkingImages(int count)  {
+        Log.i("In","Blinking ");
 
 //        if(elapsedMillis>60000) {
 //            time.stop();
@@ -311,27 +353,46 @@ public class SimonGame extends AppCompatActivity {
 
         blinkingOn=0;
         int i;
-
+        Log.i("In","Disable");
+        for(int bk=0; bk<imageViews.length;bk++){
+            imageViews[bk].setClickable(false);
+            //imageViews[bk].setEnabled(true);
+        }
         for(i=1;i<=count;i++){
 
             Random randomNum = new Random();
             final int num = randomNum.nextInt(8);
             answer.add(num);
             Log.i("Image", String.valueOf(num));
+            final int finalI = i;
             handler.postDelayed(new Runnable() {
 
-                @Override
-                public void run() {
-                    blink(num);
-                }
-            }, 1000 * i);
+                        @Override
+                        public void run() {
+                            Handler h = new Handler();
+                            h.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    blink(num);
+                                }
+                            });
+
+                        }
+                    }, 1000 * finalI);
+
+
         }
-        for(int bk=0; bk<myImageList.length;bk++){
-            imageViews[bk].setEnabled(true);
-        }
+
 //        Arrays.fill(answer, 0);
         if(i==count+1)
             blinkingOn=1;
+    }
+    public void enableImages(){
+        Log.d("In","Enable function");
+        for(int bk=0; bk<myImageList.length;bk++){
+            imageViews[bk].setClickable(true);
+            //imageViews[bk].setEnabled(true);
+        }
     }
     public void blink(final int num) {
 

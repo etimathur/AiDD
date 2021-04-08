@@ -20,11 +20,11 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Color_instruct extends AppCompatActivity {
-Button cm;
-private static final String SET_OF_GAMES="set_of_games";
-TextView trail;
-public static final String SHARED_PREFS = "sharedPrefs";
-public static final String OLD_DATE ="04/04/2020";
+    Button cm,tutorial;
+    private static final String SET_OF_GAMES="set_of_games";
+    TextView trail;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String OLD_DATE ="04/04/2020";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,8 +50,15 @@ public static final String OLD_DATE ="04/04/2020";
             editor.apply();
 
         }
-
-
+        tutorial=(Button) findViewById(R.id.tutorial_colour1);
+        tutorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent tut=new Intent(Color_instruct.this, YoutubeVideo1.class);
+                startActivity(tut);
+                finish();
+            }
+        });
 
         cm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,18 +96,18 @@ public static final String OLD_DATE ="04/04/2020";
                     System.out.println("nooo cant playyy");
                     System.out.println("cant ");
 
-                            AlertDialog.Builder builder=new AlertDialog.Builder(Color_instruct.this);
-                            builder.setMessage("You have completed your exercises for the day");
-                            builder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
-                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                    AlertDialog.Builder builder=new AlertDialog.Builder(Color_instruct.this);
+                    builder.setMessage("You have completed your exercises for the day");
+                    builder.setNegativeButton("Okay", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
                             dialog.cancel();
                         }
                     });
-                            builder.setCancelable(false);
-                            AlertDialog alertDialog=builder.create();
-                            alertDialog.show();
-                        }
+                    builder.setCancelable(false);
+                    AlertDialog alertDialog=builder.create();
+                    alertDialog.show();
+                }
 
 
                 else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){

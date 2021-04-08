@@ -91,7 +91,7 @@ public class FindTheMatch extends AppCompatActivity {
     int correctScore=0, wrongScore=0, totalanswers=0,missedScore=0,levelScore=0;
     SessionManagement sessionManagement;
     private TextView timer ;
-    private static final long COUNTDOWN_IN=30000;
+    private static final long COUNTDOWN_IN=60000;
     private CountDownTimer cd;
     private long timeleft;
     int back=0;
@@ -365,7 +365,7 @@ public class FindTheMatch extends AppCompatActivity {
             TextView levelTag=(TextView)findViewById(R.id.levelNo);
             levelTag.setText(Integer.toString(level));
             timer = (TextView) findViewById(R.id.time);
-            timeleft = COUNTDOWN_IN+15000;
+            timeleft = 90000;
             startCountDown();
             generateImages();
         }
@@ -619,7 +619,7 @@ public class FindTheMatch extends AppCompatActivity {
 
 
                 if (back != 1) {
-                    if (level == 1 && levelScore >= 10) {
+                    if (level == 1 && levelScore >= 15) {
                         popup.startlevelpop();
                         levelImageCount = 16;
                         level++;
@@ -645,7 +645,7 @@ public class FindTheMatch extends AppCompatActivity {
                             }
                         }, 2000);
 
-                    } else if (level == 2 && levelScore >= 20) {
+                    } else if (level == 2 && levelScore >= 30) {
                         popup.startlevelpop();
                         levelImageCount = 9;
                         condition = 2;
@@ -671,7 +671,7 @@ public class FindTheMatch extends AppCompatActivity {
                                 levelCheck();
                             }
                         }, 3000);
-                    } else if (level == 3 && levelScore >= 7) {
+                    } else if (level == 3 && levelScore >= 15) {
                         popup.startlevelpop();
                         levelImageCount = 16;
                         condition = 2;
@@ -764,11 +764,25 @@ public class FindTheMatch extends AppCompatActivity {
                         levelScore = 0;
                         totalanswers = 0;
                         missedScore = 0;
-                        Intent homepage = new Intent(FindTheMatch.this, FindMatchInstruct.class);
-                        ;
-                        homepage.putExtra("Game", "Over");
-                        startActivity(homepage);
-                        finish();
+                        popup.startpop();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                popup.dismisspop();
+                            }
+                        }, 1000);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent homepage = new Intent(FindTheMatch.this, FindMatchInstruct.class);
+
+                                homepage.putExtra("Game", "Over");
+                                startActivity(homepage);
+                                finish();
+                            }
+                        }, 1000);
+
 
                     }
 
@@ -780,7 +794,7 @@ public class FindTheMatch extends AppCompatActivity {
     public void updateCountDownText(){
         int minutes=(int)(timeleft/1000)/60;
         int seconds=(int)(timeleft/1000)%60;
-        String timeformat=String.format(Locale.getDefault(),"00:%02d",seconds);
+        String timeformat=String.format(Locale.getDefault(),"%02d:%02d",minutes,seconds);
         timer.setText(timeformat);
         if(timeleft<10000){
             timer.setTextColor(Color.RED);
