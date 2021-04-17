@@ -21,17 +21,23 @@ import java.util.Locale;
 
 public class Color_instruct extends AppCompatActivity {
     Button cm,tutorial;
-    private static final String SET_OF_GAMES="set_of_games";
+
     TextView trail;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String OLD_DATE ="04/04/2020";
+    public String userrr;
+    DatabaseHelper db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color_instruct);
         cm=(Button) findViewById(R.id.cm);
         trail=findViewById(R.id.textView4);
-
+        db=new DatabaseHelper(this);
+        SessionManagement sessionManagement=new SessionManagement(Color_instruct.this);
+        userrr=db.getEmailForChild(sessionManagement.getTableID())+"colormatch";
 
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
@@ -43,10 +49,10 @@ public class Color_instruct extends AppCompatActivity {
 
         final int diff=getDateDiffFromNow(sharedPreferences.getString(OLD_DATE," "));
         System.out.println(diff);
-        System.out.println("no of games played"+ sharedPreferences.getInt(SET_OF_GAMES,-1));
-        if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==2){
+        System.out.println("no of games played"+ sharedPreferences.getInt(userrr,-1));
+        if(diff>0 && sharedPreferences.getInt(userrr,0)==2){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(SET_OF_GAMES,0);
+            editor.putInt(userrr,0);
             editor.apply();
 
         }
@@ -64,11 +70,11 @@ public class Color_instruct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){
+                if(diff>0 && sharedPreferences.getInt(userrr,0)==0){
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,1);
+                    editor.putInt(userrr,1);
                     editor.apply();
                     Toast.makeText(Color_instruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(Color_instruct.this,ColourMatch.class);
@@ -78,11 +84,11 @@ public class Color_instruct extends AppCompatActivity {
                     finish();
 
                 }
-                else if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==1){
+                else if(diff>0 && sharedPreferences.getInt(userrr,0)==1){
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,2);
+                    editor.putInt(userrr,2);
                     editor.apply();
                     Toast.makeText(Color_instruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(Color_instruct.this,ColourMatch.class);
@@ -92,7 +98,7 @@ public class Color_instruct extends AppCompatActivity {
                     finish();
 
                 }
-                else if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==2){
+                else if(diff==0 && sharedPreferences.getInt(userrr,0)==2){
                     System.out.println("nooo cant playyy");
                     System.out.println("cant ");
 
@@ -110,10 +116,10 @@ public class Color_instruct extends AppCompatActivity {
                 }
 
 
-                else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){
+                else  if(diff==0 && sharedPreferences.getInt(userrr,0)==0){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,1);
+                    editor.putInt(userrr,1);
                     editor.apply();
                     Toast.makeText(Color_instruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(Color_instruct.this,ColourMatch.class);
@@ -123,12 +129,12 @@ public class Color_instruct extends AppCompatActivity {
                     finish();
 
                 }
-                else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==1){
+                else  if(diff==0 && sharedPreferences.getInt(userrr,0)==1){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,2);
+                    editor.putInt(userrr,2);
                     editor.apply();
-                    Toast.makeText(Color_instruct.this, "Date saved", Toast.LENGTH_SHORT).show();
+
                     Intent cmin=new Intent(Color_instruct.this,ColourMatch.class);
                     startActivity(cmin);
 

@@ -68,7 +68,6 @@
                 android:layout_margin="13dp"
                 android:adjustViewBounds="true"
                 android:cropToPadding="true"
-                android:onClick="select"
                 android:padding="4dp"
                 android:scaleType="centerCrop"
                 android:tag="0" />
@@ -82,7 +81,6 @@
                 android:layout_margin="13dp"
                 android:cropToPadding="true"
                 android:padding="4dp"
-                android:onClick="select"
                 android:scaleType="centerCrop"
                 android:tag="3" />
 
@@ -96,7 +94,6 @@
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
-                android:onClick="select"
                 android:tag="6" />
 
             <ImageView
@@ -108,7 +105,6 @@
                 android:layout_margin="13dp"
                 android:cropToPadding="true"
                 android:padding="4dp"
-                android:onClick="select"
                 android:scaleType="centerCrop"
                 android:tag="1" />
 
@@ -122,7 +118,6 @@
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
-                android:onClick="select"
                 android:tag="4" />
 
             <ImageView
@@ -135,7 +130,6 @@
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
-                android:onClick="select"
                 android:tag="7" />
 
             <ImageView
@@ -148,7 +142,7 @@
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
-                android:onClick="select"
+
                 android:tag="2" />
 
             <ImageView
@@ -161,7 +155,7 @@
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:padding="4dp"
-                android:onClick="select"
+
                 android:tag="5" />
 
             <ImageView
@@ -174,7 +168,7 @@
                 android:scaleType="centerCrop"
                 android:cropToPadding="true"
                 android:padding="4dp"
-                android:onClick="select"
+
                 android:tag="8" />
         </GridLayout>
 

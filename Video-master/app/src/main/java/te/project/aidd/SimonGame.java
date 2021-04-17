@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -73,9 +74,11 @@ public class SimonGame extends AppCompatActivity {
     Interpreter interpreter;
     DatabaseHelper db;
     int analysis;
-    int sheet_list[]=new int[6];
+    int sheet_list[]=new int[4];
     int wrongAnswers=0;
     pop popup=new pop(SimonGame.this);
+    ImageView img1,img2,img3,img4,img5,img6,img7,img8,img9;
+    static int stat=0;
     private static Integer[] array;
     static {
         array = new Integer[6];
@@ -109,6 +112,10 @@ public class SimonGame extends AppCompatActivity {
         tt[5]=0;
 
     }
+    public static final String SHARED_PREFS = "shared_Prefs";
+    int new_aray[]=new int[12];
+    int analysi_sum=0;
+
 
 
 
@@ -116,6 +123,69 @@ public class SimonGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simon_game);
+        img1=findViewById(R.id.v0);
+        img2=findViewById(R.id.v1);
+        img3=findViewById(R.id.v2);
+        img4=findViewById(R.id.v3);
+        img5=findViewById(R.id.v4);
+        img6=findViewById(R.id.v5);
+        img7=findViewById(R.id.v6);
+        img8=findViewById(R.id.v7);
+        img9=findViewById(R.id.v8);
+        img1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img1);
+            }
+        });
+        img2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img2);
+            }
+        });
+        img3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img3);
+            }
+        });
+        img4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img4);
+            }
+        });
+        img5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img5);
+            }
+        });
+        img6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img6);
+            }
+        });
+        img7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img7);
+            }
+        });
+        img8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img8);
+            }
+        });
+        img9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                select(img9);
+            }
+        });
         db=new DatabaseHelper(this);
         try {
             interpreter = new Interpreter(loadModelfile(), null);
@@ -124,6 +194,10 @@ public class SimonGame extends AppCompatActivity {
         }
         levelcheck();
     }
+
+
+
+
     public void levelcheck() {
         generateImages();
         time=findViewById(R.id.time);
@@ -153,6 +227,9 @@ public class SimonGame extends AppCompatActivity {
                     String email = db.getEmailForChild(ses.getTableID());
                     db.simon_analysis(analysis,email);
                     db.simon_30(email,ses.getnaaam(),score,analysis);
+                    String userrr=db.getEmailForChild(ses.getTableID())+"blinkweek";
+                    SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                    sendData(sharedPreferences.getInt(userrr,0));
                     array[0]=array[1];
                     array[1]=array[2];
                     array[2]=array[3];
@@ -172,7 +249,7 @@ public class SimonGame extends AppCompatActivity {
                     tt[4]=tt[5];
                     tt[5]=(int)elapsedMillis/1000;
 
-                    addItemToSheet();
+//                    addItemToSheet();
                     Log.i("wrongAnswers: " ,wrongAnswers+" ");
                     if(decision!=1){
 
@@ -237,10 +314,11 @@ public class SimonGame extends AppCompatActivity {
         }, 1000);
     }
 
-    public void select(View view)
+    public void select(ImageView img)
     {
         if(blinkingOn==1) {
-            final ImageView counter = (ImageView) view;
+            Log.i("whats happening","gggg");
+            final ImageView counter = img;
             selected[lastIndex] = counter;
             int taggedCounter = Integer.parseInt(counter.getTag().toString());
             selans.add(taggedCounter);
@@ -299,10 +377,11 @@ public class SimonGame extends AppCompatActivity {
                             outLoop=1;
                             Log.i("In","wrong");
                             BlinkingImages(outLoop);
-                            enableImages();
+
+
 
                         }
-                    },3000);
+                    },2000);
 
                     break;
 
@@ -328,6 +407,7 @@ public class SimonGame extends AppCompatActivity {
                     answer.clear();
                     outLoop++;
                     blinkingOn=0;
+
                     Log.i("In","correct anwser");
                     BlinkingImages(outLoop);
                     enableImages();
@@ -342,7 +422,7 @@ public class SimonGame extends AppCompatActivity {
         elapsedMillis = SystemClock.elapsedRealtime() - time.getBase();
         //Toast.makeText(SimonGame.this, "Elapsed milliseconds,score: " + elapsedMillis+"+"+score,Toast.LENGTH_SHORT).show();
     }
-    public void BlinkingImages(int count)  {
+    public void BlinkingImages(final int count)  {
         Log.i("In","Blinking ");
 
 //        if(elapsedMillis>60000) {
@@ -373,15 +453,21 @@ public class SimonGame extends AppCompatActivity {
                             h.post(new Runnable() {
                                 @Override
                                 public void run() {
-                                    blink(num);
+                                    blink(num,count);
+
                                 }
                             });
 
                         }
                     }, 1000 * finalI);
-
+Log.i("its ","me");
+            for(int bk=0; bk<imageViews.length;bk++){
+                imageViews[bk].setClickable(true);
+                //imageViews[bk].setEnabled(true);
+            }
 
         }
+
 
 //        Arrays.fill(answer, 0);
         if(i==count+1)
@@ -394,22 +480,32 @@ public class SimonGame extends AppCompatActivity {
             //imageViews[bk].setEnabled(true);
         }
     }
-    public void blink(final int num) {
-
+    public void blink(final int num,int swara) {
+        Log.i("swara value",swara+"");
         Log.i("Blink","now"+String.valueOf(num));
+        stat++;
         final ImageView image=imageViews[num];
         image.setAlpha(0);
         blinkDelay++;
+
         handler.postDelayed(new Runnable() {
 
             @Override
             public void run() {
                 image.setAlpha(255);
             }
-        }, 500);
+        }, 750);
         for(int bk=0; bk<myImageList.length;bk++){
             imageViews[bk].setBackgroundColor(Color.WHITE);
+            imageViews[bk].setClickable(false);
+
+
         }
+        if(stat==swara){
+            enableImages();
+            stat=0;
+        }
+
     }
 
     private MappedByteBuffer loadModelfile() throws IOException {
@@ -448,17 +544,13 @@ public class SimonGame extends AppCompatActivity {
         SessionManagement ses=new SessionManagement(SimonGame.this);
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
-        sheet_list=db.simon_graph(email);
-        final String game_1="Level:1" +"\n" +  "Wrong answers:" + array[0] +"\n"+ "Score:"+questions[0]+"\n"+ "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:1" +"\n" +  "Wrong answers:" + array[1] +"\n"+ "Score:"+questions[1]+"\n"+ "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:1" +"\n" +  "Wrong answers:" + array[2] +"\n"+ "Score:"+questions[2]+"\n"+ "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:1" +"\n" +  "Wrong answers:" + array[3] +"\n"+ "Score:"+questions[3]+"\n"+ "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:1" +"\n" +  "Wrong answers:" + array[4] +"\n"+ "Score:"+questions[4]+"\n"+ "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:1" +"\n" + "Wrong answers:" + array[5] +"\n"+ "Score:"+questions[5]+"\n"+ "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        sheet_list=db.blinkweek_fetch(email);
+        final String game_1="Analysis:"+sheet_list[0];
+        final String game_2="Analysis:"+sheet_list[1];
+        final String game_3="Analysis:"+sheet_list[2];
+        final String game_4="Analysis:"+sheet_list[3];
 
-
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbx6LCx7JFgOBOk4XwGxig21JtnuGotPjrG2DlOseAU13Gf-4B1K3MeqUw/exec?",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbxd0i78VqZTytNJ_i__Ueyi2MPz59Q-8OfRMWVbhRtlyUR7cp_pM3360-sIaYF_gFgawQ/exec?",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -485,12 +577,11 @@ public class SimonGame extends AppCompatActivity {
                 parmas.put("action", "addItem");
                 parmas.put("child_name", child_name);
                 parmas.put("email",email);
-                parmas.put("game_1",game_1);
-                parmas.put("game_2",game_2);
-                parmas.put("game_3",game_3);
-                parmas.put("game_4",game_4);
-                parmas.put("game_5",game_5);
-                parmas.put("game_6",game_6);
+                parmas.put("week1",game_1);
+                parmas.put("week2",game_2);
+                parmas.put("week3",game_3);
+                parmas.put("week4",game_4);
+
 
                 return parmas;
             }
@@ -504,6 +595,36 @@ public class SimonGame extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         queue.add(stringRequest);
+
+
+    }
+
+
+    public void sendData(int noOfgames){
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        SessionManagement ss= new SessionManagement(this);
+        String userrr=db.getEmailForChild(ss.getTableID())+"blinkweek";
+        if(noOfgames==12){
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,0);
+            editor.apply();
+            new_aray=db.sheet_blink(db.getEmailForChild(ss.getTableID()));
+            System.out.println(new_aray);
+            for(int i=0;i<12;i++){
+                analysi_sum=analysi_sum+new_aray[i];
+                System.out.println(new_aray[i]);
+            }
+            db.addblinkweek(db.getEmailForChild(ss.getTableID()),analysi_sum/12);
+            System.out.println("weekklyyy "+analysi_sum/12);
+            addItemToSheet();
+        }
+        else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,noOfgames+1);
+            editor.apply();
+            Log.i("didnt send dataaa",sharedPreferences.getInt(userrr,0)+"");
+        }
 
 
     }

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -70,7 +71,10 @@ class Pair{
         this.type=colour;
         count=0;
     }
+
+
 }
+
 public class FindTheMatch extends AppCompatActivity {
 
     Interpreter interpreter;
@@ -94,9 +98,13 @@ public class FindTheMatch extends AppCompatActivity {
     private static final long COUNTDOWN_IN=60000;
     private CountDownTimer cd;
     private long timeleft;
+    int new_aray[]=new int[12];
+
     int back=0;
-    int sheet_list[]=new int[6];
+    int analysi_sum=0;
+    int sheet_list[]=new int[4];
     private static Integer[] array;
+    public static final String SHARED_PREFS = "shared_Prefs";
     static {
         array = new Integer[6];
         array[0]=0;
@@ -718,6 +726,10 @@ public class FindTheMatch extends AppCompatActivity {
                         }
                         db.insertScore(email, sessionManagement.getnaaam(), correctScore, wrongScore, totalanswers,analysis);
                         db.insert_findmatch_analysis(analysis, email);
+
+                        String userrr=db.getEmailForChild(sessionManagement.getTableID())+"findweek";
+                        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                        sendData(sharedPreferences.getInt(userrr,0));
                         array[0]=array[1];
                         array[1]=array[2];
                         array[2]=array[3];
@@ -756,7 +768,7 @@ public class FindTheMatch extends AppCompatActivity {
                         tt3[5]=level;
 
 
-                        addItemToSheet();
+
                         Log.i("anal:", " " + analysis);
                         noOfQuestions = 0;
                         correctScore = 0;
@@ -849,16 +861,14 @@ public class FindTheMatch extends AppCompatActivity {
         SessionManagement ses=new SessionManagement(FindTheMatch.this);
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
-        sheet_list=db.find_match_graph(email);
-        final String game_1="Level:"+tt3[0]+"\n" +  "Correct answers:" + array[0] +"\n"+ "Wrong answers:"+questions[0]+"\n"+ "Missed answers"+tt[0]+"\n"+"total answers"+tt1[0]+"\n"+"No of questions"+tt2[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:"+tt3[1] +"\n" +  "Correct answers:" + array[1] +"\n"+ "Wrong answers:"+questions[1]+"\n"+ "Missed answers"+tt[1]+"\n"+"total answers"+tt1[1]+"\n"+"No of questions"+tt2[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:"+tt3[2] +"\n" +  "Correct answers:" + array[2] +"\n"+ "Wrong answers:"+questions[2]+"\n"+ "Missed answers"+tt[2]+"\n"+"total answers"+tt1[2]+"\n"+"No of questions"+tt2[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:"+tt3[3] +"\n" +  "Correct answers:" + array[3] +"\n"+ "Wrong answers:"+questions[3]+"\n"+ "Missed answers"+tt[3]+"\n"+"total answers"+tt1[3]+"\n"+"No of questions"+tt2[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:"+tt3[4]+"\n" +   "Correct answers:" + array[4] +"\n"+ "Wrong answers:"+questions[4]+"\n"+ "Missed answers"+tt[4]+"\n"+"total answers"+tt1[4]+"\n"+"No of questions"+tt2[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:"+tt3[5] +"\n" + "Correct answers:" + array[5] +"\n"+ "Wrong answers:"+questions[5]+"\n"+ "Missed answers"+tt[5]+"\n"+"total answers"+tt1[5]+"\n"+"No of questions"+tt2[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        sheet_list=db.findweek_fetch(email);
+        final String game_1="Analysis:"+sheet_list[0];
+        final String game_2="Analysis:"+sheet_list[1];
+        final String game_3="Analysis:"+sheet_list[2];
+        final String game_4="Analysis:"+sheet_list[3];
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbxZM8AW7d-MeAroy2MhojwgdQx8ZW6HieQtUy5v6gI71w76FsuJVsNl/exec?",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbzI514ENkX0KkefrRWsl6zqfGOqsJPz727J2gPbNcb-2RIf1DUB69iFumoNjIFkZhKH1g/exec?",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -885,12 +895,11 @@ public class FindTheMatch extends AppCompatActivity {
                 parmas.put("action", "addItem");
                 parmas.put("child_name", child_name);
                 parmas.put("email",email);
-                parmas.put("game_1",game_1);
-                parmas.put("game_2",game_2);
-                parmas.put("game_3",game_3);
-                parmas.put("game_4",game_4);
-                parmas.put("game_5",game_5);
-                parmas.put("game_6",game_6);
+                parmas.put("week1",game_1);
+                parmas.put("week2",game_2);
+                parmas.put("week3",game_3);
+                parmas.put("week4",game_4);
+
 
                 return parmas;
             }
@@ -904,6 +913,35 @@ public class FindTheMatch extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         queue.add(stringRequest);
+
+
+    }
+
+    public void sendData(int noOfgames){
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        SessionManagement ss= new SessionManagement(this);
+        String userrr=db.getEmailForChild(ss.getTableID())+"findweek";
+        if(noOfgames==12){
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,0);
+            editor.apply();
+            new_aray=db.sheet_findmatch(db.getEmailForChild(ss.getTableID()));
+            System.out.println(new_aray);
+            for(int i=0;i<12;i++){
+                analysi_sum=analysi_sum+new_aray[i];
+                System.out.println(new_aray[i]);
+            }
+            db.addfindweek(db.getEmailForChild(ss.getTableID()),analysi_sum/12);
+            System.out.println("weekklyyy "+analysi_sum/12);
+            addItemToSheet();
+        }
+        else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,noOfgames+1);
+            editor.apply();
+            Log.i("didnt send dataaa",sharedPreferences.getInt(userrr,0)+"");
+        }
 
 
     }

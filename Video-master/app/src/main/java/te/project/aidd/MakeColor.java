@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -40,7 +41,6 @@ public class MakeColor extends AppCompatActivity {
     Button redb,yellowb,whiteb,blackb,blueb,greenb;
     ImageView yourcolor, givencolor;
     String colorvalue="";
-
     private int count=-1,decision;
     private static final long COUNTDOWN_IN=45000;
     private CountDownTimer cd;
@@ -49,65 +49,22 @@ public class MakeColor extends AppCompatActivity {
     pop popup=new pop(MakeColor.this);
     Random r=new Random();
     Button clear;
+    int flag=1;
     DatabaseHelper db;
-    int sheet_list[]=new int[6];
+    int sheet_list[]=new int[4];
     TextView score,timer;
     Interpreter interpreter;
     long timetaken;
-    int  level_1_results,no_of_q,no_of_q1=0, points1=0,level_1_points,level_no=2,l;
-    ColourMatch obj=new ColourMatch();
-
-    public static Integer[] questions;
-    static {
-        questions = new Integer[6];
-        questions[0]=0;
-        questions[1]=0;
-        questions[2]=0;
-        questions[3]=0;
-        questions[4]=0;
-        questions[5]=0;
-
-    }
-
-    public static Integer[] level_tell1;
-    static {
-        level_tell1 = new Integer[6];
-        level_tell1[0]=0;
-        level_tell1[1]=0;
-        level_tell1[2]=0;
-        level_tell1[3]=0;
-        level_tell1[4]=0;
-        level_tell1[5]=0;
-
-    }
-
-    public static Integer[] marks1;
-    static {
-        marks1 = new Integer[6];
-        marks1[0]=0;
-        marks1[1]=0;
-        marks1[2]=0;
-        marks1[3]=0;
-        marks1[4]=0;
-        marks1[5]=0;
-
-    }
-    public static Integer[] wakt1;
-    static {
-        wakt1 = new Integer[6];
-        wakt1[0]=0;
-        wakt1[1]=0;
-        wakt1[2]=0;
-        wakt1[3]=0;
-        wakt1[4]=0;
-        wakt1[5]=0;
-
-    }
-
-
-
-
-
+    int anal;
+    int ams=0;
+    float level_2_results;
+    int points1 ,no_of_q1=0;
+    int level_1_results, level_1_points;
+    public static int make_level_2_analysis,make_level_2_points;
+    ColourMatch cm=new ColourMatch();
+    int new_array[]=new int[12];
+    int analysis_sum=0;
+    public static final String SHARED_PREFS = "shared_Prefs";
 
 
 
@@ -133,17 +90,6 @@ public class MakeColor extends AppCompatActivity {
         score=findViewById(R.id.score);
         clear=findViewById(R.id.clear);
         timer=findViewById(R.id.time);
-        Intent intent=getIntent();
-        level_1_results=intent.getIntExtra("level_1_results",level_1_results);
-        level_1_points=intent.getIntExtra("color_points",level_1_points);
-
-        no_of_q=intent.getIntExtra("no_of_q",no_of_q);
-        Log.d("questionss",no_of_q+"");
-        questions=obj.total_questions;
-        level_tell1=obj.level_tell;
-        marks1=obj.marks;
-        wakt1=obj.wakt;
-
         count=r.nextInt(Questions.colorss.length);
         newQuestion();
         timeleft=COUNTDOWN_IN;
@@ -317,8 +263,27 @@ public class MakeColor extends AppCompatActivity {
 
     public void newQuestion(){
         if(points1>=15){
+            ams=1;
+            level_1_points=cm.make_level_1_points;
+            level_1_results=cm.make_level_1_analysis;
+            level_2_results=(float) points1*100/(2*no_of_q1);
+            anal=(int) (level_1_results+level_2_results)/2;
+            make_level_2_analysis=anal;
+            make_level_2_points=points1;
+            popup.startlevelpop();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    flag=0;
+                    popup.dismisslevelpop();
+
+
+                }
+            },1250);
+            Log.i("level 2__  ","analysissss "+anal+"levelll"+level_2_results);
          Intent in=new Intent(MakeColor.this,Color_Instruct3.class);
          startActivity(in);
+
         }
         else{
 
@@ -352,7 +317,7 @@ public class MakeColor extends AppCompatActivity {
                     newQuestion();
 
                 }
-            },1000);
+            },1500);
         }
     }
 
@@ -380,48 +345,22 @@ public class MakeColor extends AppCompatActivity {
                         SessionManagement ses=new SessionManagement(MakeColor.this);
                         String email=db.getEmailForChild(ses.getTableID());
                        // int analysis=(int)doInference(level_1_results,no_of_q,points1,no_of_q1);
-                        Log.i("level 2  ","points: "+points1+level_1_points+"  no of ques:"+no_of_q1);
-                        float level_2_results=  (points1 *100 )/(2*no_of_q1);
+                        level_1_points=cm.make_level_1_points;
+                        level_1_results=cm.make_level_1_analysis;
+                        Log.i("level 1 POINTS",level_1_points+"");
+                        level_2_results= (float) points1*100/(2*no_of_q1);
                         //level_2_results= level_2_results*100;
                         int analysis=(int) (level_1_results+level_2_results)/2;
-                        Log.i("level 2__  ","analysissss "+analysis+"levelll"+level_2_results);
+                        Log.i("level 2: ","LEVEL 2 ANALYSIS"+analysis+"level"+level_2_results);
                         db.addscore((level_1_points+points1),email);
                         db.time_analysis(analysis,email);
                         db.color_match_30(email,ses.getnaaam(),(level_1_points+points1),analysis);
-                        questions[0]=questions[1];
-                        questions[1]=questions[2];
-                        questions[2]=questions[3];
-                        questions[3]=questions[4];
-                        questions[4]=questions[5];
-                        questions[5]=no_of_q1+no_of_q;
+                        if(ams==0){
+                            SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                            String userrr=db.getEmailForChild(ses.getTableID())+"colorweek";
+                            sendData(sharedPreferences.getInt(userrr,0));
+                        }
 
-
-                        level_tell1[0]=level_tell1[1];
-                        level_tell1[1]=level_tell1[2];
-                        level_tell1[2]=level_tell1[3];
-                        level_tell1[3]=level_tell1[4];
-                        level_tell1[4]=level_tell1[5];
-                        level_tell1[5]=level_no;
-
-                        marks1[0]=marks1[1];
-                        marks1[1]=marks1[2];
-                        marks1[2]=marks1[3];
-                        marks1[3]=marks1[4];
-                        marks1[4]=marks1[5];
-                        marks1[5]=points1+level_1_points;
-
-                        wakt1[0]=wakt1[1];
-                        wakt1[1]=wakt1[2];
-                        wakt1[2]=wakt1[3];
-                        wakt1[3]=wakt1[4];
-                        wakt1[4]=wakt1[5];
-                        wakt1[5]=(int)timetaken;
-
-
-                        Intent swara=new Intent(MakeColor.this,ColourMatch.class);
-                        swara.putExtra("array",questions);
-
-                        addItemToSheet();
                         popup.dismisspop();
                         finish();
                     }
@@ -451,18 +390,8 @@ public class MakeColor extends AppCompatActivity {
         return fileChannel.map(FileChannel.MapMode.READ_ONLY,startOffset,length);
 
     }
-    public  float doInference(int level1, int no_of_q,int level3, int no_of_q1){
-        float[][] input= new float[1][4];
-        input[0][0]=(float)(level1);
-        input[0][1]=(float)(no_of_q);
-        input[0][2]=(float)(level3);
-        input[0][3]=(float)(no_of_q1);
-        float[][] output=new float[1][1];
-        interpreter.run(input,output);
-        return output[0][0];
 
 
-    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
@@ -483,16 +412,14 @@ public class MakeColor extends AppCompatActivity {
         SessionManagement ses=new SessionManagement(MakeColor.this);
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
-        sheet_list=db.time_analysis_graph(email);
-        final String game_1="Level:"+level_tell1[0]+"\n"+"Score:"+marks1[0]+"\n"+"No of questions attempted:"+questions[0]+"\n"+"Timetaken:"+wakt1[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:"+level_tell1[1]+"\n"+"Score:"+marks1[1]+"\n"+"No of questions attempted:"+questions[1]+"\n"+"Timetaken:"+wakt1[1]+"\n"+ "Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:"+level_tell1[2]+"\n"+"Score:"+marks1[2]+"\n"+"No of questions attempted:"+questions[2]+"\n"+"Timetaken:"+wakt1[2]+"\n"+ "Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:"+level_tell1[3]+"\n"+"Score:"+marks1[3]+"\n"+"No of questions attempted:"+questions[3]+"\n"+"Timetaken:"+wakt1[3]+"\n"+ "Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:"+level_tell1[4]+"\n"+"Score:"+marks1[4]+"\n"+"No of questions attempted:"+questions[4]+"\n"+"Timetaken:"+wakt1[4]+"\n"+ "Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:"+level_tell1[5]+"\n"+"Score:"+marks1[5]+"\n"+"No of questions attempted:"+questions[5]+"\n"+"Timetaken:"+wakt1[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        sheet_list=db.colorweek_fetch(email);
+        final String game_1="Analysis:"+sheet_list[0];
+        final String game_2="Analysis:"+sheet_list[1];
+        final String game_3="Analysis:"+sheet_list[2];
+        final String game_4="Analysis:"+sheet_list[3];
 
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbz91TkRELYJEBgNUI3Wj5zQfWsdon05SgfbWabEdjtmupLtPCqkJXmy4w/exec?",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbzfURLQdGxY6Bv6h20S9kCSgi_4WwEG4ZGTKjQSwPhg-R4D9i2dYbsVRvopoBqMzEOD/exec?",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -516,12 +443,11 @@ public class MakeColor extends AppCompatActivity {
                 parmas.put("action", "addItem");
                 parmas.put("child_name", child_name);
                 parmas.put("email",email);
-                parmas.put("game_1",game_1);
-                parmas.put("game_2",game_2);
-                parmas.put("game_3",game_3);
-                parmas.put("game_4",game_4);
-                parmas.put("game_5",game_5);
-                parmas.put("game_6",game_6);
+                parmas.put("week1",game_1);
+                parmas.put("week2",game_2);
+                parmas.put("week3",game_3);
+                parmas.put("week4",game_4);
+
 
                 return parmas;
             }
@@ -540,9 +466,29 @@ public class MakeColor extends AppCompatActivity {
     }
 
 
+    public void sendData(int noOfgames) {
+        SessionManagement ss = new SessionManagement(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        String userrr = db.getEmailForChild(ss.getTableID()) + "colorweek";
+
+        if (noOfgames == 12) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr, 0);
+            editor.apply();
+            new_array = db.sheet_colormatch(db.getEmailForChild(ss.getTableID()));
+            System.out.println(new_array);
+            for (int i = 0; i < 12; i++) {
+                analysis_sum = analysis_sum + new_array[i];
+            }
+            db.addcolorweek(db.getEmailForChild(ss.getTableID()), analysis_sum / 12);
+            addItemToSheet();
+        } else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr, noOfgames + 1);
+            editor.apply();
+            Log.i("didnt send dataaa", sharedPreferences.getInt(userrr, 0) + "");
+        }
 
 
-
-
-
-}
+    }}

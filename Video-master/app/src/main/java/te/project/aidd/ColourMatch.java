@@ -18,6 +18,8 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -39,7 +41,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
-import static te.project.aidd.MakeColor.questions;
+
 
 //import te.project.aidd.ui.exercises.ExercisesFragment;
 
@@ -48,7 +50,7 @@ public class ColourMatch extends AppCompatActivity{
     private ImageView image,image2;
     private boolean answer;
     private Button yes,no;
-    private int points=0;
+    public int points=0;
     private int question=0,decision,neww;
     private int no_of_q=0;
     public float analysis;
@@ -56,60 +58,23 @@ public class ColourMatch extends AppCompatActivity{
     private static final long COUNTDOWN_IN=30000;
     private CountDownTimer cd;
     public long timeleft;
-
+    public static int make_level_1_points;
+    public static int make_level_1_analysis;
     int flag=1, fla=1;
     DatabaseHelper db;
     Animation animation;
     CardView c1,c2;
-    int sheet_list[]=new int[6];
+    int amms=0;
+    int sheet_list[]=new int[4];
     int item=0;
     int level_no=1;
     pop popup=new pop(ColourMatch.this);
-    public static Integer[] total_questions;
-    static {
-        total_questions = new Integer[6];
-        total_questions[0]=0;
-        total_questions[1]=0;
-        total_questions[2]=0;
-        total_questions[3]=0;
-        total_questions[4]=0;
-        total_questions[5]=0;
+    int new_array[]=new int[12];
+    int analysis_sum=0;
+    public static final String SHARED_PREFS = "shared_Prefs";
 
-    }
 
-    public static Integer[] level_tell;
-    static {
-        level_tell = new Integer[6];
-        level_tell[0]=0;
-        level_tell[1]=0;
-        level_tell[2]=0;
-        level_tell[3]=0;
-        level_tell[4]=0;
-        level_tell[5]=0;
 
-    }
-    public static Integer[] marks;
-    static {
-        marks = new Integer[6];
-        marks[0]=0;
-        marks[1]=0;
-        marks[2]=0;
-        marks[3]=0;
-        marks[4]=0;
-        marks[5]=0;
-
-    }
-    public static Integer[] wakt;
-    static {
-        wakt = new Integer[6];
-        wakt[0]=0;
-        wakt[1]=0;
-        wakt[2]=0;
-        wakt[3]=0;
-        wakt[4]=0;
-        wakt[5]=0;
-
-    }
 
 
 
@@ -220,6 +185,8 @@ public class ColourMatch extends AppCompatActivity{
         image.startAnimation(animation);
         if(points>=10){
             level.setText("LEVEL 2");
+            make_level_1_points=points;
+            amms=1;
             level_no++;
             popup.startlevelpop();
             new Handler().postDelayed(new Runnable() {
@@ -236,6 +203,7 @@ public class ColourMatch extends AppCompatActivity{
             timetaken=timetaken/1000;
             analysis= (float) ((0.6*points/no_of_q)+ (0.4*no_of_q/timetaken));
             int results =(int)(analysis*100);
+            make_level_1_analysis=results;
             fla=0;
             Log.i("level_1","points:"+ points+"no of ques:"+no_of_q+"anal:"+results+"timetaken:"+timetaken);
             intent.putExtra("color_points",points);
@@ -244,6 +212,7 @@ public class ColourMatch extends AppCompatActivity{
             intent.putExtra("level",level_no);
             Intent instrut2=new Intent(ColourMatch.this,Color_Instruct2.class);
             startActivity(instrut2);
+
         }
 //        else if(points>5 | flag==0){
 //            if(flag==1){
@@ -310,44 +279,15 @@ public class ColourMatch extends AppCompatActivity{
                 //if(level.getText().toString().equals("LEVEL 2") | level.getText().toString().equals("LEVEL 1") ){
                     db.addscore(points,email);
                     db.time_analysis(results,email);
+                    System.out.println("AAAAAA" +analysis_sum/12);
                     db.color_match_30(email,ses.getnaaam(),points,results);
-                    MakeColor obj=new MakeColor();
-                    total_questions=obj.questions;
-                    level_tell=obj.level_tell1;
-                    marks=obj.marks1;
-                    wakt=obj.wakt1;
+                    if(amms==0){
+                        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                        String userrr=db.getEmailForChild(ses.getTableID())+"colorweek";
+                        sendData(sharedPreferences.getInt(userrr,0));
 
-                    total_questions[0]=total_questions[1];
-                    total_questions[1]=total_questions[2];
-                    total_questions[2]=total_questions[3];
-                    total_questions[3]=total_questions[4];
-                    total_questions[4]=total_questions[5];
-                    total_questions[5]=no_of_q;
+                    }
 
-                    level_tell[0]=level_tell[1];
-                    level_tell[1]=level_tell[2];
-                    level_tell[2]=level_tell[3];
-                    level_tell[3]=level_tell[4];
-                    level_tell[4]=level_tell[5];
-                    level_tell[5]=level_no;
-
-                    marks[0]=marks[1];
-                    marks[1]=marks[2];
-                    marks[2]=marks[3];
-                    marks[3]=marks[4];
-                    marks[4]=marks[5];
-                    marks[5]=points;
-
-                    wakt[0]=wakt[1];
-                    wakt[1]=wakt[2];
-                    wakt[2]=wakt[3];
-                    wakt[3]=wakt[4];
-                    wakt[4]=wakt[5];
-                    wakt[5]=(int)timetaken;
-
-
-
-                    addItemToSheet();
                     Log.i("hello","points:"+ points+"no of ques:"+no_of_q+"anal:"+results);
                 }
 
@@ -398,16 +338,15 @@ public class ColourMatch extends AppCompatActivity{
         SessionManagement ses=new SessionManagement(ColourMatch.this);
          final String email=db.getEmailForChild(ses.getTableID());
          final String child_name=ses.getnaaam();
-         sheet_list=db.time_analysis_graph(email);
+         sheet_list=db.colorweek_fetch(email);
          Log.d("yooo","yooo");
-         final String game_1="Level:"+level_tell[0]+"\n"+"Score:"+marks[0]+"\n"+"No of questions attempted:"+total_questions[0]+"\n"+"Timetaken:"+wakt[0]+"\n"+ "Analysis:"+ sheet_list[0]+"";
-         final String game_2="Level:"+level_tell[1]+"\n"+"Score:"+marks[1]+"\n"+"No of questions attempted:"+total_questions[1]+"\n"+ "Timetaken:"+wakt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-         final String game_3="Level:"+level_tell[2]+"\n"+"Score:"+marks[2]+"\n"+"No of questions attempted:"+total_questions[2]+"\n"+ "Timetaken:"+wakt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-         final String game_4="Level:"+level_tell[3]+"\n"+"Score:"+marks[3]+"\n"+"No of questions attempted:"+total_questions[3]+"\n"+ "Timetaken:"+wakt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-         final String game_5="Level:"+level_tell[4]+"\n"+"Score:"+marks[4]+"\n"+"No of questions attempted:"+total_questions[4]+"\n"+ "Timetaken:"+wakt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-         final  String game_6="Level:"+level_tell[5]+"\n"+"Score:"+marks[5]+"\n"+"No of questions attempted:"+total_questions[5]+"\n"+"Timetaken:"+wakt[5]+"\n"+ "Analysis:"+ sheet_list[5]+"";
+         final String game_1="Analysis:"+sheet_list[0];
+         final String game_2="Analysis:"+sheet_list[1];
+         final String game_3="Analysis:"+sheet_list[2];
+         final String game_4="Analysis:"+sheet_list[3];
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbz91TkRELYJEBgNUI3Wj5zQfWsdon05SgfbWabEdjtmupLtPCqkJXmy4w/exec?",
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbzfURLQdGxY6Bv6h20S9kCSgi_4WwEG4ZGTKjQSwPhg-R4D9i2dYbsVRvopoBqMzEOD/exec?",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -434,12 +373,10 @@ public class ColourMatch extends AppCompatActivity{
                 parmas.put("action", "addItem");
                 parmas.put("child_name", child_name);
                 parmas.put("email",email);
-                parmas.put("game_1",game_1);
-                parmas.put("game_2",game_2);
-                parmas.put("game_3",game_3);
-                parmas.put("game_4",game_4);
-                parmas.put("game_5",game_5);
-                parmas.put("game_6",game_6);
+                parmas.put("week1",game_1);
+                parmas.put("week2",game_2);
+                parmas.put("week3",game_3);
+                parmas.put("week4",game_4);
 
                 return parmas;
             }
@@ -456,6 +393,35 @@ public class ColourMatch extends AppCompatActivity{
 
 
     }
+
+    public void sendData(int noOfgames){
+        SessionManagement ss= new SessionManagement(this);
+
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        String userrr=db.getEmailForChild(ss.getTableID())+"colorweek";
+
+        if(noOfgames==12){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,0);
+            editor.apply();
+            new_array=db.sheet_colormatch(db.getEmailForChild(ss.getTableID()));
+            System.out.println(new_array);
+            for(int i=0;i<12;i++){
+                analysis_sum=analysis_sum+new_array[i];
+            }
+            db.addcolorweek(db.getEmailForChild(ss.getTableID()),analysis_sum/12);
+            addItemToSheet();
+        }
+        else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,noOfgames+1);
+            editor.apply();
+            Log.i("didnt send dataaa",sharedPreferences.getInt(userrr,0)+"");
+        }
+
+
+    }
+
 
 
 }

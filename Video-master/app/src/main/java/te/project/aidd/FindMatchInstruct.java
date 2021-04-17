@@ -20,14 +20,17 @@ import java.util.Locale;
 
 public class FindMatchInstruct extends AppCompatActivity {
     Button ftm,tutorial;
-    private static final String SET_OF_GAMES="set_of_games_findthematch";
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String OLD_DATE1 ="04/04/2020";
+    public String userrr;
+    DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_match_instruct);
         ftm=(Button) findViewById(R.id.ftm);
+
+        db=new DatabaseHelper(this);
         tutorial=(Button) findViewById(R.id.tutorial);
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
@@ -36,13 +39,15 @@ public class FindMatchInstruct extends AppCompatActivity {
         final String formattedDate = df.format(c);
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         String dd=sharedPreferences.getString(OLD_DATE1," ");
+        SessionManagement sessionManagement=new SessionManagement(FindMatchInstruct.this);
+        userrr=db.getEmailForChild(sessionManagement.getTableID())+"findmatch";
 
         final int diff=getDateDiffFromNow(sharedPreferences.getString(OLD_DATE1," "));
         System.out.println(diff);
-        System.out.println("no of games played"+ sharedPreferences.getInt(SET_OF_GAMES,-1));
-        if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==2){
+        System.out.println("no of games played"+ sharedPreferences.getInt(userrr,-1));
+        if(diff>0 && sharedPreferences.getInt(userrr,0)==2){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(SET_OF_GAMES,0);
+            editor.putInt(userrr,0);
             editor.apply();
 
         }
@@ -59,11 +64,11 @@ public class FindMatchInstruct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){
+                if(diff>0 && sharedPreferences.getInt(userrr,0)==0){
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE1 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,1);
+                    editor.putInt(userrr,1);
                     editor.apply();
                     //Toast.makeText(FindMatchInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(FindMatchInstruct.this,FindTheMatch.class);
@@ -74,11 +79,11 @@ public class FindMatchInstruct extends AppCompatActivity {
                     finish();
 
                 }
-                else if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==1){
+                else if(diff>0 && sharedPreferences.getInt(userrr,0)==1){
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE1 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,2);
+                    editor.putInt(userrr,2);
                     editor.apply();
                     //Toast.makeText(FindMatchInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(FindMatchInstruct.this,FindTheMatch.class);
@@ -89,7 +94,7 @@ public class FindMatchInstruct extends AppCompatActivity {
                     finish();
 
                 }
-                else if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==2){
+                else if(diff==0 && sharedPreferences.getInt(userrr,0)==2){
                     System.out.println("nooo cant playyy");
                     System.out.println("cant ");
 
@@ -107,10 +112,10 @@ public class FindMatchInstruct extends AppCompatActivity {
                 }
 
 
-                else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){
+                else  if(diff==0 && sharedPreferences.getInt(userrr,0)==0){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE1 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,1);
+                    editor.putInt(userrr,1);
                     editor.apply();
                     //Toast.makeText(FindMatchInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(FindMatchInstruct.this,FindTheMatch.class);
@@ -121,10 +126,10 @@ public class FindMatchInstruct extends AppCompatActivity {
                     finish();
 
                 }
-                else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==1){
+                else  if(diff==0 && sharedPreferences.getInt(userrr,0)==1){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE1 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,2);
+                    editor.putInt(userrr,2);
                     editor.apply();
                     //Toast.makeText(FindMatchInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(FindMatchInstruct.this,FindTheMatch.class);

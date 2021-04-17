@@ -23,6 +23,8 @@ public class SimonInstruct extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String OLD_DATE3 ="04/04/2020";
     int decision=0;
+    public String userrr;
+    DatabaseHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +32,7 @@ public class SimonInstruct extends AppCompatActivity {
         flipinstrut=(Button) findViewById(R.id.flipin);
         tutorial=(Button) findViewById(R.id.tutorial_simon);
 
+        db=new DatabaseHelper(this);
 
         Date c = Calendar.getInstance().getTime();
         System.out.println("Current time => " + c);
@@ -41,10 +44,13 @@ public class SimonInstruct extends AppCompatActivity {
 
         final int diff=getDateDiffFromNow(sharedPreferences.getString(OLD_DATE3," "));
         System.out.println(diff);
-        System.out.println("no of games played"+ sharedPreferences.getInt(SET_OF_GAMES,-1));
-        if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==2){
+        SessionManagement sessionManagement=new SessionManagement(SimonInstruct.this);
+        userrr=db.getEmailForChild(sessionManagement.getTableID())+"simon";
+        System.out.println("no of games played"+ sharedPreferences.getInt(userrr,-1));
+
+        if(diff>0 && sharedPreferences.getInt(userrr,0)==2){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(SET_OF_GAMES,0);
+            editor.putInt(userrr,0);
             editor.apply();
 
         }
@@ -53,11 +59,11 @@ public class SimonInstruct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-                if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){
+                if(diff>0 && sharedPreferences.getInt(userrr,0)==0){
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE3 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,1);
+                    editor.putInt(userrr,1);
                     editor.apply();
                     //Toast.makeText(SimonInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(SimonInstruct.this, SimonGame.class);
@@ -68,11 +74,11 @@ public class SimonInstruct extends AppCompatActivity {
                     finish();
 
                 }
-                else if(diff>0 && sharedPreferences.getInt(SET_OF_GAMES,0)==1){
+                else if(diff>0 && sharedPreferences.getInt(userrr,0)==1){
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE3 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,2);
+                    editor.putInt(userrr,2);
                     editor.apply();
                     //Toast.makeText(SimonInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(SimonInstruct.this, SimonGame.class);
@@ -83,7 +89,7 @@ public class SimonInstruct extends AppCompatActivity {
                     finish();
 
                 }
-                else if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==2){
+                else if(diff==0 && sharedPreferences.getInt(userrr,0)==2){
                     System.out.println("nooo cant playyy");
                     System.out.println("cant ");
 
@@ -101,10 +107,10 @@ public class SimonInstruct extends AppCompatActivity {
                 }
 
 
-                else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==0){
+                else  if(diff==0 && sharedPreferences.getInt(userrr,0)==0){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE3 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,1);
+                    editor.putInt(userrr,1);
                     editor.apply();
                     //Toast.makeText(SimonInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(SimonInstruct.this, SimonGame.class);
@@ -115,10 +121,10 @@ public class SimonInstruct extends AppCompatActivity {
                     finish();
 
                 }
-                else  if(diff==0 && sharedPreferences.getInt(SET_OF_GAMES,0)==1){
+                else  if(diff==0 && sharedPreferences.getInt(userrr,0)==1){
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(OLD_DATE3 ,formattedDate );
-                    editor.putInt(SET_OF_GAMES,2);
+                    editor.putInt(userrr,2);
                     editor.apply();
                     //Toast.makeText(SimonInstruct.this, "Date saved", Toast.LENGTH_SHORT).show();
                     Intent cmin=new Intent(SimonInstruct.this, SimonGame.class);

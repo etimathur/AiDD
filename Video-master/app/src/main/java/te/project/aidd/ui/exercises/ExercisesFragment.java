@@ -12,7 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import te.project.aidd.Color_instruct;
+import te.project.aidd.ColourMatch;
 import te.project.aidd.FindMatchInstruct;
+import te.project.aidd.FindTheMatch;
+import te.project.aidd.Jigsaw;
+import te.project.aidd.SimonGame;
 import te.project.aidd.SimonInstruct;
 import te.project.aidd.JigsawInstructActivity;
 import te.project.aidd.R;

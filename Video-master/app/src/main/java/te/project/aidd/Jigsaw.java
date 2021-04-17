@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -79,7 +80,7 @@ public class Jigsaw extends AppCompatActivity {
     ArrayList<Date> time = new ArrayList<>();
     TextView answer, levelNo;
     boolean generatedImage = false;
-    int sheet_list[]=new int[6];
+    int sheet_list[]=new int[4];
     private static Integer[] array;
     static {
         array = new Integer[6];
@@ -125,6 +126,9 @@ public class Jigsaw extends AppCompatActivity {
         tt1[5]=0;
 
     }
+    public static final String SHARED_PREFS = "shared_Prefs";
+    int new_aray[]=new int[12];
+    int analysi_sum=0;
 
 
 
@@ -429,6 +433,10 @@ public class Jigsaw extends AppCompatActivity {
                     final_result=100;
                 db.insert_puzzle_analysis(final_result, email);
 
+                String userrr=db.getEmailForChild(ses.getTableID())+"puzzleweek";
+                SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                sendData(sharedPreferences.getInt(userrr,0));
+
                 tt[0]=tt[1];
                 tt[1]=tt[2];
                 tt[2]=tt[3];
@@ -442,7 +450,6 @@ public class Jigsaw extends AppCompatActivity {
                 tt1[4]=tt1[5];
                 tt1[5]=level;
 
-                addItemToSheet();
                 Log.i("final",final_result+" ");
                 Log.i("data", "saved");
 
@@ -564,6 +571,9 @@ public class Jigsaw extends AppCompatActivity {
                         int timetakens=(int)timetaken/1000;
                         total_time=total_time+timetakens;
                         db.insert_puzzle_analysis(final_result, email);
+                        String userrr=db.getEmailForChild(ses.getTableID())+"puzzleweek";
+                        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+                        sendData(sharedPreferences.getInt(userrr,0));
                         tt[0]=tt[1];
                         tt[1]=tt[2];
                         tt[2]=tt[3];
@@ -571,7 +581,7 @@ public class Jigsaw extends AppCompatActivity {
                         tt[4]=tt[5];
                         tt[5]=total_time;
 
-                        addItemToSheet();
+//
                         Log.i("final", final_result + " ");
                         Log.i("data", "saved");
                     }
@@ -639,16 +649,13 @@ public class Jigsaw extends AppCompatActivity {
         SessionManagement ses=new SessionManagement(Jigsaw.this);
         final String email=db.getEmailForChild(ses.getTableID());
         final String child_name=ses.getnaaam();
-        sheet_list=db.puzzle_graph(email);
-        final String game_1="Level:"+tt1[0]+"\n" +  "Timetaken:"+tt[0]+"\n"+"Analysis:"+ sheet_list[0]+"";
-        final String game_2="Level:"+tt1[1]+"\n" +  "Timetaken:"+tt[1]+"\n"+"Analysis:"+ sheet_list[1]+"";
-        final String game_3="Level:"+tt1[2]+"\n" +  "Timetaken:"+tt[2]+"\n"+"Analysis:"+ sheet_list[2]+"";
-        final String game_4="Level:" +tt1[3]+"\n" +  "Timetaken:"+tt[3]+"\n"+"Analysis:"+ sheet_list[3]+"";
-        final String game_5="Level:" +tt1[4]+"\n" +  "Timetaken:"+tt[4]+"\n"+"Analysis:"+ sheet_list[4]+"";
-        final  String game_6="Level:"+tt1[5]+"\n" +  "Timetaken:"+tt[5]+"\n"+"Analysis:"+ sheet_list[5]+"";
+        sheet_list=db.puzzleweek_fetch(email);
+        final String game_1="Analysis:"+sheet_list[0];
+        final String game_2="Analysis:"+sheet_list[1];
+        final String game_3="Analysis:"+sheet_list[2];
+        final String game_4="Analysis:"+sheet_list[3];
 
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwrmJWC4ZMYBohPpGq5xWTJ5qfWYgQuso200ow7P_jWltnjMIFwNdxz5g/exec?",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbwNRF8JvfQv12hawU8WZqEoi2JiAzwBUvi4VAirASL_D81Dki0tDJs2285rYx_aAPVY/exec?",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -675,12 +682,10 @@ public class Jigsaw extends AppCompatActivity {
                 parmas.put("action", "addItem");
                 parmas.put("child_name", child_name);
                 parmas.put("email",email);
-                parmas.put("game_1",game_1);
-                parmas.put("game_2",game_2);
-                parmas.put("game_3",game_3);
-                parmas.put("game_4",game_4);
-                parmas.put("game_5",game_5);
-                parmas.put("game_6",game_6);
+                parmas.put("week1",game_1);
+                parmas.put("week2",game_2);
+                parmas.put("week3",game_3);
+                parmas.put("week4",game_4);
 
                 return parmas;
             }
@@ -697,6 +702,35 @@ public class Jigsaw extends AppCompatActivity {
 
 
     }
+    public void sendData(int noOfgames){
+        SharedPreferences sharedPreferences=getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        SessionManagement ss= new SessionManagement(this);
+        String userrr=db.getEmailForChild(ss.getTableID())+"puzzleweek";
+        if(noOfgames==12){
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,0);
+            editor.apply();
+            new_aray=db.sheet_puzzle(db.getEmailForChild(ss.getTableID()));
+            System.out.println(new_aray);
+            for(int i=0;i<12;i++){
+                analysi_sum=analysi_sum+new_aray[i];
+                System.out.println(new_aray[i]);
+            }
+            db.addpuzzleweek(db.getEmailForChild(ss.getTableID()),analysi_sum/12);
+            System.out.println("weekklyyy "+analysi_sum/12);
+            addItemToSheet();
+        }
+        else {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt(userrr,noOfgames+1);
+            editor.apply();
+            Log.i("didnt send dataaa",sharedPreferences.getInt(userrr,0)+"");
+        }
+
+
+    }
+
 
 
 }
